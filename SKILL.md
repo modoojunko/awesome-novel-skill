@@ -152,8 +152,14 @@ Agent(
 1. 将正文写入 `archives/vol-{N}-ch-{M}-{slugified-title}.md`
 2. 分析正文中角色的变化（位置、关系、能力、心态），推断状态更新
 3. 为每个出场角色追加 state_history 条目（见下方格式）
-4. 将 chapter.yaml 的 status 更新为 `archived`
-5. 更新 story.yaml 的 chapters 列表中对应条目
+4. 同步更新角色 yaml 中受影响的当前状态字段，对照清单：
+   - `location` / `environment` 是否变化
+   - `abilities` / `skills` 是否变化（突破、获得新能力）
+   - `relationships[].status` 是否变化（关系亲疏、立场转变）
+   - `worldview` / `self_identity` 是否因本章事件产生偏移
+   - `summary` 是否需要改写以反映角色当前状态
+5. 将 chapter.yaml 的 status 更新为 `archived`
+6. 更新 story.yaml 的 chapters 列表中对应条目
 
 角色 state_history 格式（追加到 character yaml 的 state_history 数组末尾）:
 ```yaml
