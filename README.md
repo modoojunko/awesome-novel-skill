@@ -15,38 +15,30 @@
 ### Claude Code
 
 ```bash
-# 克隆或复制项目
 git clone https://github.com/modoojunko/awesome-novel-skill.git
 cd awesome-novel-skill
-
-# 安装为全局 skill
-cp -r . ~/.claude/skills/novel-agent/
-
-# 或创建符号链接
-ln -s "$(pwd)" ~/.claude/skills/novel-agent
+mkdir -p ~/.claude/skills/novel-agent
+cp SKILL.md ~/.claude/skills/novel-agent/
+cp -r scripts ~/.claude/skills/novel-agent/
 ```
 
-安装后在 Claude Code 中使用：
+### Hermes Agent
+
+```bash
+git clone https://github.com/modoojunko/awesome-novel-skill.git
+cd awesome-novel-skill
+./install.sh hermes
 ```
-/novel-agent
+
+或使用 PowerShell：
+
+```powershell
+.\install.ps1 -Platform hermes
 ```
-或直接开始创作小说。
 
 ### OpenClaw
 
-```bash
-# 参考 OpenClaw 的 skill 安装文档
-# 通常将项目路径配置为 skill 来源
-openclaw skill add file:///path/to/awesome-novel-skill
-```
-
-### Hermes
-
-```bash
-# 参考 Hermes 的 skill 安装文档
-# 通常将项目路径配置为 skill 来源
-hermes skill install /path/to/awesome-novel-skill
-```
+参考 OpenClaw 的 skill 安装文档，将项目路径配置为 skill 来源。
 
 ## 使用
 
