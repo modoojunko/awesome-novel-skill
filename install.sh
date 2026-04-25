@@ -18,10 +18,10 @@ PLATFORM="$1"
 
 case "$PLATFORM" in
     claude-code)
-        DEST_DIR="$HOME/.claude/skills/novel-agent"
+        DEST_DIR="$HOME/.claude/skills/awesome-novel"
         ;;
     hermes)
-        DEST_DIR="$HOME/.hermes/skills/novel-agent"
+        DEST_DIR="$HOME/.hermes/skills/awesome-novel"
         ;;
     *)
         echo "不支持的平台: $PLATFORM"

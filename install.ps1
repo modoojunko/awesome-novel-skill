@@ -10,10 +10,10 @@ $HOME_DIR = $env:USERPROFILE
 
 switch ($Platform) {
     "claude-code" {
-        $DEST_DIR = "$HOME_DIR\.claude\skills\novel-agent"
+        $DEST_DIR = "$HOME_DIR\.claude\skills\awesome-novel"
     }
     "hermes" {
-        $DEST_DIR = "$HOME_DIR\.hermes\skills\novel-agent"
+        $DEST_DIR = "$HOME_DIR\.hermes\skills\awesome-novel"
     }
 }
 

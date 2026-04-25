@@ -17,8 +17,8 @@
 ```bash
 git clone https://github.com/modoojunko/awesome-novel-skill.git
 cd awesome-novel-skill
-mkdir -p ~/.claude/skills/novel-agent
-cp SKILL.md ~/.claude/skills/novel-agent/
+mkdir -p ~/.claude/skills/awesome-novel
+cp SKILL.md ~/.claude/skills/awesome-novel/
 cp -r scripts ~/.claude/skills/novel-agent/
 ```
 
