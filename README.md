@@ -15,16 +15,38 @@
 ### Claude Code
 
 ```bash
-# 方式1: 直接使用
-cd /path/to/awesome-novel-skilll
-claude
+# 克隆或复制项目
+git clone https://github.com/modoojunko/awesome-novel-skill.git
+cd awesome-novel-skill
 
-# 方式2: 安装为全局skill（取决于Claude Code配置）
+# 安装为全局 skill
+cp -r . ~/.claude/skills/novel-agent/
+
+# 或创建符号链接
+ln -s "$(pwd)" ~/.claude/skills/novel-agent
 ```
 
-### 其他Agent
+安装后在 Claude Code 中使用：
+```
+/novel-agent
+```
+或直接开始创作小说。
 
-参考各Agent的skill加载文档，将此项目路径配置为skill来源。
+### OpenClaw
+
+```bash
+# 参考 OpenClaw 的 skill 安装文档
+# 通常将项目路径配置为 skill 来源
+openclaw skill add file:///path/to/awesome-novel-skill
+```
+
+### Hermes
+
+```bash
+# 参考 Hermes 的 skill 安装文档
+# 通常将项目路径配置为 skill 来源
+hermes skill install /path/to/awesome-novel-skill
+```
 
 ## 使用
 
