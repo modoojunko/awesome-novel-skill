@@ -1,0 +1,25 @@
+# character.yaml - 角色设定模板
+# 每个角色一个yaml文件
+
+name: ""
+summary: ""
+
+# 基础设定
+cognition: ""
+worldview: ""
+self_identity: ""
+values: ""
+abilities: ""
+skills: ""
+environment: ""
+
+# 关系
+relationships: []
+
+# 外观和背景
+appearance: ""
+background: ""
+role: ""
+
+# 状态历史（归档时由Agent更新）
+state_history: []

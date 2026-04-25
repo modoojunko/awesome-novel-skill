@@ -1,0 +1,10 @@
+# volume-N.yaml - 卷模板
+
+volume: 1
+title: ""
+summary: ""
+
+chapters_summary:
+  - id: 1
+    title: ""
+    summary: ""

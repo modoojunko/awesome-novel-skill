@@ -1,0 +1,16 @@
+# vol-N-ch-M.yaml - 章节模板
+
+volume: 1
+chapter: 1
+title: ""
+outline_status: "draft"
+
+outline:
+  summary: ""
+  key_points: []
+  characters: []
+  location: ""
+  time: ""
+
+prompt_yaml_path: "./prompts/vol-1-ch-1-prompt.yaml"
+status: "outline"
