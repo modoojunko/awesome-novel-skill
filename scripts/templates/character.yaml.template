@@ -19,7 +19,7 @@ relationships: []
 # 外观和背景
 appearance: ""
 background: ""
-role: ""
+story_role: ""
 
 # 状态历史（归档时由Agent更新）
 state_history: []
