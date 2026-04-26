@@ -45,18 +45,13 @@ cp -r scripts ~/.claude/skills/awesome-novel/
 
 ## 开始写小说
 
-打开终端，在你想放小说的目录下启动你的 AI 编程工具（Claude Code / Hermes / OpenClaw），比如：
+打开终端，在你想放小说的目录下启动你的 AI 编程工具（Claude Code / Hermes / OpenClaw），然后用自然语言告诉它你想做什么。比如：
 
-```bash
-cd ~/我的小说
-claude
-```
+> **我想写一本玄幻小说，帮我开始**
 
-然后对你的 AI Agent 说：
+> **来帮我写小说吧**
 
-> **create novel 我的第一本小说**
-
-Claude 会在当前目录下创建一个以你小说命名的文件夹，然后引导你按以下流程进行：
+Agent 会在当前目录下创建小说项目，然后引导你按以下流程进行：
 
 ### 第一步：设定世界观
 
