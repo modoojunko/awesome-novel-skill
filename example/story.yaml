@@ -37,6 +37,13 @@ chapters:
     path: "./chapters/vol-1-ch-2.yaml"
     archive_path: "./archives/vol-1-ch-2-huxi.md"
     status: "archived"
+  - id: "1-3"
+    volume: 1
+    chapter: 3
+    title: "敲门的人"
+    path: "./chapters/vol-1-ch-3.yaml"
+    archive_path: "./archives/vol-1-ch-3-qiaomen-de-ren.md"
+    status: "archived"
 
 current_volume: 1
-current_chapter: 2
+current_chapter: 3
