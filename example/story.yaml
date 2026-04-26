@@ -1,0 +1,42 @@
+# story.yaml - 示例项目：凌晨六点四十七分
+
+title: "凌晨六点四十七分"
+author: "示例作者"
+created_at: "2026-04-26"
+updated_at: "2026-04-26"
+
+world_setting:
+  path: "./settings/world-setting.yaml"
+  summary: "表面正常的现代都市，每天凌晨06:47时间裂缝出现三分钟，渗出不可见的异物。少数觉醒者能看见。"
+
+characters:
+  path: "./settings/character-setting/"
+  summary: "林辰（主角，28岁程序员，能看见时间异物）"
+
+writing_style:
+  path: "./settings/writing-style.yaml"
+  summary: "冷峻克制，重氛围轻抒情，Show Don't Tell"
+
+volumes:
+  - id: 1
+    title: "裂缝"
+    path: "./volumes/volume-1.yaml"
+
+chapters:
+  - id: "1-1"
+    volume: 1
+    chapter: 1
+    title: "末班地铁"
+    path: "./chapters/vol-1-ch-1.yaml"
+    archive_path: "./archives/vol-1-ch-1-moban-ditie.md"
+    status: "archived"
+  - id: "1-2"
+    volume: 1
+    chapter: 2
+    title: "被抹去的人"
+    path: "./chapters/vol-1-ch-2.yaml"
+    archive_path: "./archives/vol-1-ch-2-bei-moqu-de-ren.md"
+    status: "archived"
+
+current_volume: 1
+current_chapter: 2
