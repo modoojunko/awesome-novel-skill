@@ -13,3 +13,4 @@ outline:
 
 prompt_yaml_path: "./prompts/vol-1-ch-1-prompt.yaml"
 status: "outline"
+content: ""
