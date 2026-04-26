@@ -21,7 +21,7 @@ set -e
 
 usage() {
     echo "用法: $0 <平台>"
-    echo "平台: claude-code, hermes"
+    echo "平台: claude-code, hermes, openclaw"
     echo "示例: $0 hermes"
     exit 1
 }
@@ -38,6 +38,9 @@ case "$PLATFORM" in
         ;;
     hermes)
         DEST_DIR="$HOME/.hermes/skills/awesome-novel"
+        ;;
+    openclaw)
+        DEST_DIR="$HOME/.openclaw/skills/awesome-novel"
         ;;
     *)
         echo "不支持的平台: $PLATFORM"
