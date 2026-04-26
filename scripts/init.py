@@ -38,7 +38,8 @@ def create_directory_structure(project_path: Path) -> None:
     dirs = [
         project_path / "settings" / "character-setting",
         project_path / "volumes",
-        project_path / "chapters" / "prompts",
+        project_path / "chapters",
+        project_path / "prompts",
         project_path / "archives",
     ]
     for d in dirs:
