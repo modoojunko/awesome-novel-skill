@@ -18,5 +18,5 @@ outline:
   location: "青石村→林氏祖宅→通往古墓的石阶"
   time: "现代，从接到消息到抵达青石村的当天和次日"
 
-prompt_yaml_path: "./prompts/vol-1-ch-1-prompt.yaml"
+prompt_path: "./prompts/vol-1-ch-1-prompt.md"
 status: "archived"

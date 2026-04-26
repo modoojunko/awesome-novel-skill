@@ -11,5 +11,5 @@ outline:
   location: ""
   time: ""
 
-prompt_yaml_path: "./prompts/vol-1-ch-1-prompt.yaml"
+prompt_path: "./prompts/vol-1-ch-1-prompt.md"
 status: "outline"

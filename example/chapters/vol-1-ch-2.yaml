@@ -18,5 +18,5 @@ outline:
   location: "古墓前的石阶→古墓入口"
   time: "第一章的三天后，午夜 00:00"
 
-prompt_yaml_path: "./prompts/vol-1-ch-2-prompt.yaml"
+prompt_path: "./prompts/vol-1-ch-2-prompt.md"
 status: "archived"
