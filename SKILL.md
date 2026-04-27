@@ -72,8 +72,25 @@ Agent 首先判断用户意图——是新建还是导入：
 5. 根据已有正文反写各章的 outline 字段
 6. 创建 `volumes/volume-N.yaml` 卷纲
 7. 更新 `story.yaml` 索引
-8. 反向提取的设定必须经作者确认后才能定稿——Agent 不假设自己理解正确。如果某设定不明显，向作者提问而非自行推测
-9. 确认当前进度（已写了几卷几章），后续从 Phase 4 开始继续创作
+8. 反向提取完成后，执行 `python scripts/check_completeness.py [项目路径]` 扫描空字段，然后 Agent 输出 **导入完整性报告**：
+
+   | 文件 | 字段 | 状态 | 影响 |
+   |------|------|------|------|
+   | world-setting.yaml | geography | ✅ 已提取 | — |
+   | world-setting.yaml | politics | ⚠️ 已推测 | Phase 4 提示词可能缺少政治背景 |
+   | world-setting.yaml | history | ❌ 未找到 | Phase 4 提示词无历史语境 |
+   | character-setting/xx | cognition | ❌ 未找到 | 角色行为可能不一致 |
+   | hooks.yaml | — | ✅ 3个钩子 | — |
+   | writing-style.yaml | depiction_techniques | ✅ 已分析 | — |
+
+   每个 ❌/⚠️ 项附带一句说明：这个缺失在实践中意味着什么，作者是否需要在进入 Phase 4 前补充。
+
+9. **STOP：将完整性报告展示给作者。** 作者决定：
+   - "就这样，缺的后面再说" → 进入 Phase 4，Agent 写作时对缺失字段不做假设
+   - "先补几项" → Agent 逐项引导补充
+   - "缺太多，走完整设定流程" → 转入 Phase 2 从头讨论
+
+10. 确认当前进度后，后续从 Phase 4 开始继续创作
 
 ### Phase 2: 设定阶段 - 世界 & 角色 & 写作风格
 
