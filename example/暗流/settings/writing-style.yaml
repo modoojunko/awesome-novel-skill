@@ -78,7 +78,7 @@ workflow:
 # ============================================================
 genre:
   # 题材类型（Phase 2 讨论确定）
-  type: ""  # xuanhuan | xianxia | urban | sci-fi | xuanhuan_survival | mystery | horror | fanfic | other
+  type: "mystery"  # 都市悬疑
 
   # 爽点类型（本题材读者最期待的情绪回报）
   satisfaction_types: []  # 例如: ["实力突破", "打脸反击", "智斗妙招", "身份揭晓", "感情升温"]
