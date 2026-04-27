@@ -1,0 +1,145 @@
+# anti-ai.yaml - AI味检测配置
+# 基于 InkOS 的 11 条确定性规则 + webnovel-writer 的 7 层审查体系
+# 用于 Phase 5 正文质量检查
+
+# 中文高危疲劳词（blocklist — 出现即标记）
+fatigue_words_zh:
+  summary_narrative:
+    - "本章讲述了"
+    - "接下来"
+    - "在这一章中"
+    - "故事还在继续"
+    - "与此同时"
+    - "另一方面"
+  abstract_emotion:
+    - "他感到"
+    - "他觉得"
+    - "他意识到"
+    - "他注意到"
+    - "他明白"
+    - "他知道"
+  academic_tone:
+    - "综上所述"
+    - "总而言之"
+    - "从某种意义上说"
+    - "不可否认"
+    - "显而易见"
+  cliche_action:
+    - "深吸一口气"
+    - "咬了咬牙"
+    - "握紧拳头"
+    - "眼中闪过一丝"
+    - "嘴角勾起一抹"
+    - "心中暗道"
+  cliche_environment:
+    - "阳光透过树叶"
+    - "月光洒在大地"
+    - "微风拂过"
+    - "夜幕降临"
+    - "天刚蒙蒙亮"
+  logical_connectors:
+    - "由此可见"
+    - "正因如此"
+    - "不仅如此"
+    - "首先...其次...最后"
+  narrative_filler:
+    - "似乎"
+    - "也许"
+    - "大概"
+    - "仿佛"
+    - "宛如"
+
+# 英文高危疲劳词（LitRPG / Progression Fantasy 等题材）
+fatigue_words_en:
+  - "delve"
+  - "tapestry"
+  - "testament"
+  - "embodiment"
+  - "harbinger"
+  - "veritable"
+  - "inexorable"
+  - "nonetheless"
+  - "furthermore"
+  - "however"
+  - "seemed to"
+  - "as if"
+
+# 句式规则
+sentence_rules:
+  # 禁止连续 3 段以上以相同句式开头
+  no_consecutive_same_openings: true
+  max_consecutive_same_openings: 3
+
+  # 禁止列表式叙述（"首先...其次...最后"）
+  no_list_narrative: true
+
+  # 每 300 字最多 4 个程度副词（很/非常/极/特别/太/十分）
+  max_intensity_adverbs_per_300: 4
+
+  # 每个名词前最多 2 个形容词
+  max_adjectives_per_noun: 2
+
+  # 每 500 字最多 3 个四字成语
+  max_idioms_per_500: 3
+
+# 段落结构规则
+paragraph_rules:
+  # 单句段占比建议 25%-45%
+  single_sentence_paragraph_ratio:
+    min: 0.25
+    max: 0.45
+
+  # 段落长度范围（字）
+  paragraph_length_range:
+    min: 20
+    max: 200
+
+  # 场景转换必须用动作/对话，禁止用纯环境描写过渡
+  scene_transition_via_action: true
+
+# 对话规则
+dialogue_rules:
+  # 禁止说明书式对话（角色互相告知已知信息）
+  no_info_dump_dialogue: true
+
+  # 对话必须有意图（说服/隐藏/试探/拒绝/转移话题等）
+  dialogue_must_have_intent: true
+
+  # 允许犹豫、打断、反问——对话不等于轮流发言
+  allow_interruption_and_hesitation: true
+
+  # 禁止副词修饰对话标签（"她愤怒地说"→对话本身传达情绪）
+  no_adverb_dialogue_tags: true
+
+# 标点节奏规则
+punctuation_rules:
+  # 不连续使用省略号或感叹号
+  no_consecutive_ellipsis_or_exclamation: true
+
+  # 每段最多 1 个感叹号
+  max_exclamation_per_paragraph: 1
+
+  # 4 个逗号以上必须拆段（中文）
+  max_commas_before_split: 4
+
+# AI味改写算法（用于 Phase 5 质量修正）
+rewrite_rules:
+  abstract_to_physical:
+    description: "将抽象情绪描述转换为生理反应+意图+动作"
+    example_before: "他感到很愤怒，决定要报复。"
+    example_after: "他手背上的青筋跳了一下。放下杯子，盯着桌面看了三秒，然后起身。"
+  conclusion_to_scene:
+    description: "将总结句转换为事实+代价+决定"
+    example_before: "这一战后，两人的关系彻底破裂了。"
+    example_after: "从那以后，她再也没踏进他的营帐。偶尔在练兵场遇见，她的目光从他身上划过去，像看一块石头。"
+  explanation_to_dialogue:
+    description: "将 3 句以上的纯解释转换为对话+动作+反问"
+    example_before: "他向她说明了整个计划：先去港口找到老李，拿到通行证，然后从南门出城。"
+    example_after: "她截住他：'港口那边谁去？' '我去。'他系好袖扣，'老李的通行证明天到期——过了明天，南门就是最远的距离。'"
+
+# 违规严重度
+severity:
+  critical: "元叙事、上帝视角概述、非正文内容（直接丢弃该段或要求重写）"
+  high: "高频疲劳词、说明书式对话（标记并建议替换）"
+  medium: "形容词堆砌、列表式叙事（标记，可接受阈值内）"
+  low: "偶发性成语堆砌、轻度副词多用（不阻断，记录趋势）"

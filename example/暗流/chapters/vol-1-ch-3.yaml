@@ -1,0 +1,18 @@
+# vol-1-ch-3.yaml
+volume: 1
+chapter: 3
+title: "水面之下"
+outline:
+  summary: "通过闺蜜方敏找到周雨桐藏身地，获知失踪真相应为发现双份不符单据被组织发觉而自行躲藏。回城路上收到威胁短信。"
+  key_points:
+    - "从方敏处获得周雨桐藏身地址"
+    - "在乡下找到周雨桐"
+    - "周雨桐说出真相：物流公司双份单据"
+    - "回城路上收到列出家庭信息的威胁短信"
+  characters: ["lu-zheng"]
+  location: "方敏出租屋→乡下藏身处→回城路上"
+  time: "第三天"
+prompt_path: "./prompts/vol-1-ch-3-prompt.md"
+status: "archived"
+prompt_variant: "变体1-主角视角"
+archive_path: "./archives/vol-1-ch-3-水面之下.md"

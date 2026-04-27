@@ -52,6 +52,12 @@ def copy_template(template_name: str, dest: Path) -> None:
     shutil.copy2(src, dest)
 
 
+def copy_md_template(template_name: str, dest: Path) -> None:
+    """复制 markdown 模板文件到目标路径"""
+    src = Path(__file__).parent / "templates" / f"{template_name}.md.template"
+    shutil.copy2(src, dest)
+
+
 def init_project(project_name: str, author: str = "") -> None:
     """
     初始化小说项目
@@ -69,6 +75,12 @@ def init_project(project_name: str, author: str = "") -> None:
     copy_template("story", project_path / "story.yaml")
     copy_template("world-setting", project_path / "settings" / "world-setting.yaml")
     copy_template("writing-style", project_path / "settings" / "writing-style.yaml")
+    copy_template("anti-ai", project_path / "settings" / "anti-ai.yaml")
+    copy_template("hooks", project_path / "settings" / "hooks.yaml")
+
+    # 复制控制文档（markdown 格式）
+    copy_md_template("author-intent", project_path / "author-intent.md")
+    copy_md_template("current-focus", project_path / "current-focus.md")
 
     # 创建空的character-setting目录（角色文件后续讨论时创建）
 
