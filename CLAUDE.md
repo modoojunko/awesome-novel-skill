@@ -80,6 +80,7 @@ project/
 
 SKILL.md 定义完整的 6 阶段工作流，是此项目的核心：
 
+0. **Phase 0: 导入**（可选）— 导入已有小说文件，Agent 自动切分章节、反向提取世界观/角色/风格/钩子设定
 1. **Phase 1: Init** — 调用 `scripts/init.py` 创建目录结构（含 anti-ai.yaml、hooks.yaml、control docs）
 2. **Phase 2: 设定** — 讨论世界设定 + 角色设定 + 写作风格确认 + 题材选择 + 钩子初始化
 3. **Phase 3: 故事线拆分** — 逐卷逐章讨论章纲 + 同步更新 hooks.yaml（埋/提/收钩子）
