@@ -449,6 +449,12 @@ grep -cP '不是.{1,20}(而是|，是|,是)' archives/vol-00N-ch-00M-*.md
    - 如果本章无任何冲突/问题/目标 → 触发 HARD-004 冲突真空警告："本章没有需要解决的问题，读者无法回答'这章要解决什么'"
 9. 将 chapter.yaml 的 status 更新为 `archived`
 10. 更新 story.yaml 的 chapters 列表中对应条目
+11. **滑动窗口审视 current-focus.md**（每章归档后必做，不可跳过）：
+    - 读取 `current-focus.md`，检查其中的"当前优先级"和"节奏意图"是否仍然适用
+    - 将刚归档的章节标记为 ✅（已完成）
+    - 以最近 3 章为滑动窗口，判断：(a) 优先级是否需要调整——是否有支线已收束、新支线已展开；(b) 节奏意图是否偏移——连续 3 章的 primary_mood 是否偏离了 current-focus.md 设定的方向；(c) 需提及的钩子是否已处理——已兑现的移除、新增的加入
+    - 如果窗口内的章节状态与 current-focus.md 记录不符，**向作者报告差异并建议更新**。作者确认后写入。如果无需更新，向作者报告"滑动窗口内状态一致，current-focus.md 无需更新"
+    - 特别关注：每 3 章的倍数节点（第 3、6、9…章归档后），**必须引导作者**重新审视并主动更新 current-focus.md，而非仅做被动检查
 
 角色 state_history 格式（追加到 character yaml 的 state_history 数组末尾）:
 ```yaml
@@ -607,4 +613,5 @@ project/
 - [ ] 角色 emotional_arc 在归档时追记
 - [ ] hooks.yaml 在归档时更新（mention/resolve/defer），钩子健康检查已完成
 - [ ] 跨章情绪单调检测已在归档时执行
+- [ ] current-focus.md 滑动窗口审视已完成（每章归档后必做，3 章倍数节点必须引导作者主动更新）
 
