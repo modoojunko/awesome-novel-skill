@@ -229,6 +229,18 @@ genre:
   # 反套路规则（该题材读者已厌倦的套路，写作时需避开）
   anti_cliches: []  # 例如玄幻: ["退婚开局", "废材觉醒", "老爷爷随身带"]
 
+  # ============================================================
+  # 读者留存量化配置（借鉴 webnovel-writer Retention Config）
+  # 按题材设定每章的微兑现密度、停滞阈值、钩子强度基准
+  # ============================================================
+  retention_config:
+    micropayoff_min_per_chapter: 1    # 每章最低微兑现数（过渡章也必须至少1个）
+    micropayoff_transition_min: 1     # 过渡章最低微兑现数
+    stagnation_threshold: 3           # 连续N章无任何推进 → 触发HARD-003停滞警告
+    transition_max_consecutive: 2     # 最多连续过渡章数，超过需插入实质性推进章
+    hook_strength_baseline: "medium"  # 默认钩子强度（strong/medium/weak）
+    safe_landing_detection: true      # 是否启用"安全着陆"检测（章尾不应所有冲突完美解决）
+
 # ============================================================
 # 写作方法论分层注入（借鉴 InkOS L1/L2/L3 Skill Distribution）
 # Agent 在 Phase 4 组装提示词时，按层级将方法论分发给不同职责的 subagent

@@ -64,8 +64,21 @@ emotional_design:
   mood_progression: ""   # 情绪走向：从什么情绪→中间经过什么→以什么情绪结束
   intensity_peak: ""     # 情绪强度峰值的场景（哪一段的情绪最强烈）
   satisfaction_beat: ""  # 本章的小爽点/情绪回报（读者在本章能获得什么满足）
-  emotional_hook: ""     # 章尾的情绪钩子类型（悬念/共情/期待/愤怒/好奇）
+  emotional_hook: ""     # 章尾的情绪钩子类型（悬念/共情/期待/愤怒/好奇/情绪/选择/渴望）
   intensity_level: 5     # 本章整体情绪强度 (1-10)
+
+  # 微兑现：章节内给读者的"小收获"，让读者感觉"这章没白看"
+  # 每章至少 1 个，过渡章也必须至少 1 个
+  micro_payoffs:
+    - type: ""            # info（信息兑现：新线索/新信息）
+                          # relationship（关系兑现：关系推进/接触）
+                          # emotion（情绪兑现：情绪释放/共鸣）
+                          # clue（线索兑现：伏笔回收/推进）
+                          # ability（能力兑现：能力提升/新技能）
+                          # resource（资源兑现：获得物品/资源）
+                          # recognition（认可兑现：获得认可/面子）
+      description: ""     # 一句话描述读者在本章获得了什么
+      location: ""        # 在本章的哪个位置兑现（前段/中段/后段）
 
 prompt_path: "./prompts/vol-1-ch-1-prompt.md"
 status: "outline"
