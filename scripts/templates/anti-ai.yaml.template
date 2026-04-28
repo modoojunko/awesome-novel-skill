@@ -137,9 +137,70 @@ rewrite_rules:
     example_before: "他向她说明了整个计划：先去港口找到老李，拿到通行证，然后从南门出城。"
     example_after: "她截住他：'港口那边谁去？' '我去。'他系好袖扣，'老李的通行证明天到期——过了明天，南门就是最远的距离。'"
 
+# ============================================================
+# 情绪节奏检测（借鉴 InkOS Long-Span Fatigue / Cadence Analysis）
+# 跨章节追踪情绪单调性，防止读者疲劳
+# ============================================================
+emotional_cadence:
+  # 情绪单调检测：连续高压无释放 → 读者疲劳
+  mood_monotony:
+    max_consecutive_high_tension: 3  # 连续高压章数上限，超过需插入释放章
+    high_tension_moods:              # 高压情绪关键词（匹配章纲 emotional_design.primary_mood）
+      - "紧张"
+      - "压抑"
+      - "愤怒"
+      - "悲伤"
+      - "恐惧"
+      - "绝望"
+    release_moods:                   # 释放型情绪（应在高压后轮换出现）
+      - "温情"
+      - "爽快"
+      - "释然"
+      - "幽默"
+      - "平静"
+      - "满足"
+
+  # 章节类型单调检测：同一章型连续出现 → 节奏固化
+  chapter_type_rotation:
+    max_consecutive_same_type: 2     # 同一章型连续上限
+    type_categories:                 # 章型分类
+      - "冲突升级"
+      - "能力展示/爽点释放"
+      - "信息揭露/真相"
+      - "关系转折"
+      - "日常过渡/蓄势"
+      - "高潮收束/后效"
+
+  # 情绪强度节奏：应有高低起伏，不能全程拉满
+  intensity_rhythm:
+    max_consecutive_high_intensity: 2  # 连续高强度章数上限（intensity_level >= 8）
+    recommended_after_climax: "高潮章后的 1-2 章必须降强度（intensity_level <= 5），写代价、后效、关系变化"
+
+  # 章尾钩子类型轮换：避免同一种钩子类型连续使用
+  hook_type_rotation:
+    min_variety_in_3_chapters: 2    # 最近 3 章至少包含 2 种不同的章尾钩子类型
+    hook_types:
+      - "悬念（想知道答案）"
+      - "共情（担心角色的处境）"
+      - "期待（想看爽点兑现）"
+      - "愤怒（对反派/不公的情绪）"
+      - "好奇（新信息引发的探索欲）"
+
+  # 开头/结尾句式多样性：检测邻章开头/结尾是否高度相似
+  boundary_variation:
+    check_window: 3                  # 检查最近 3 章
+    warn_if_opening_too_similar: true  # 开头句式相似 → 警告
+    warn_if_ending_too_similar: true   # 结尾句式相似 → 警告
+
+  # 情绪强度分布检查（最近 5 章应呈波浪形，而非直线）
+  intensity_wave:
+    check_window: 5
+    warn_if_flat: true               # 连续 3 章 intensity_level 差值 < 2 → 情绪走平
+    warn_if_all_high: true           # 连续 3 章 intensity_level >= 8 → 情绪透支
+
 # 违规严重度
 severity:
-  critical: "元叙事、上帝视角概述、非正文内容（直接丢弃该段或要求重写）"
-  high: "高频疲劳词、说明书式对话（标记并建议替换）"
-  medium: "形容词堆砌、列表式叙事（标记，可接受阈值内）"
-  low: "偶发性成语堆砌、轻度副词多用（不阻断，记录趋势）"
+  critical: "元叙事、上帝视角概述、非正文内容、情绪透支（连续 4+ 章高压无释放）"
+  high: "高频疲劳词、说明书式对话、情绪单调（连续 3 章同类型钩子/同情绪基调）"
+  medium: "形容词堆砌、列表式叙事、开头/结尾句式相似"
+  low: "偶发性成语堆砌、轻度副词多用、情绪强度轻微走平"

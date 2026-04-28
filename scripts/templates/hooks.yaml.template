@@ -21,6 +21,8 @@ hooks:
     payoff_timing: "near_term"
     priority: 1
     hook_type: "mystery"
+    seed_text: ""           # 钩子种下时的原文片段（1-3句），用于兑现时锚定读者记忆
+    seed_location: ""       # 种下的具体位置（vol-ch 格式）
     last_mentioned_chapter: ""
     resolution_chapter: ""
     notes: ""
@@ -45,8 +47,9 @@ hook_health_rules:
 
 # 钩子操作语义（借鉴 InkOS 的 upsert/mention/resolve/defer）
 hook_operations:
-  upsert: "新增或更新钩子（同一钩子跨章演进时更新描述和 last_mentioned）"
+  upsert: "新增或更新钩子（同一钩子跨章演进时更新描述和 last_mentioned）。新钩子必须在归档时从正文提取 1-3 句原文填入 seed_text"
   mention: "本章提及已有钩子，更新 last_mentioned_chapter"
-  resolve: "钩子在当前章收束，填入 resolution_chapter"
+  resolve: "钩子在当前章收束，填入 resolution_chapter。兑现时必须引用 seed_text 中的原文画面，使兑现段落与种下时的画面形成呼应"
   defer: "钩子收束推迟（需说明理由和新的 payoff 预期）"
   abandon: "废弃钩子（仅当主线方向改变时，需注明原因）"
+  extract_seed: "归档时从正文中提取新埋钩子的原文片段（1-3句），填入该钩子的 seed_text 字段"
