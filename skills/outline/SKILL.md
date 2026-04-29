@@ -7,7 +7,7 @@ description: 卷纲和章纲规划。Phase 3。当设定完成后需要规划故
 
 ## Overview
 
-引导作者拆分故事线、讨论卷纲、逐章设计章纲（含 memo 读者情绪设计和 emotional_design）。
+引导作者拆分故事线、讨论卷纲、逐章设计章纲（含 memo 读者情绪设计和 emotional_design）。讨论期待值管理、章纲节奏、开篇设计时，参考 `best-practices.md` 中的模式和案例。
 
 **When NOT to use:** 设定未完成（world-setting 为空）、章纲已完成（status = draft 或 archived）、只是想查看已有章纲。
 
