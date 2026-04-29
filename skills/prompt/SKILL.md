@@ -26,6 +26,7 @@ description: 章提示词生成与视角转换。Phase 4。当章纲已确认、
 |--------|------|
 | `prompts/global-prompt.md` 是否存在？ | 不存在 → 生成（从 writing-style.yaml），作者确认 |
 | `prompts/volume-{N}-prompt.md` 是否存在？ | 不存在 → 生成（从 volume.yaml + archives/），作者确认 |
+| 模板版本检查 | 读取 `~/.claude/skills/novel/scripts/templates/writing-style.yaml.template` 头部 `# version: N`，对比项目 `settings/writing-style.yaml` 头部版本号。模板版本更高 → 向作者报告"写作风格模板有更新"，列出新增的 global_rules 和 possible_mistakes 条目，问作者"合并新规则 / 暂不合并"。合并后自动重新生成 `prompts/global-prompt.md` |
 | 章纲完整性 | memo（7段）+ emotional_design 全部有值？任一为空 → **STOP**，退回 `novel-outline` |
 | author-intent.md 一致性 | 本章与核心主题一致 / 存在偏离？偏离 → **STOP** |
 | current-focus.md 一致性 | 本章在优先级范围内 / 偏离？偏离 → **STOP** |

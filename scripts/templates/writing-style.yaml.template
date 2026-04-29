@@ -1,4 +1,5 @@
 # writing-style.yaml - 写作风格指南（低AI味优化版）
+# version: 3
 # 参考AI Engineer案例格式，新增「句式约束、语言松弛度」硬规则，根治机器腔
 
 role: |
