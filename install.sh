@@ -1,6 +1,6 @@
 #!/bin/bash
 # Novel Agent Skill 安装脚本
-
+#
 # awesome-novel-skill - AI-assisted novel writing workflow system
 # Copyright (C) 2026  modoojunko
 #
@@ -22,7 +22,6 @@ set -e
 usage() {
     echo "用法: $0 <平台>"
     echo "平台: claude-code, hermes, openclaw"
-    echo "示例: $0 hermes"
     exit 1
 }
 
@@ -34,13 +33,13 @@ PLATFORM="$1"
 
 case "$PLATFORM" in
     claude-code)
-        DEST_DIR="$HOME/.claude/skills/awesome-novel"
+        SKILLS_DIR="$HOME/.claude/skills"
         ;;
     hermes)
-        DEST_DIR="$HOME/.hermes/skills/awesome-novel"
+        SKILLS_DIR="$HOME/.hermes/skills"
         ;;
     openclaw)
-        DEST_DIR="$HOME/.openclaw/skills/awesome-novel"
+        SKILLS_DIR="$HOME/.openclaw/skills"
         ;;
     *)
         echo "不支持的平台: $PLATFORM"
@@ -48,10 +47,16 @@ case "$PLATFORM" in
         ;;
 esac
 
-echo "安装到: $DEST_DIR"
+DEST="$SKILLS_DIR/awesome-novel"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-mkdir -p "$DEST_DIR"
-cp SKILL.md "$DEST_DIR/"
-cp -r scripts "$DEST_DIR/"
+echo "安装到: $DEST"
+
+# 全量覆盖
+rm -rf "$DEST"
+cp -r "$SCRIPT_DIR" "$DEST"
+
+# 清理不需要的文件
+rm -rf "$DEST/.git" "$DEST/.claude" "$DEST/docs" "$DEST/example"
 
 echo "安装完成!"
