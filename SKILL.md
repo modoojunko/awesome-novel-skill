@@ -167,6 +167,16 @@ author-intent.md 填写（Phase 2 最后一步）:
 1. 此时世界设定、角色设定、写作风格、题材、钩子均已确认，作者对故事的全局方向已有完整认知
 2. Agent 引导作者填写 `author-intent.md`：核心主题、终局方向、写作信条、绝不妥协、长期伏笔池
 3. 如果作者暂时不想确定终局，至少填写"核心主题"和"写作信条"——这两条直接影响 Phase 4 提示词的写作指引段
+4. **STOP：作者确认后再进入下一步**
+
+全局提示词生成（author-intent.md 之后，Phase 2 最后一步）:
+1. Agent 读取 `settings/writing-style.yaml` 的全部 12 个字段，按 prose 格式一次性组装为 `prompts/global-prompt.md`
+2. 内容（自然段落，非 YAML，全本一字不改复用）：
+   - **角色定位**：role 原样写入
+   - **写作原则与禁忌**：core_principles + possible_mistakes + depiction_techniques + reader_psychology + emotional_pacing + creative_constitution + character_psychology_method，按🔴硬禁止 / 🟡强建议 / 🟢软引导三层物理分离，段间空行
+   - **欲望引擎与代入感**：desire_engine + immersion_pillars，告诉 subagent "读者的爽感从哪来、场景怎么立住"
+   - **题材规则**：genre 的反套路规则 + 节奏红线 + 爽点类型
+3. 展示给作者确认。此文件后续 Phase 4/5 直接引用，永不再改。
 4. **STOP：作者确认后再进入 Phase 3**
 
 ### Phase 3: 故事线拆分 + 卷纲 + 章纲
@@ -188,6 +198,11 @@ author-intent.md 填写（Phase 2 最后一步）:
 1. 创建 `volumes/volume-1.yaml`，写入卷标题和卷概要
 2. 讨论卷纲：本卷核心冲突、主要事件、角色弧光走向
 3. 将章节摘要列表写入 volume-1.yaml 的 chapters_summary
+3.5. **生成卷提示词**：读取 `volumes/volume-{N}.yaml`（标题、核心冲突、主线）+ story.yaml 的章节列表，组装为 `prompts/volume-{N}-prompt.md`：
+   - 本卷核心冲突与主线
+   - 章节列表（标题 + 一句话概要，未写章节留概要为空）
+   - **"已完成章节摘要"区**——初始为空。Phase 6 每章归档后由 Agent 追加一条摘要（第N章标题 + 一句话核心事件）
+   此文件在 Phase 6 归档时每章更新一次，其余时间不修改。展示给作者确认。
 4. 逐章讨论章纲 → 创建 `chapters/vol-1-ch-1.yaml`
    a. 先讨论 plot outline（剧情要点），确认后填入 outline 字段
    a2. outline 确认后，**必须询问作者**："本章有没有明确禁止出现的场景、元素或情节？有没有绝对不能写的东西？" 将作者回答记录到 memo.prohibitions。如果作者说"没有"，也要确认一次——有时作者事后才想起来。
@@ -278,93 +293,37 @@ current-focus.md 填写（Phase 3 最后一步）:
 3. **STOP：将转换后的内容展示给作者，等待确认。作者不满意则继续调整，直到确认。**
 4. 作者确认视角转换后，进入第二轮。
 
-**第二轮：组装提示词并生成变体**
+**第二轮：组装章提示词（三层合并）**
 
-5. **必须先读取 `settings/writing-style.yaml` 的全部字段**，按以下聚合清单逐项处理。**全部字段聚合完毕后才能进入步骤 6。缺失任何一个字段 subagent 都会缺少对应约束。**
+章提示词 = 全局提示词全文 + 卷提示词全文 + 本章专属 prose。**subagent 只读这一个文件。**
 
-   **聚合清单（逐项执行，每完成一项在脑内确认）**：
+5. 读取 `prompts/global-prompt.md` 全文——不加工，不截断，原样作为章提示词第一部分。全局提示词教 subagent "怎么写出好小说"。
+6. 读取 `prompts/volume-{N}-prompt.md` 全文——不加工，不截断，原样作为章提示词第二部分。卷提示词教 subagent "这一卷在讲什么、前面写了什么、将要走到哪"。
+7. 以 chapter.yaml 的以下字段为**过滤键**，精准读取源文件，生成的本章专属 prose 作为第三部分——"今天写什么、注意什么"：
 
-   | # | 字段 | 融入目标段 | 关键内容 |
-   |---|------|-----------|---------|
-   | 1 | `role` | 角色定位段 | 原样写入 |
-   | 2 | `core_principles` | 写作原则与禁忌段 🔴 | 全局规则、自然表达、描写替代描述、角色构建 |
-   | 3 | `possible_mistakes` | 写作原则与禁忌段 🔴 | 常见错误清单，转为禁止语句 |
-   | 4 | `depiction_techniques` | 写作原则与禁忌段 🟡 | 五种描写技法（动作/对话/微表情/环境互动/内心独白） |
-   | 5 | `reader_psychology` | 写作原则与禁忌段 🟡 | 期待管理、信息落差、情绪节拍、锚定效应、沉没成本 |
-   | 6 | `emotional_pacing` | 写作原则与禁忌段 🟡 | 关系递进规则、情绪升级法 |
-   | 7 | `creative_constitution` | 写作原则与禁忌段 🟡 | 14 条写作脊梁，转为自然段落约束 |
-   | 8 | `character_psychology_method` | 写作原则与禁忌段 🟡 | 六步推导法——subagent 写关键场景前必须先推导角色行为 |
-   | 9 | `desire_engine` | 写作要求段 | 基础欲望 + 主动欲望，告诉 subagent 本章要满足读者的什么欲望 |
-   | 10 | `immersion_pillars` | 写作要求段 | 六支柱作为场景设计默认模板 |
-   | 11 | `genre` | 写作原则与禁忌段 🟡 + 写作要求段 | 爽点类型/节奏红线→写作要求段；反套路规则→写作原则段 |
-   | 12 | `skill_layers` | L1→视角转换 / L2→写作原则段 / L3→Phase 5 保留 | 三层各司其职，不全部塞给 subagent |
+   **故事背景**（一段）：
+   - `settings/world-setting.yaml`：只取与 `outline.location` + `outline.time` 相关的设定片段——哪里、什么时间
+   - `settings/character-setting/`：只读 `outline.characters` 列出的角色——姓名与定位、当前地点、当前状态、关键人际关系、最近 1-2 条 state_history、驱动行为的 worldview/values。禁止只写角色名
 
-   **聚合完毕后自检**：逐项确认以上 12 项是否都已出现在提示词中。如有任何一项未聚合，**STOP**——补全后再继续。
-   - **约束优先级分层**：将上述所有约束按三级标注，写入提示词"写作原则与禁忌"段时物理分离：
-     - 🔴 **硬禁止（Hard Prohibition）**：违反即不合格。包括：禁止"他感到/他觉得/他意识到"、禁止元叙事、禁止文末总结升华、禁止俗套比喻、禁止副词修饰对话标签、禁止"不是……而是……"句式（单章不超过 3 次）。写入提示词时放在最前面，以"以下行为绝对禁止，违反任何一条正文即为不合格"领起。
-     - 🟡 **强建议（Strong Recommendation）**：应该遵守，偶有违反可容忍。包括：五感锚定、对话即动作、Show Don't Tell、期待管理、情绪节拍、欲望驱动。写入提示词时放在🔴之后，以"以下原则必须遵守"领起。
-     - 🟢 **软引导（Soft Guidance）**：尽力而为，不影响合格判定。包括：句式变化、成语密度、段落节奏。写入提示词时放在最后，以"以下技法请注意"领起。
-     - 🔴和🟡之间空一行，🟡和🟢之间空一行——物理分隔让 subagent 不可能把硬禁止和软建议混为一谈。
-6. **读取以下源文件，逐项组装为自然段落**（每完成一项在脑内确认）。提示词的六个段——角色定位、写作原则与禁忌、故事背景、写作指引、写作执行清单、写作要求——全部由此组装而成，不凭空生成任何内容。
+   **写作指引**（一段）：
+   - 第一轮视角转换结果（步骤 4 确认的沉浸式指引）
+   - 从 chapter.yaml 的 memo + emotional_design 提取读者情绪策略
+   - `settings/hooks.yaml`：只读 `memo.payoff_plan` 涉及的钩子条目——待兑现钩子的 seed_text，待压住钩子的 seed_text（只取提醒避开）
 
-   **故事背景段 — 从 4 个来源融合为一到两段叙述**：
+   **写作执行清单**（一段，PRE_WRITE_CHECK prose）：
+   - 当前任务（memo.current_task）、读者情绪策略（memo.reader_expectation）
+   - 伏笔兑现/压住清单（memo.payoff_plan）、章尾必须改变（memo.required_changes）
+   - 微兑现要求（emotional_design.micro_payoffs）、爽感循环位置与策略（emotional_design.cycle_position）
+   - 不要做的红线（memo.prohibitions）
 
-   | # | 源文件 | 提取内容 | 说明 |
-   |---|--------|---------|------|
-   | 6a | `settings/world-setting.yaml` | 与本章相关的设定细节 | 本章涉及的地理、政治、文化、规则等。不是全盘复制，只取与本章场景/冲突相关的部分 |
-   | 6b | `settings/character-setting/{本章出场角色}.yaml` | 角色的当前完整状态 | 每个本章出场角色必须包含：姓名与角色定位、当前所在地点、当前状态摘要、关键人际关系（especially 与其他出场角色的关系）、最近 1-2 条 state_history、驱动其行为的 worldview/values。**禁止只写角色名——subagent 需要知道这个人是谁、要什么、怕什么** |
-   | 6c | `volumes/volume-{N}.yaml` | 本卷标题、核心冲突、主线概要 | 告诉 subagent 本章在整个卷中的位置——之前发生了什么、将要走向哪里 |
-   | 6d | `chapters/vol-{N}-ch-{M}.yaml` 的 `outline.location` + `outline.time` | 本章场景时空 | 具体地点、时间（季节/时辰/特殊时间背景） |
+   **写作要求**（一段）：
+   - 字数下限、节奏方向、本章必须兑现给读者的微收获
+   - 爽感循环策略（从 emotional_design.cycle_position）
 
-   故事背景段组装完毕后，subagent 应该能回答：这是什么世界、这些人是谁（各自要什么怕什么）、此刻在哪里、发生了什么。
-
-   **写作指引段 — 从 3 个来源融合**：
-
-   | # | 源文件 | 提取内容 |
-   |---|--------|---------|
-   | 6e | 第一轮视角转换结果（步骤 7） | 沉浸式写作指引——场景基调、关键节点、叙述约束 |
-   | 6f | `chapters/vol-{N}-ch-{M}.yaml` 的 `memo` + `emotional_design` | 读者情绪设计——"读者此刻在等什么"、"章尾必须发生的改变"、"情绪基调与强度"、爽感循环位置与策略 |
-   | 6g | `settings/hooks.yaml` | 本章待兑现/推进钩子的 seed_text + hook_strength + hook_position |
-
-   **写作要求段 — 从 2 个来源融合**：
-
-   | # | 源文件 | 提取内容 |
-   |---|--------|---------|
-   | 6h | 步骤 5 聚合清单中的 `desire_engine` + `immersion_pillars` | 本章的情绪回报目标和场景设计模板 |
-   | 6i | `chapters/vol-{N}-ch-{M}.yaml` 的 `emotional_design.micro_payoffs` | 本章读者至少要获得什么——"本章必须让读者至少得到[具体微兑现]，如果没有，这一章就不算完成" |
-   | 6j | `settings/writing-style.yaml` > `genre` | 爽点类型、节奏红线、字数下限 |
-
-   **组装完毕后总检**：六个段（角色定位 / 写作原则与禁忌 / 故事背景 / 写作指引 / 写作执行清单 / 写作要求）是否全部有内容？任何一段空白 → **STOP**，补全后再继续。
-7. 将第一轮确认后的沉浸式内容作为"写作指引"段写入
-8. **生成 PRE_WRITE_CHECK 写作执行清单**：主 Agent 根据本章的 memo + emotional_design + cycle_position + micro_payoffs，生成一份"写作执行清单"（见下方格式），列出 subagent 动笔前必须对齐的所有约束。清单以 prose 段落形式写入提示词文件的"写作执行清单"段——不是 markdown 表格，是自然段落指令。内容必须覆盖：
-   - 当前任务与执行动作（从 memo.current_task）
-   - 读者情绪处理策略（从 memo.reader_expectation）
-   - 伏笔兑现/压住清单（从 memo.payoff_plan）
-   - 章尾必须发生的改变（从 memo.required_changes）
-   - 本章微兑现要求（从 emotional_design.micro_payoffs）
-   - 爽感循环位置与策略（从 emotional_design.cycle_position + suppression_stack / release_target）
-   - 不要做的红线（从 memo.prohibitions）
-9. 基于同一 content + PRE_WRITE_CHECK 清单，生成 3 个提示词变体（不同切入角度/叙事策略，每个变体均包含该清单作为"写作执行清单"段）
-10. **STOP：将 3 个变体展示给作者选择（含 PRE_WRITE_CHECK 清单），作者不满意则调整，直到确认。**
-11. 作者确认后，将章节状态从 outline → draft
-12. 确保 `prompts/` 目录存在，保存为 `prompts/vol-N-ch-M-prompt.md`
-
-**提示词组装映射表**（源文件 → 提示词 prose 段落）:
-
-| 读取的源文件 | 映射到提示词字段 | 说明 |
-|-------------|-----------------|------|
-| writing-style.yaml > role | 角色定位段 | 原样写入 |
-| writing-style.yaml > core_principles + possible_mistakes + depiction_techniques + reader_psychology + emotional_pacing + creative_constitution + character_psychology_method | 写作原则与禁忌段 | 融合为自然段落（期待管理、信息落差、情绪节拍、欲望驱动、情感节点设计、创作宪法全部融入） |
-| writing-style.yaml > desire_engine + immersion_pillars | 写作要求段 | 本章的情绪回报目标和场景设计模板 |
-| world-setting.yaml > details | 故事背景段 | 融合为叙述 |
-| character-setting/[角色].yaml | 故事背景段 | 角色当前状态，融入背景叙述 |
-| volume-N.yaml | 故事背景段 | 本卷冲突、主线，融入背景叙述 |
-| chapter.yaml > outline.location + time | 场景段 | 场景时空 |
-| chapter.yaml > outline | 写作指引段 | 章纲经视角转换后填入（见下方规则） |
-| chapter.yaml > memo + emotional_design | 写作指引段 | 读者情绪设计融入视角转换——"读者此刻在等什么"、"章尾必须发生的改变"、"情绪基调与强度"作为视角转换的核心约束 |
-| hooks.yaml > 待兑现/推进钩子的 seed_text | 写作指引段 | 在有钩子需要兑现或推进的章节，将种下时的原文片段注入写作指引，让 subagent 接着读者已经看到的画面来写兑现——不是"揭晓真相"，而是"读者在第X章看到的那个画面，现在有了后续" |
-| hooks.yaml > 钩子的 hook_strength + hook_position | 写作指引段 | 告诉 subagent 本章的钩子应该多强（strong/medium/weak）以及放在章内还是章末 |
-| chapter.yaml > emotional_design.micro_payoffs | 写作要求段 | 告诉 subagent 本章读者至少要获得什么——"本章必须让读者至少得到[具体的微兑现内容]，如果没有，这一章就不算完成" |
+8. 将步骤 5 + 6 + 7 合并为一个完整的 prose 文件。对步骤 7 的写作指引生成 3 个变体（不同切入角度，全局和卷部分完全相同）供作者选择：
+   - 变体1：以主角视角展开   /   变体2：以场景氛围开场   /   变体3：以冲突切入
+9. **STOP：将章提示词展示给作者确认（含变体选择）。作者不满意则调整，直到确认。**
+10. 作者确认后，保存为 `prompts/vol-{N}-ch-{M}-prompt.md`，章节状态 outline → draft
 
 **视角转换规则**（章纲 → 提示词 content 字段）——一句话概括：
 
@@ -414,7 +373,7 @@ current-focus.md 填写（Phase 3 最后一步）:
 Agent(
   description: "生成第{N}卷第{M}章正文",
   subagent_type: "general-purpose",
-  prompt: "读取 prompts/vol-{N}-ch-{M}-prompt.md。该文件是你的完整写作指令——从角色定位、写作原则与禁忌、故事背景、写作指引、写作执行清单到写作要求全部包含在内。严格按文件中的所有要求写作。
+  prompt: "读取 prompts/vol-{N}-ch-{M}-prompt.md。该文件是你的完整写作指令——包含全局写作方法论、本卷上下文、本章任务。严格按文件中的所有要求写作。
 
 文件中的字数下限为硬性指标。正文完成后自行统计字数：不足下限视为不合格，必须重新生成。
 
@@ -483,6 +442,7 @@ grep -cP '不是.{1,20}(而是|，是|,是)' archives/vol-00N-ch-00M-*.md
    - 如果本章无任何冲突/问题/目标 → 触发 HARD-004 冲突真空警告："本章没有需要解决的问题，读者无法回答'这章要解决什么'"
 9. 将 chapter.yaml 的 status 更新为 `archived`
 10. 更新 story.yaml 的 chapters 列表中对应条目
+10.5. **更新卷提示词**：往 `prompts/volume-{N}-prompt.md` 的"已完成章节摘要"区追加本章一句话摘要——章节标题 + 一句核心事件。这保持卷提示词随时反映最新进度，Phase 4 读取时不用再翻 archives/。
 11. **滑动窗口审视 current-focus.md**（每章归档后必做，不可跳过）：
     - 读取 `current-focus.md`，检查其中的"当前优先级"和"节奏意图"是否仍然适用
     - 将刚归档的章节标记为 ✅（已完成）
@@ -528,26 +488,15 @@ chapters:
 
 ## 提示词格式
 
-提示词保存为 `prompts/vol-N-ch-M-prompt.md`，**必须是自然语言 prose 格式，不是 YAML 结构**。原因：subagent 是 LLM，prose 指令比结构化碎片更有效——它不需要先在脑内拼装碎片。
+所有提示词均为 **自然语言 prose 格式，非 YAML**。三层分工：
 
-文件内容必须依次覆盖以下六个层次，以自然段落形式书写，不使用 YAML 字段：
+| 文件 | 生成时机 | 更新时机 | 内容 |
+|------|---------|---------|------|
+| `prompts/global-prompt.md` | Phase 2 末尾 | **永不修改** | 角色定位 + 写作原则与禁忌（🔴🟡🟢三层分离）+ 技法工具箱 + 欲望引擎 + 题材规则。全本小说家的"基本功手册" |
+| `prompts/volume-{N}-prompt.md` | Phase 3 卷纲确认后 | Phase 6 每章归档后追加一条摘要 | 本卷核心冲突与主线 + 章节列表 + 已完成章节摘要。告诉 subagent"这一卷在讲什么、走到哪了" |
+| `prompts/vol-{N}-ch-{M}-prompt.md` | Phase 4 | 作者确认后落盘 | **全局全文 + 卷全文 + 本章专属 prose**。本章专属部分：故事背景（world 片段 + 角色快照）+ 写作指引（视角转换 + memo + 钩子 seed_text）+ 写作执行清单（PRE_WRITE_CHECK）+ 写作要求（字数/节奏/微兑现/爽感循环策略） |
 
-1. **角色定位** — 从 writing-style.yaml 的 role 取出，原样写入
-2. **写作原则与禁忌** — 将 core_principles、possible_mistakes、depiction_techniques、reader_psychology、emotional_pacing、creative_constitution、character_psychology_method 融合为自然段落，但必须按三级优先级物理分离：
-   - 🔴 **硬禁止（违反即不合格）**：禁止"他感到/他觉得/他意识到"、禁止元叙事、禁止文末总结升华、禁止俗套比喻、禁止副词修饰对话标签、禁止"不是……而是……"句式（单章不超过 3 次）。以"以下行为绝对禁止，违反任何一条正文即为不合格"领起。
-   - 🟡 **强建议（必须遵守）**：五感锚定、对话即动作、Show Don't Tell、期待管理、情绪节拍、欲望驱动。以"以下原则必须遵守"领起。
-   - 🟢 **软引导（请注意）**：句式变化、成语密度、段落节奏。以"以下技法请注意"领起。
-   - 三段之间空一行物理分隔。禁止将🔴硬禁止淹没在🟡🟢的段落中——subagent 只会记住段首和段尾，埋在中段的约束等于不存在。
-3. **故事背景** — 融合以下四部分为一段或两段自然叙述，让 subagent 读完就能回答"这是什么世界、这些人是谁（各自要什么怕什么）、此刻在哪里、发生了什么"：
-   - 世界设定：本章涉及的地理、政治、文化、规则等（只取相关部分，不全盘复制）
-   - 角色状态：每个本章出场角色必须包含——姓名与定位、当前所在地点、当前状态、关键人际关系、驱动其行为的 worldview/values、最近 1-2 条状态变化。**禁止只写角色名——subagent 需要知道这个人的欲望和恐惧才能写出合理行为**
-   - 本卷上下文：本卷标题、核心冲突、主线概要、本章在卷中的位置
-   - 场景时空：具体地点、时间背景
-4. **写作指引** — 即经 Phase 4 第一轮视角转换并经作者确认后的沉浸式内容。包含场景基调、关键节点、叙述约束、爽感循环策略、钩子兑现锚定
-5. **写作执行清单** — 主 Agent 在 Phase 4 步骤 8 生成的 PRE_WRITE_CHECK 清单，以 prose 自然段落形式告诉 subagent：本章必须完成什么动作、读者此刻在等什么、必须兑现/压住的伏笔清单、章尾必须发生的改变、本章微兑现要求、爽感循环位置与策略、不要做的红线
-6. **写作要求** — 字数下限（不少于3000字）、节奏方向、结尾方向、欲望引擎和代入感支柱。用自然语言表达，如"本章不少于3000字，前松后紧，结尾不要总结"
-
-文件和 example/ 下的示例提示词参考格式。
+章提示词是 subagent 的唯一输入——读完就知道"怎么写出好小说（全局）"、"这一卷在讲什么（卷）"、"今天写什么（章）"。
 
 ## 授权模式
 
@@ -575,6 +524,7 @@ chapters:
 - 提示词缺失 writing-style 四个字段中的任何一个——缺少约束 subagent 必然放飞
 - Phase 5 质量检查跳过 AI 味检测（anti-ai.yaml）——疲劳词和句式违规是读者流失的首要原因
 - 归档时不更新 hooks.yaml——伏笔追踪断裂，长篇连续性崩溃
+- 归档时不更新卷提示词——后续章丢失前情上下文，subagent 不知道"前面写了什么"
 - 连续多章不检查 current-focus.md——故事方向漂移，角色行为失控
 - Phase 3 或 Phase 4 跳过 author-intent.md / current-focus.md 前置检查——这两个文件是"作者意图→Agent 执行"的唯一桥梁，跳过等于让 subagent 在没有方向约束的情况下自行判断故事走向
 - Phase 3 章纲讨论跳过 memo（读者情绪设计）——子智能体只知剧情不知情绪，正文必然缺少情绪调动
@@ -605,7 +555,10 @@ project/
 │   └── character-setting/              # 角色文件
 ├── volumes/                            # 卷文件
 ├── chapters/                           # 章纲
-├── prompts/                            # 提示词（prose .md）
+├── prompts/
+│   ├── global-prompt.md                # 全局提示词（Phase 2，全本复用）
+│   ├── volume-{N}-prompt.md            # 卷提示词（Phase 3，归档时追加摘要）
+│   └── vol-{N}-ch-{M}-prompt.md        # 章提示词（Phase 4，三层合并）
 └── archives/                           # 正文
 ```
 
@@ -615,6 +568,8 @@ project/
 - **hooks.yaml**：伏笔全生命周期追踪（pending→mentioned→resolved→abandoned），支持 payoff_timing 调度、钩子操作语义（upsert/mention/resolve/defer/abandon）、陈旧度检测和收束健康检查。
 - **author-intent.md**：作者长周期意图——核心主题、终局方向、写作信条、不妥协底线、长期伏笔池。
 - **current-focus.md**：1-3章中周期聚焦——当前优先级、需推进支线、需提及钩子、节奏意图、限制约束。
+- **prompts/global-prompt.md**：全局写作方法论——角色定位、🔴🟡🟢三层约束、技法工具箱、欲望引擎、题材规则。Phase 2 末尾生成，全本一字不改复用。
+- **prompts/volume-{N}-prompt.md**：卷级上下文——核心冲突、主线、已完成章节摘要。Phase 3 生成，Phase 6 每章归档后追加。
 
 ## Verification
 
@@ -627,13 +582,12 @@ project/
 - [ ] 章纲包含所有必需字段 (outline + memo + emotional_design)
 - [ ] 章纲讨论时同步更新了 hooks.yaml
 - [ ] Phase 3 chapter memo 的 7 段（尤其是"读者此刻在等什么"和"章尾必须发生的改变"）已经作者讨论确认
+- [ ] `prompts/global-prompt.md` 已在 Phase 2 生成，全本复用，永不修改
+- [ ] `prompts/volume-{N}-prompt.md` 已在 Phase 3 卷纲确认后生成
+- [ ] Phase 4 章提示词已按三层合并（全局全文 + 卷全文 + 本章专属 prose）
 - [ ] Phase 4 视角转换已完成且经作者确认
-- [ ] 提示词为 prose 格式（非 YAML），包含六个层次：角色定位、写作原则与禁忌、故事背景、写作指引、写作执行清单、写作要求
-- [ ] 提示词"写作原则与禁忌"段已按🔴🟡🟢三层物理分离，硬禁止在最前面单独成段
-- [ ] 提示词已融入 writing-style 的 reader_psychology、desire_engine、immersion_pillars、emotional_pacing、creative_constitution、character_psychology_method（融入写作原则段和写作要求段）
-- [ ] 提示词已融入 chapter.yaml 的 memo 和 emotional_design（融入写作指引段）
-- [ ] 提示词已融入 writing-style 的 skill_layers（L1 结构层用于叙事约束、L2 内容层用于写作原则段、L3 审查层保留给 Phase 5 质量检查）
-- [ ] 提示词中 writing-style 四个字段的内容已融入 prose——缺失任何一个 subagent 都会放飞
+- [ ] 章提示词本章专属部分已按过滤键精准读取（只读本章涉及的角色/地点/钩子）
+- [ ] 章提示词为 prose 格式（非 YAML）
 - [ ] 正文已通过 anti-ai.yaml 的质量检查（含 AI 疲劳词、句式违规、章尾情绪缺口、情绪兑现检测）
 - [ ] 正文已通过结构性句式癖好检测（grep 扫描 anti-ai.yaml structural_tic_patterns，各模式不超过阈值）
 - [ ] 正文已写入 archives/ 目录（Phase 5 落盘）后再进入归档流程
@@ -641,6 +595,7 @@ project/
 - [ ] 角色 state_history 在归档时更新
 - [ ] 角色 emotional_arc 在归档时追记
 - [ ] hooks.yaml 在归档时更新（mention/resolve/defer），钩子健康检查已完成
+- [ ] 卷提示词已在归档时更新（追加本章一句话摘要）
 - [ ] 跨章情绪单调检测已在归档时执行
 - [ ] current-focus.md 滑动窗口审视已完成（每章归档后必做，3 章倍数节点必须引导作者主动更新）
 
