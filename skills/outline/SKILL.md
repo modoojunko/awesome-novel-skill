@@ -13,6 +13,8 @@ description: 卷纲和章纲规划。Phase 3。当设定完成后需要规划故
 
 **Announce at start:** "我来引导你规划章节。先确认卷纲，再逐章讨论。"
 
+讨论章纲时参考 `best-practices.md` 中的模式和案例引导作者。
+
 ## HARD-GATE
 
 ```
@@ -50,19 +52,22 @@ memo 缺失 → Phase 4 subagent 不知道"读者此刻在等什么"。
 **必须询问：** "本章有没有明确禁止出现的场景、元素或情节？" 记录到 memo.prohibitions。作者说"没有"也要确认一次。
 
 #### b. Chapter Memo（7 段）
+填写每段时触发以下诊断（参考 best-practices.md）：
 - current_task：本章必须完成的具体动作
-- reader_expectation：读者此刻在等什么 + 策略（制造新缺口/延迟兑现/兑现旧缺口/双重）
+- reader_expectation：**诊断：** "这一章读者最想知道答案的问题是什么？你打算回答多少？留多少？"（参考「期待值管理」）
 - payoff_plan：该兑现 / 暂不掀的伏笔
-- downtime_functions：日常/过渡段落的功能映射
+- downtime_functions：**诊断：** "这个平淡段落的'前因'可以是什么？如果让剧情一层层变得更糟，第一层是什么？"（参考「流水账修复」）
 - key_choices：关键抉择三连问
 - required_changes：章尾必须改变的 1-3 条
 - prohibitions：硬约束红线
 
 #### c. Emotional Design
 primary_mood、mood_progression、intensity_peak、emotional_hook、intensity_level
+**诊断：** "这一章结尾，读者最担心什么？最有好奇心的问题是什么？"（参考「钩子设计」和「期待值管理」）
 
 #### d. 钩子操作
 upsert（埋新）→ 归档时从正文提取 seed_text / mention（推进）/ resolve（收束）→ Phase 4 视角转换时注入 seed_text
+**诊断（参考「四种开头钩」）：** "本章开头的钩子是什么类型——硬悬疑、思路式、人设式还是目标式？"
 
 #### e. 更新 hooks.yaml
 
