@@ -48,6 +48,11 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 | chapter.yaml status = `draft`，正文未归档 | Phase 5/6 待执行 | → `novel-write` 或 `novel-archive` |
 | chapter.yaml status = `archived` | 本章已完成 | 问作者：下一章还是回顾？ |
 
+**章状态（chapter.status）:**
+- `outline` — 章纲和情绪设计已确认，等待生成提示词
+- `draft` — 提示词已生成，正文写作/修改中，等待归档
+- `archived` — 正文已归档
+
 ### Step 2: 匹配用户意图
 
 | 用户说 | 目标 Phase | 子技能 |

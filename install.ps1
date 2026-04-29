@@ -16,7 +16,7 @@
 
 param(
     [Parameter(Mandatory=$true)]
-    [ValidateSet("claude-code", "hermes")]
+    [ValidateSet("claude-code", "hermes", "openclaw")]
     [string]$Platform
 )
 
@@ -29,13 +29,23 @@ switch ($Platform) {
     "hermes" {
         $DEST_DIR = "$HOME_DIR\.hermes\skills\awesome-novel"
     }
+    "openclaw" {
+        $DEST_DIR = "$HOME_DIR\.openclaw\skills\awesome-novel"
+    }
 }
+
+$SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 Write-Host "安装到: $DEST_DIR"
 
-New-Item -ItemType Directory -Force -Path $DEST_DIR | Out-Null
+# 全量覆盖
+Remove-Item -Recurse -Force $DEST_DIR -ErrorAction SilentlyContinue
+Copy-Item -Recurse "$SCRIPT_DIR" "$DEST_DIR"
 
-Copy-Item "SKILL.md" "$DEST_DIR\"
-Copy-Item -Recurse "scripts" "$DEST_DIR\"
+# 清理不需要的文件
+Remove-Item -Recurse -Force "$DEST_DIR\.git" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$DEST_DIR\.claude" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$DEST_DIR\docs" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$DEST_DIR\example" -ErrorAction SilentlyContinue
 
 Write-Host "安装完成!"
