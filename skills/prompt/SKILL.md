@@ -67,8 +67,11 @@ description: 章提示词生成与视角转换。Phase 4。当章纲已确认、
 3. 以 chapter.yaml 字段为过滤键，精准读取源文件生成第三部分：
 
 **故事背景（一段）：**
-- world-setting：只取与 location + time 相关的片段
+- world-setting 全局规则（每章必带，不过滤）：力量/法术体系、科技水平、特殊世界规则（时间循环/系统/鬼怪机制）、社会结构、当前世界大势、世界基调。这些是世界的底层规则——无论主角在哪都在起作用
+- world-setting 场景片段：只取与 location + time 相关的局部设定
 - 角色快照：只读 outline.characters 列出的角色（姓名、定位、当前状态、关系、state_history、worldview/values）。禁止只写角色名
+- 前章锚定：上一章正文结尾最后 150-200 字原文引用。让 subagent 知道读者刚刚看到什么画面，保证章节衔接无缝
+- 活跃钩子速览：所有 status != resolved 的钩子列表（只列标题+当前状态，不展开正文）。防止正文意外踩坑或遗漏
 
 **写作指引（一段）：**
 - 视角转换结果 + memo + emotional_design
