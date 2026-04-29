@@ -16,6 +16,7 @@ outline:
   characters: []
   location: ""
   time: ""
+  narrative_pov: ""  # 第三人称有限视角 / 第一人称视角 / 全知视角。空值时 Phase 4 强制询问作者确认
 
 # ============================================================
 # 节备忘录（借鉴 InkOS Chapter Memo — 7 段读者情绪设计）

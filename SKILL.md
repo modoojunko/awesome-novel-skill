@@ -204,7 +204,7 @@ author-intent.md 填写（Phase 2 最后一步）:
    - **"已完成章节摘要"区**——初始为空。Phase 6 每章归档后由 Agent 追加一条摘要（第N章标题 + 一句话核心事件）
    此文件在 Phase 6 归档时每章更新一次，其余时间不修改。展示给作者确认。
 4. 逐章讨论章纲 → 创建 `chapters/vol-1-ch-1.yaml`
-   a. 先讨论 plot outline（剧情要点），确认后填入 outline 字段
+   a. 先讨论 plot outline（剧情要点），确认后填入 outline 字段（含 narrative_pov——本章用什么叙事视角。若作者未指定，沿用上一章的视角设定）
    a2. outline 确认后，**必须询问作者**："本章有没有明确禁止出现的场景、元素或情节？有没有绝对不能写的东西？" 将作者回答记录到 memo.prohibitions。如果作者说"没有"，也要确认一次——有时作者事后才想起来。
    b. 再讨论 chapter memo（读者情绪设计），分为 7 段：
       - **当前任务**：本章必须完成的具体动作（对齐卷纲节点）
@@ -279,6 +279,7 @@ current-focus.md 填写（Phase 3 最后一步）:
 |--------|------|
 | `prompts/global-prompt.md` 是否存在？ | 不存在 → 向作者说明"全局提示词缺失，需要从 writing-style.yaml 生成一次（全本复用）"，作者确认后按 Phase 2 全局提示词步骤生成 |
 | `prompts/volume-{N}-prompt.md` 是否存在？ | 不存在 → 向作者说明"卷提示词缺失"，读取 `volumes/volume-{N}.yaml` + 扫描 `archives/` 已有章节生成。如果已有归档章节，Agent 翻正文提取每章一句话摘要填入"已完成章节摘要"区 |
+| 章纲完整性检查 | 读取本章 chapter.yaml，确认 memo（7 段：current_task / reader_expectation / payoff_plan / downtime_functions / key_choices / required_changes / prohibitions）和 emotional_design（primary_mood / mood_progression / intensity_level / emotional_hook / micro_payoffs）全部有值。任一字段为空 → **STOP**——章纲不完整，退回 Phase 3 补全。memo 缺失意味着 subagent 不知道"读者此刻在等什么"，emotional_design 缺失意味着 subagent 不知道"本章要给读者什么情绪" |
 | 重新读取 `author-intent.md` | 本章方向与核心主题一致 / 存在偏离？ |
 | 重新读取 `current-focus.md` | 本章在 1-3 章优先级范围内 / 偏离当前聚焦？ |
 | 存在偏离 | **STOP** — 先与作者讨论调整章纲或更新控制文档 |
@@ -291,9 +292,10 @@ current-focus.md 填写（Phase 3 最后一步）:
 **第一轮：视角转换**
 
 1. 读取章纲 `chapters/vol-N-ch-M.yaml` 的 outline 字段
-2. 按视角转换规则（见下方）将上帝视角章纲转换为沉浸式写作指引
-3. **STOP：将转换后的内容展示给作者，等待确认。作者不满意则继续调整，直到确认。**
-4. 作者确认视角转换后，进入第二轮。
+2. **确认叙事视角**：本章用什么叙事视角？读取 chapter.yaml 的 `narrative_pov` 字段。若为空，询问作者确认（第三人称有限视角/第一人称视角/全知视角/其他）。确认后写入 chapter.yaml。视角转换必须严格遵守此设定——第一人称不能出现"他感到"，第三人称有限不能跳出 POV 角色做全知解释
+3. 按视角转换规则（见下方）将上帝视角章纲转换为沉浸式写作指引
+4. **STOP：将转换后的内容展示给作者（含叙事视角确认），等待确认。作者不满意则继续调整，直到确认。**
+5. 作者确认视角转换后，进入第二轮。
 
 **第二轮：组装章提示词（三层合并）**
 
@@ -308,7 +310,7 @@ current-focus.md 填写（Phase 3 最后一步）:
    - `settings/character-setting/`：只读 `outline.characters` 列出的角色——姓名与定位、当前地点、当前状态、关键人际关系、最近 1-2 条 state_history、驱动行为的 worldview/values。禁止只写角色名
 
    **写作指引**（一段）：
-   - 第一轮视角转换结果（步骤 4 确认的沉浸式指引）
+   - 第一轮视角转换结果（经作者确认的沉浸式指引 + 叙事视角）
    - 从 chapter.yaml 的 memo + emotional_design 提取读者情绪策略
    - `settings/hooks.yaml`：只读 `memo.payoff_plan` 涉及的钩子条目——待兑现钩子的 seed_text，待压住钩子的 seed_text（只取提醒避开）
 
@@ -338,6 +340,10 @@ current-focus.md 填写（Phase 3 最后一步）:
 - content 应是"让作者沉浸到场景中去写"的指引，而非"告诉 subagent 剧情是什么"的摘要
 - **指引不是剧本。禁止按时间顺序逐段描述'先写什么再写什么'。给出氛围基调、关键情节点、情感走向即可，把具体的叙事节奏、细节选择和语言组织留给 subagent。如果 content 读起来像分镜脚本，说明粒度太细了。**
 - 禁止自由发挥联想，严格基于章纲已确认的情节，仅改变叙述视角，不添加章纲中没有的事件
+- **字数上限**：guidance 字数不超过章纲 outline 字数的 2-3 倍。超过则说明在写半成品正文而非指引
+- **禁止写具体对话**：guidance 只描述"对话的目的和走向"（如"两人在此发生争执，林默试图回避但苏清步步紧逼"），不写具体台词和说话方式
+- **禁止写动作细节**：guidance 只描述"动作的结果和意义"（如"打斗中林默发现对手的弱点"），不写具体招式、动作分解和身体反应
+- **指引是地图，不是已经走完的路**：subagent 收到的是"要写什么场景、什么情绪、什么转折"，而不是"怎么措辞、怎么描写"。写完 guidance 后自检——如果 subagent 照着 guidance 做文字整理就能交稿，说明粒度太细了
 
 **钩子兑现锚定规则**：如果本章 memo.payoff_plan.must_resolve 或 partial_advance 中有钩子需要兑现或推进，视角转换时必须将该钩子的 seed_text（种下时的原文片段）嵌入写作指引段。格式参考："> 读者在第 X 章看到过：'[seed_text 原文引用]'——本章需要接着这个画面来写兑现/推进。不是轻描淡写一句话带过，而是让读者感觉到'这个坑终于填了'——兑现段落应在情绪或画面上与原文片段形成呼应。"
 
@@ -419,6 +425,18 @@ grep -cP '不是.{1,20}(而是|，是|,是)' archives/vol-00N-ch-00M-*.md
 触发条件：作者审阅正文满意，确认归档
 
 步骤：
+
+**归档前 Workflow 完整性检查（步骤 0，任意一项不通过 → STOP，修复后再归档）：**
+
+| 检查项 | 操作 |
+|--------|------|
+| chapter.yaml 完整性 | memo（7 段）和 emotional_design 全部有值？任一缺失 → 退回 Phase 3 补全章纲 |
+| `prompts/vol-{N}-ch-{M}-prompt.md` 存在？ | 不存在 → 退回 Phase 4 生成章提示词 |
+| 提示词覆盖本章所有 key_points？ | 对照 `outline.key_points`，确认章提示词覆盖了每条关键情节点。缺失 → 退回 Phase 4 补全 |
+| 正文已通过 Phase 5 全部质量检查？ | 未通过 → 退回 Phase 5 修复 |
+
+以上全部通过后，执行以下步骤：
+
 1. 正文已在 Phase 5 写入 `archives/vol-{N}-ch-{M}-{slugified-title}.md`，此步复核归档文件内容无误
 2. 分析正文中角色的变化（位置、关系、能力、心态），推断状态更新
 3. 为每个出场角色追加 state_history 条目（见下方格式）
