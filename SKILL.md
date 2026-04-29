@@ -140,11 +140,13 @@ Agent 首先判断用户意图——是新建还是导入：
 4. 每角色讨论完创建 `settings/character-setting/[角色名拼音id].yaml`
 
 写作风格确认（世界和角色设定完成后进行）:
-1. 告知作者：settings/writing-style.yaml 已预填默认写作原则，包括：
-   - 角色定位：全球闻名的客观冷峻小说作家
-   - Show Don't Tell：禁止直接描写感受，通过动作/语言/微表情展示
-   - 禁止道德说教：让故事和角色自己说话
-   - 禁止俗套比喻：拒绝"眼泪像断了线的珍珠"之类表达
+1. 告知作者：settings/writing-style.yaml 已预填"低 AI 味优化版"默认写作原则，包括：
+   - 角色定位：擅长细腻真挚、贴近真人的文字
+   - Show Don't Tell：禁止直接描写感受，通过动作/语言/微表情展示，展示不刻意
+   - 行文自然松弛：允许轻微思绪跳跃、留白、断句，拒绝机器式规整句式
+   - 句式强制规则：单段不超过 5 行，每 3 句必有 1 句短句（1-5 字）
+   - 禁止堆技法：五感、微表情、反差细节顺势带出，不刻意设计
+   - 自然对话：允许半截话、重复语气、下意识口头禅
    - 五种描写技法：动作描写、对话展示、微表情捕捉、环境互动、内心独白
 2. 用 AskUserQuestion 询问作者是否调整：
    - "使用默认风格，以后再说" — 跳过
@@ -391,7 +393,7 @@ Agent(
 
 **放弃 subagent 输出的判断标准**：
 
-subagent 返回的正文在展示给作者之前，主 Agent 必须先检查以下十一项（含 AI 味检测、情绪缺口检测、跨章情绪单调检测、微兑现检测、安全着陆检测）。**任意一项触发，不展示正文，向作者报告具体问题，由作者决定下一步：重新调用 subagent、主 Agent 按指令重写、或作者给出方向后主 Agent 修改。**
+subagent 返回的正文在展示给作者之前，主 Agent 必须先检查以下十三项（含 AI 味检测、句式单调检测、身体反应模板化检测、情绪缺口检测、跨章情绪单调检测、微兑现检测、安全着陆检测、物品/状态一致性检测）。**任意一项触发，不展示正文，向作者报告具体问题，由作者决定下一步：重新调用 subagent、主 Agent 按指令重写、或作者给出方向后主 Agent 修改。**
 
 检测时参考 `settings/anti-ai.yaml` 中的 fatigue_words、sentence_rules（含句式开头多样性 + 句子长度节奏 + 身体部位情绪密度）、paragraph_rules、dialogue_rules、emotional_cadence、stagnation、safe_landing、structural_tic_patterns（含公式化副词/一边一边/就在这时/身体部位情绪模板）八个规则组。
 
@@ -543,7 +545,7 @@ chapters:
 - 一次性产出多个 Phase 的文件（如同时创建 world-setting、character、volume、chapter）
 - 作者说一句模糊指令（如"帮我写完"）就直接推进多个阶段
 - 提示词采用 YAML 结构格式而非 prose——结构化碎片对 LLM subagent 效果打折，应使用自然段落
-- 提示词缺失 writing-style 四个字段中的任何一个——缺少约束 subagent 必然放飞
+- `prompts/global-prompt.md` 未在 Phase 2 生成或内容不完整——subagent 缺少写作方法论约束，正文必然放飞
 - Phase 5 质量检查跳过 AI 味检测（anti-ai.yaml）——疲劳词和句式违规是读者流失的首要原因
 - 归档时不更新 hooks.yaml——伏笔追踪断裂，长篇连续性崩溃
 - 归档时不更新卷提示词——后续章丢失前情上下文，subagent 不知道"前面写了什么"
