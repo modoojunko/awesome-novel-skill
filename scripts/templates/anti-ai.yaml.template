@@ -95,6 +95,11 @@ structural_tic_patterns:
     threshold: 3
     severity: "medium"
     description: "'没有X，只是Y'——'不是而是'的变体，同样的问题"
+  - pattern: "(不[,，]?\s*不是这样|其实并非如此|更准确[地性]说|不[,，]?\s*[他她它那这])"
+    name: "否定-纠正句式"
+    threshold: 2           # 单章最多允许出现次数
+    severity: "high"
+    description: "'不，不是这样'、'其实并非如此'、'更准确地说'——LLM 先否定再纠正的统计癖好。直接陈述事实即可，不需要先声明'刚才说的不对'。修复方式：删除否定-纠正前缀，只保留纠正后的陈述"
   - pattern: "——(他|她|它|这|那)"
     name: "破折号解释句式"
     threshold: 5           # 宽松一些，因为是常见的中文写作手法
