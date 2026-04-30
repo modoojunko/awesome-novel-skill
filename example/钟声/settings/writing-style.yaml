@@ -1,6 +1,13 @@
 # writing-style.yaml - 写作风格指南（低AI味优化版）
-# version: 3
-# 参考AI Engineer案例格式，新增「句式约束、语言松弛度」硬规则，根治机器腔
+# version: 4
+
+# ============================================================
+# 写作模型配置（全局设置，所有 Phase 5 subagent 使用此模型）
+# 留空则继承主会话模型。可选: sonnet | opus | haiku
+# Claude Code: haiku = deepseek-v4-flash，最快最省，推荐用于写作
+# OpenClaw / Hermes: 留空即可，使用默认模型
+# ============================================================
+writing_model: "haiku"
 
 role: |
   你是全球闻名的小说作家，擅长以细腻真挚、贴近真人的文字描摹角色性格。
@@ -225,9 +232,6 @@ character_psychology_method:
 genre:
   # 题材类型（Phase 2 讨论确定）
   type: "urban"  # xuanhuan | xianxia | urban | sci-fi | xuanhuan_survival | mystery | horror | fanfic | other
-
-# Phase 5 写作 subagent 使用的模型（留空则继承主会话模型）
-writing_model: "haiku"  # sonnet | opus | haiku（opus 质量最高，haiku 最快最省）
 
   # 爽点类型（本题材读者最期待的情绪回报）
   satisfaction_types: ["智斗妙招", "身份揭晓", "真相浮现", "关系转折"]
