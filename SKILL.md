@@ -44,13 +44,14 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 |------|-----------|--------|
 | world-setting.yaml 字段大量为空 | Phase 2 未完成 | → `novel-setup` |
 | chapter.yaml status = `outline`，memo 不完整 | Phase 3 进行中 | → `novel-outline` |
-| chapter.yaml status = `outline`，memo 完整，提示词不存在 | Phase 4 待执行 | → `novel-prompt` |
+| chapter.yaml status = `outline`，memo 完整，segments 为空 | Phase 4 待执行——需拆 segment | → `novel-prompt` |
+| chapter.yaml status = `outline`，segments 已填充，提示词不存在 | Phase 4 进行中——需生成提示词 | → `novel-prompt`（Step 0 展示已有 segments，确认后跳 Step 2） |
 | chapter.yaml status = `draft`，正文未归档 | Phase 5/6 待执行 | → `novel-write` 或 `novel-archive`。建议归档前先 `novel-review` |
 | chapter.yaml status = `archived` | 本章已完成 | 问作者：下一章还是回顾？可随时触发 `novel-review` 回顾评审 |
 
 **章状态（chapter.status）:**
-- `outline` — 章纲和情绪设计已确认，等待生成提示词
-- `draft` — 提示词已生成，正文写作/修改中，等待归档
+- `outline` — 章纲和情绪设计已确认，等待拆 segment → 生成提示词
+- `draft` — segment 提示词已生成，正文写作/修改中，等待归档
 - `archived` — 正文已归档
 
 ### Step 2: 匹配用户意图
@@ -70,8 +71,8 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 
 若目标 Phase > 当前 Phase + 1，检查前面 Phase 的产出是否完整：
 
-- 目标 Phase 4 → 检查 chapter.yaml 的 memo 7 段是否填满
-- 目标 Phase 5 → 检查 `prompts/vol-{N}-ch-{M}-prompt.md` 是否存在
+- 目标 Phase 4 → 检查 chapter.yaml 的 memo 7 段是否填满、segments 是否已拆分
+- 目标 Phase 5 → 检查 `prompts/vol-{N}-ch-{M}-seg-{1}-prompt.md` 是否存在
 - 目标 Phase 6 → 检查正文是否已写入 archives/
 
 缺失 → **STOP**。告知作者"XX 还没完成，先补这一环"，路由到前置 Phase 的子技能。
@@ -82,8 +83,8 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 
 - `novel-setup`：Phase 1+2 — 初始化、世界观、角色、全局提示词
 - `novel-outline`：Phase 3 — 卷纲、章纲、memo、情绪设计、卷提示词
-- `novel-prompt`：Phase 4 — 视角转换、三层合并章提示词
-- `novel-write`：Phase 5 — 调 subagent 写正文、质量检查
+- `novel-prompt`：Phase 4 — 叙事段落拆分、视角转换、per-segment 提示词生成
+- `novel-write`：Phase 5 — 串行 subagent 写各段、拼接全文、质量检查+深度评审
 - `novel-archive`：Phase 6 — 归档、角色更新、钩子更新、滑动窗口审视
 - `novel-review`：Phase 5→6 推荐评审 — 10 维 60+ 细项诊断，对照全部设定文件逐条评审章正文
 
