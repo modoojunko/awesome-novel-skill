@@ -88,6 +88,24 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 - `novel-archive`：Phase 6 — 归档、角色更新、钩子更新、滑动窗口审视
 - `novel-review`：Phase 5→6 推荐评审 — 10 维 60+ 细项诊断，对照全部设定文件逐条评审章正文
 
+## 模型策略
+
+各 Phase 根据任务性质使用不同模型。主 Agent 调用子技能时按此表选择模型，跳过模型参数则继承主会话当前模型。
+
+| Phase | 子技能 | 推荐模型 | 原因 |
+|-------|--------|---------|------|
+| 1+2 | novel-setup | sonnet/opus | 世界观讨论、角色设计、风格确认——需要深度思考 |
+| 3 | novel-outline | sonnet/opus | 章纲规划、情绪设计、结构推理 |
+| 4 | novel-prompt | sonnet/opus | 视角转换、segment 拆分、提示词组装——最耗推理 |
+| 5 | novel-write (subagent) | haiku | 正文生成，大量 serical 调用——快省优先 |
+| 6 | novel-archive | haiku | 归档、状态更新——机械操作 |
+| review | novel-review | sonnet/opus | 深度评审需要批判性思考 |
+
+**说明：**
+- Claude Code: `haiku` = deepseek-v4-flash
+- OpenClaw / Hermes: 不传模型参数，使用平台默认模型
+- 每个子技能的 SKILL.md 中 Agent() 调用的 `model` 参数由具体实现读取（如 Phase 5 从 `writing-style.yaml` 的 `writing_model` 读取）
+
 ## 授权模式
 
 - **步步授权（默认）**：每步需作者确认

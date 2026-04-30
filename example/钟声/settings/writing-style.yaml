@@ -2,10 +2,10 @@
 # version: 4
 
 # ============================================================
-# 写作模型配置（全局设置，所有 Phase 5 subagent 使用此模型）
-# 留空则继承主会话模型。可选: sonnet | opus | haiku
-# Claude Code: haiku = deepseek-v4-flash，最快最省，推荐用于写作
-# OpenClaw / Hermes: 留空即可，使用默认模型
+# Phase 5 写作模型（覆盖主 SKILL.md 的模型策略）
+# 可选: sonnet | opus | haiku | 留空则使用主会话模型
+# Claude Code: haiku = deepseek-v4-flash
+# OpenClaw / Hermes: 留空即可，使用平台默认模型
 # ============================================================
 writing_model: "haiku"
 
