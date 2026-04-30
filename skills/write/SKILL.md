@@ -46,10 +46,11 @@ for seg in 1..N:
         > {prev_segment_last_200_chars}"
         写回 prompt_file
     
-    # 3. 调 subagent
+    # 3. 调 subagent（模型从 settings/writing-style.yaml 的 writing_model 读取）
     Agent(
       description: "写第{N}卷第{M}章 Segment {S}/{N}",
       subagent_type: "general-purpose",
+      model: "{writing_model}",
       prompt: "读取 {prompt_file}。该文件是你的完整写作指令——包含全局写作方法论、故事背景、本段写作指引。
 
 严格按文件中的所有要求写作。字数必须达到 word_target 指定的目标（不低于 80%，不超过 120%）。

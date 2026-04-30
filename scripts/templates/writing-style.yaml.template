@@ -226,6 +226,9 @@ genre:
   # 题材类型（Phase 2 讨论确定）
   type: ""  # xuanhuan | xianxia | urban | sci-fi | xuanhuan_survival | mystery | horror | fanfic | other
 
+# Phase 5 写作 subagent 使用的模型（留空则继承主会话模型）
+writing_model: "haiku"  # sonnet | opus | haiku（haiku 对应 deepseek-v4-flash，最快最省，适合写作）
+
   # 爽点类型（本题材读者最期待的情绪回报）
   satisfaction_types: []  # 例如: ["实力突破", "打脸反击", "智斗妙招", "身份揭晓", "感情升温"]
 
