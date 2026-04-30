@@ -31,6 +31,69 @@ description: 章提示词生成与视角转换。Phase 4。当章纲已确认、
 | author-intent.md 一致性 | 本章与核心主题一致 / 存在偏离？偏离 → **STOP** |
 | current-focus.md 一致性 | 本章在优先级范围内 / 偏离？偏离 → **STOP** |
 
+## Step 0: 叙事功能段落拆分
+
+门禁通过后，Agent 自动将章纲拆分为 5-7 个叙事功能段落（segment），展示给作者确认后写入 chapter.yaml。
+
+### 段落功能类型
+
+| 类型 | 作用 | 分配原则 |
+|------|------|---------|
+| `atmosphere` | 氛围建立——环境描写、五感锚定、世界基调 | 首段常用，让读者先站稳 |
+| `character_beat` | 角色状态——习惯/情绪/内心活动，建立读者连接 | 首段或事件后使用 |
+| `dialogue_push` | 对话推进——有意图的对话，推动信息或关系变化 | 每个 key_point 如涉及重要对话 |
+| `action_beat` | 动作事件——冲突、动作、关键事件发生 | 每个 key_point 如涉及动作/事件 |
+| `revelation` | 信息揭露——新线索、真相浮现、伏笔推进 | 每个 key_point 如涉及信息释放 |
+| `emotional_landing` | 情绪落地——事件余波、角色反应、章末钩子 | **末段必须** |
+| `transition` | 过渡桥接——时间/地点/情绪转换 | 仅必要时使用 |
+
+### 拆分流程
+
+1. 读取 chapter.yaml 的 outline + memo + emotional_design
+2. 按以下规则拆分为 5-7 个 segment：
+   - **首段**：必须是 `atmosphere` 或 `character_beat`——先让读者站稳，不急着推剧情
+   - **中间段**：每个 key_point 映射为 1-2 个 segment，选择匹配的 function 类型
+   - **末段**：必须是 `emotional_landing`——事件后的情绪余波 + 章末钩子（对应 emotional_design.emotional_hook）
+   - **transition**：只在时间跳转/地点切换/情绪大转折时插入，不滥用
+   - 总 word_target 之和 ≈ 章纲字数下限
+   - emotional_tone 序列必须匹配 mood_progression（从X→经Y→以Z结束）
+3. 为每个 segment 填写：
+   - `function`：从 7 种类型中选择
+   - `goal`：一句话描述本段目标
+   - `what_to_write`：3-5 句叙述，描述本段具体写什么。**不写对话、不写动作细节**，只描述事件和走向
+   - `characters`：本段出场角色
+   - `emotional_tone`：本段情绪基调
+   - `word_target`：字数目标（500-600 字）
+   - `ends_with`：本段结尾的画面/状态——**这是下一个 subagent 的锚点**。必须是一个可感知的具体画面或状态，不是概述
+   - `dialogue_intent`：仅 `dialogue_push` 填写（说服/试探/拒绝/转移/暗示/攻击/隐藏）
+   - `micro_payoff`：如果本段承担某个微兑现，填写对应的微兑现 type
+4. 检查：
+   - key_points 是否全部有对应的 segment？
+   - emotional_tone 序列是否与 mood_progression 一致？
+   - 章末 emotional_landing 是否留下了 emotional_hook 类型的钩子？
+   - 总字数是否接近章纲字数下限？
+5. **STOP：展示全部 segment 列表给作者确认/调整。确认后写入 chapter.yaml 的 segments 字段。**
+
+### 拆分示例
+
+章纲 key_points：
+  - "委托人讲述女儿失踪经过"
+  - "走访出租屋，找到未带走的充电器"
+  - "物流公司同事说法有矛盾"
+  - "朋友圈地址查无此址"
+mood_progression：日常松弛→好奇→紧张→悬念收束
+
+拆分为 6 个 segment：
+
+| # | function | goal | word_target |
+|---|----------|------|-------------|
+| 1 | atmosphere | 老城区早晨的市井气息，陆征的日常 | 400 |
+| 2 | dialogue_push | 委托人讲述失踪经过，陆征接案 | 600 |
+| 3 | character_beat | 陆征独自整理信息，决定先走访出租屋 | 400 |
+| 4 | action_beat | 走访出租屋，发现未带走的充电器 | 500 |
+| 5 | revelation | 物流公司同事说法矛盾，朋友圈地址查无此址 | 600 |
+| 6 | emotional_landing | 陆征看着地图上的空地址，买了一包烟 | 500 |
+
 ## 第一轮：视角转换
 
 1. 读取 chapter.yaml 的 outline 字段
