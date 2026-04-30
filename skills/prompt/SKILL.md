@@ -123,33 +123,77 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 - **释放章**：对应压制章的每一笔债怎么打回去；反派表情 不在乎→慌→崩溃；旁观者反应；余波
 - **余波章**：释放后世界变了什么；埋新压制种子
 
-## 第二轮：三层合并
+## 第二轮：生成 Per-Segment 提示词
 
-1. 读取 `prompts/global-prompt.md` 全文——原样，第一部分
-2. 读取 `prompts/volume-{N}-prompt.md` 全文——原样，第二部分
-3. 以 chapter.yaml 字段为过滤键，精准读取源文件生成第三部分：
+视角转换确认后，为每个 segment 生成一个**独立完整的提示词文件**。每个文件包含完整的全局上下文 + segment 专属写作指引。subagent 只读一个文件就能写。
 
-**故事背景（一段）：**
-- world-setting 全局规则（每章必带，不过滤）：力量/法术体系、科技水平、特殊世界规则（时间循环/系统/鬼怪机制）、社会结构、当前世界大势、世界基调。这些是世界的底层规则——无论主角在哪都在起作用
-- world-setting 场景片段：只取与 location + time 相关的局部设定
-- 角色快照：只读 outline.characters 列出的角色（姓名、定位、当前状态、关系、state_history、worldview/values）。禁止只写角色名
-- **回忆/闪回检测**：检查 outline.summary 和 memo 是否涉及回忆、往事、过去场景。若是 → 读取相关角色的**完整 state_history**（不只是最近 1-2 条）+ 从 archives/ 提取涉及该角色过往关键场景的原文片段（每段 100-150 字）。确保 subagent 写的回忆与已确认的正文一致，不凭空编造
-- 前章锚定：上一章正文结尾最后 150-200 字原文引用。让 subagent 知道读者刚刚看到什么画面，保证章节衔接无缝
-- 活跃钩子速览：所有 status != resolved 的钩子列表（只列标题+当前状态，不展开正文）。防止正文意外踩坑或遗漏
+**输出文件**：`prompts/vol-{N}-ch-{M}-seg-{S}-prompt.md`（S 从 1 到 N）
 
-**写作指引（一段）：**
-- 视角转换结果 + memo + emotional_design
-- hooks.yaml：只读 payoff_plan 涉及的钩子
+### 提示词结构（每个 segment 文件相同结构）
 
-**写作执行清单（一段，PRE_WRITE_CHECK prose）：**
-- current_task、reader_expectation、payoff_plan、required_changes、micro_payoffs、cycle_position、prohibitions
+```
+## 角色定位
+[来自 prompts/global-prompt.md，原样，所有 segment 完全相同]
 
-**写作要求（一段）：**
-- 字数下限、节奏方向、爽感循环策略、微兑现要求
+## 写作原则与禁忌
+[来自 prompts/global-prompt.md，原样，所有 segment 完全相同]
 
-4. 合并三部分，对写作指引生成 3 个变体（主角视角/场景氛围/冲突切入），全局和卷部分相同
-5. **STOP：展示章提示词（含变体选择），等确认。**
-6. 确认后保存 `prompts/vol-{N}-ch-{M}-prompt.md`，status → draft
+## 故事背景
+[组装方式同旧版：world-setting 全局规则 + 场景片段 + 角色快照 + 前章锚定 + 活跃钩子速览]
+[所有 segment 完全相同，因为同一章的世界背景不变]
+
+## 写作指引
+[本 segment 专属]
+- 叙事功能：{function} — {goal}
+- 你要写的是：{what_to_write}
+- 情绪基调：{emotional_tone}
+- 出场角色：{characters}
+- 角色在本段的动机/状态：[从角色 yaml 提取与当前段落相关的状态]
+- 本段结束画面：{ends_with}
+
+[以下仅 seg ≥ 2 时注入——Phase 5 写入上一段实际结尾原文后替换此占位符]
+{%%PREV_SEGMENT_ENDING%%}
+
+[以下仅 dialogue_push 段注入]
+- 对话意图：{dialogue_intent}。对话是微型动作——角色的每句话都是试探、拒绝、转移、暗示或攻击。禁止说明书式对话（角色互相告知已知信息）。
+
+[以下仅承担微兑现的段注入]
+- 微兑现要求：本段需给出 {micro_payoff} 类型的微兑现——{从 emotional_design.micro_payoffs 中取对应 description}
+
+## 写作要求
+- 字数目标：{word_target} 字。不少于目标的 80%，不超过目标的 120%
+- 叙事视角：{narrative_pov}
+- 句式规则：主体叙事用中长句，短句用于节奏切断。相邻 4 句不得以相同代词或连词开头。单段不超过 5 行。
+- 禁止事项：
+  - 禁止上帝视角概述（"本章讲述了""他意识到"）
+  - 禁止直接描述感受（"他很愤怒"→写动作和身体反应）
+  - 禁止文末总结升华
+  - 禁止提前写 ends_with 之后的内容——停在 ends_with 的画面
+  - 禁止使用 fatigue_words_zh 中 abstract_emotion 和 cliche_action 类词汇
+  [若 memo.prohibitions 非空，追加：本章禁止：{prohibitions}]
+```
+
+### 生成步骤
+
+1. 读取 `prompts/global-prompt.md` → 提取"角色定位"和"写作原则与禁忌"两段原文
+2. 按旧版方法组装"故事背景"段（world-setting + 角色快照 + 前章锚定 + 活跃钩子）
+3. 对每个 segment：
+   a. 组装"写作指引"段（function/goal/what_to_write/emotional_tone/characters/ends_with/dialogue_intent/micro_payoff）
+   b. 组装"写作要求"段（word_target + 视角 + 句式规则 + 禁止事项）
+   c. 对 seg ≥ 2 的 segment，在"写作指引"末尾插入占位符 `{%%PREV_SEGMENT_ENDING%%}`——Phase 5 串行写作时由主 Agent 替换为上一段实际结尾 200 字
+4. 保存 `prompts/vol-{N}-ch-{M}-seg-{S}-prompt.md`
+
+### 视角转换适配
+
+视角转换（第一轮）的结果应用到每个 segment 的 what_to_write 中——确保每个 segment 的 what_to_write 已经经过了视角转换（上帝视角→沉浸式指引）。
+
+### 变体策略
+
+不再生成 3 个变体。作者在 Step 0 确认 segment 拆分时已确定了叙事走向——segment 的 function 序列和 ends_with 链已锁定了节奏。每个 segment 只生成一个提示词。
+
+### STOP：展示一个代表性 segment 的完整提示词作为样例，确认后批量生成全部文件。
+
+确认后，将 chapter.yaml status 更新为 `draft`，prompt_path 替换为 segment 文件列表。
 
 ## 下一步
 
