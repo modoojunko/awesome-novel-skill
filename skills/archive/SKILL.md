@@ -27,6 +27,7 @@ description: 章节归档与状态更新。Phase 6。正文审阅满意后归档
 | `prompts/vol-{N}-ch-{M}-prompt.md` 存在？ | 不存在 → 退回 `novel-prompt` |
 | 提示词覆盖所有 key_points？ | 对照 outline.key_points。缺失 → 退回 `novel-prompt` |
 | 正文通过全部质量检查？ | 未通过 → 退回 `novel-write` |
+| 深度评审已完成？ | 建议归档前先触发 `novel-review`（10 维诊断），未评审 → 提醒作者可选评审 |
 
 ## 归档步骤
 

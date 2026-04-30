@@ -45,8 +45,8 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 | world-setting.yaml 字段大量为空 | Phase 2 未完成 | → `novel-setup` |
 | chapter.yaml status = `outline`，memo 不完整 | Phase 3 进行中 | → `novel-outline` |
 | chapter.yaml status = `outline`，memo 完整，提示词不存在 | Phase 4 待执行 | → `novel-prompt` |
-| chapter.yaml status = `draft`，正文未归档 | Phase 5/6 待执行 | → `novel-write` 或 `novel-archive` |
-| chapter.yaml status = `archived` | 本章已完成 | 问作者：下一章还是回顾？ |
+| chapter.yaml status = `draft`，正文未归档 | Phase 5/6 待执行 | → `novel-write` 或 `novel-archive`。建议归档前先 `novel-review` |
+| chapter.yaml status = `archived` | 本章已完成 | 问作者：下一章还是回顾？可随时触发 `novel-review` 回顾评审 |
 
 **章状态（chapter.status）:**
 - `outline` — 章纲和情绪设计已确认，等待生成提示词
@@ -63,6 +63,7 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 | "生成提示词""视角转换" | Phase 4 | `novel-prompt` |
 | "写正文""写第X章""继续写""质量检查" | Phase 5 | `novel-write` |
 | "归档""存档" | Phase 6 | `novel-archive` |
+| "评审""评价""review""检查这章""这章怎么样" | 独立评审 | `novel-review` |
 | "小说进度""第X卷进度" | 只读报告 | 本技能直接输出，不分发 |
 
 ### Step 3: 跳 Phase 检测
@@ -84,6 +85,7 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 - `novel-prompt`：Phase 4 — 视角转换、三层合并章提示词
 - `novel-write`：Phase 5 — 调 subagent 写正文、质量检查
 - `novel-archive`：Phase 6 — 归档、角色更新、钩子更新、滑动窗口审视
+- `novel-review`：Phase 5→6 推荐评审 — 10 维 60+ 细项诊断，对照全部设定文件逐条评审章正文
 
 ## 授权模式
 
