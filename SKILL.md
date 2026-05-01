@@ -77,34 +77,50 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 
 缺失 → **STOP**。告知作者"XX 还没完成，先补这一环"，路由到前置 Phase 的子技能。
 
-### Step 4: 分发
+### Step 4: 模型门禁
+
+读取上方的模型门禁表，检查目标 Phase 的主会话模型要求：
+
+| 目标 Phase | 主会话要求 | 操作 |
+|-----------|-----------|------|
+| 1-4（setup/outline/prompt） | sonnet（强制） | 告知用户："这个阶段需要深度推理能力。请先切换到 Sonnet 模型——输入 `/model` 选择 sonnet，切换后告诉我继续。" **STOP。不切换不继续。** |
+| review | haiku 可 | 主 Agent 直接执行，无 subagent 开销。上下文已热，直接对照检查。 |
+| 5（write） | haiku 可 | 调度是机械操作。仅告知用户当前模型即可，不强制切换。 |
+| 6（archive） | haiku 可 | 无需切换。 |
+
+**用户已切换确认后**，进入 Step 5。
+
+### Step 5: 分发
 
 调用对应子技能。每个子技能遵循自己的流程，有自己的 STOP 点和确认步骤。
 
 - `novel-setup`：Phase 1+2 — 初始化、世界观、角色、全局提示词
 - `novel-outline`：Phase 3 — 卷纲、章纲、memo、情绪设计、卷提示词
 - `novel-prompt`：Phase 4 — 叙事段落拆分、视角转换、per-segment 提示词生成
-- `novel-write`：Phase 5 — 串行 subagent 写各段、拼接全文、质量检查+深度评审
+- `novel-write`：Phase 5 — 并行 subagent 写各段、主 Agent 缝合、质量检查+深度评审
 - `novel-archive`：Phase 6 — 归档、角色更新、钩子更新、滑动窗口审视
 - `novel-review`：Phase 5→6 推荐评审 — 10 维 60+ 细项诊断，对照全部设定文件逐条评审章正文
 
-## 模型策略
+## 模型门禁（MODEL-GATE）
 
-各 Phase 根据任务性质使用不同模型。主 Agent 调用子技能时按此表选择模型，跳过模型参数则继承主会话当前模型。
+```
+深度推理阶段（Phase 1-4 + review）→ 主会话必须使用 sonnet。
+若不满足 → STOP，告知用户切换模型后再继续。不得在 haiku 下执行深度推理。
+```
 
-| Phase | 子技能 | 推荐模型 | 原因 |
-|-------|--------|---------|------|
-| 1+2 | novel-setup | sonnet/opus | 世界观讨论、角色设计、风格确认——需要深度思考 |
-| 3 | novel-outline | sonnet/opus | 章纲规划、情绪设计、结构推理 |
-| 4 | novel-prompt | sonnet/opus | 视角转换、segment 拆分、提示词组装——最耗推理 |
-| 5 | novel-write (subagent) | haiku | 正文生成，大量 serical 调用——快省优先 |
-| 6 | novel-archive | haiku | 归档、状态更新——机械操作 |
-| review | novel-review | sonnet/opus | 深度评审需要批判性思考 |
+| Phase | 子技能 | 主会话模型 | 原因 |
+|-------|--------|-----------|------|
+| 1+2 | novel-setup | **sonnet（强制）** | 世界观讨论、角色设计、风格确认——需要深度思考 |
+| 3 | novel-outline | **sonnet（强制）** | 章纲规划、情绪设计、结构推理 |
+| 4 | novel-prompt | **sonnet（强制）** | 视角转换、segment 拆分、提示词组装——最耗推理 |
+| 5 | novel-write（主 Agent 调度） | haiku 可 | 并行调度、缝合正文——机械操作 |
+| 5 | novel-write（subagent 写作） | 从 `writing_model` 读取 | 正文生成，默认 haiku。对质量要求高的章节可改为 sonnet |
+| 6 | novel-archive | haiku 可 | 归档、状态更新——机械操作 |
+| review | novel-review（主 Agent） | haiku 可 | 主 Agent 已持有全部上下文，直接对照检查——无 subagent 开销 |
 
-**说明：**
-- Claude Code: `haiku` = deepseek-v4-flash
-- OpenClaw / Hermes: 不传模型参数，使用平台默认模型
-- 每个子技能的 SKILL.md 中 Agent() 调用的 `model` 参数由具体实现读取（如 Phase 5 从 `writing-style.yaml` 的 `writing_model` 读取）
+**模型切换方法：**
+- Claude Code: 输入 `/model` 选择 sonnet，或按 `Alt+T` 切换
+- OpenClaw / Hermes: 使用平台模型切换机制，或留空使用默认
 
 ## 授权模式
 

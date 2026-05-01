@@ -1,17 +1,17 @@
 ---
 name: novel-write
-description: 正文生成与质量检查。Phase 5。按 segment 串行调 subagent 写正文，拼接后执行 15 项质量检查和深度评审，通过后展示给作者。触发："写正文""写第X章""继续写""生成正文""质量检查"。必须确认 segment 提示词已存在才能使用。
+description: 正文生成与质量检查。Phase 5。按 segment 并行调 subagent 写正文，主 Agent 缝合后执行 15 项质量检查和深度评审，通过后展示给作者。触发："写正文""写第X章""继续写""生成正文""质量检查"。必须确认 segment 提示词已存在才能使用。
 ---
 
 # Novel Write — 正文生成与质量检查
 
 ## Overview
 
-按叙事功能段落（segment）串行调 subagent 写正文，每个 subagent 只承担 400-600 字的小任务。拼接后执行 15 项硬性质量检查 + 10 维深度评审，正文和评审报告一起展示给作者。
+按叙事功能段落（segment）并行调 subagent 写正文，每个 subagent 只承担 400-600 字的小任务。全部完成后主 Agent 做缝合遍（边界过渡平滑），拼接后执行 15 项硬性质量检查 + 10 维深度评审，正文和评审报告一起展示给作者。
 
 **When NOT to use:** segment 提示词不存在、正文已生成且通过质量检查、章状态不是 draft。
 
-**Announce at start:** "我来生成第{N}卷第{M}章正文。共 {S} 个段落，串行写作。"
+**Announce at start:** "我来生成第{N}卷第{M}章正文。共 {S} 个段落，并行写作。"
 
 ## HARD-GATE
 
@@ -28,57 +28,77 @@ description: 正文生成与质量检查。Phase 5。按 segment 串行调 subag
 | chapter.yaml segments 非空？ | 空 → **STOP**，退回 `novel-prompt` Step 0 先拆 segment |
 | chapter.yaml status = draft？ | 不是 → **STOP**，检查前面 Phase 是否完成 |
 
-## Step 1: 串行 Subagent 写各 Segment
+## Step 1: 并行 Subagent 写各 Segment
 
-读取 chapter.yaml 的 segments 列表，按序号串行执行。
+读取 chapter.yaml 的 segments 列表，**一次性并行启动所有 segment 的 subagent**。每个 segment 的提示词已自包含——含起始场景锚点（seg ≥ 2 时来自前一段 ends_with），无需等待前一段实际输出。
 
 ```
-for seg in 1..N:
-    # 1. 读取本段提示词
-    prompt_file = prompts/vol-{N}-ch-{M}-seg-{S}-prompt.md
-    
-    # 2. 若 seg ≥ 2，将 {%%PREV_SEGMENT_ENDING%%} 替换为上一段的实际结尾 200 字
-    if seg >= 2:
-        读取 prompt_file
-        找到 {%%PREV_SEGMENT_ENDING%%}
-        替换为：
-        "上一段结尾原文（从这里接）：
-        > {prev_segment_last_200_chars}"
-        写回 prompt_file
-    
-    # 3. 调 subagent（模型从 settings/writing-style.yaml 的 writing_model 读取）
+# 并行启动所有 segment subagent
+for seg in 1..N (并行):
     Agent(
       description: "写第{N}卷第{M}章 Segment {S}/{N}",
       subagent_type: "general-purpose",
       model: "{writing_model}",
-      prompt: "读取 {prompt_file}。该文件是你的完整写作指令——包含全局写作方法论、故事背景、本段写作指引。
+      prompt: "读取 prompts/global-prompt.md（全局写作方法论和故事背景），然后读取 prompts/vol-{N}-ch-{M}-seg-{S}-prompt.md（本段写作指令）。
 
 严格按文件中的所有要求写作。字数必须达到 word_target 指定的目标（不低于 80%，不超过 120%）。
 
 关键约束：
 - 你只写这一段，不写整章。段长 {word_target} 字左右。
-- 如果写作指引中有'上一段结尾原文'，你的第一句话必须从那个画面无缝接续。不要复述或总结上一段内容——直接接着往下写。
+- 如果写作指引中有'起始场景'，你的第一句话必须从那个画面无缝接续——就像上一段的最后一个字刚落下，你接着往下写。不要复述、不要总结上一段内容——直接进入本段的动作和状态。
 - 结尾必须停在 ends_with 指定的画面/状态。不要超出，不要写下一段的内容。
 - 只输出小说正文。禁止出现解释、说明、注释、'以下是正文'等引导语。从第一个字开始就是小说正文，最后一个字结束就是段落结束。
 "
     )
-    
-    # 4. 提取本段结尾 200 字，供下一段使用
-    prev_segment_last_200_chars = subagent输出的最后 200 个字符
+
+# 等待所有 subagent 完成
+# 收集所有 segment 输出
 ```
 
-**段落衔接规则：**
-- Segment 1 无上一段——提示词中无 {%%PREV_SEGMENT_ENDING%%} 占位符
-- Segment 2..N：上一段结尾 200 字注入后，subagent 第一句话必须自然接续
-- 主 Agent 不在段之间添加任何过渡文字——subagent 自己负责从上一段结尾接续
+**与旧版串行架构的关键区别：**
+- 旧版：seg-2 需等待 seg-1 实际正文 → 取结尾 200 字 → 注入占位符 → 才能开始
+- 新版：seg-2 的提示词已在 Phase 4 注入了 seg-1 的 ends_with 作为起始场景——知道从哪个画面开始，不需要实际正文
+- seg-1 的提示词中无"起始场景"字段——直接从氛围建立开始
+
+## Step 1.5: 缝合遍
+
+所有 segment 写完后，主 Agent 做边界过渡平滑。
+
+```
+1. 按 seg-1 → seg-N 顺序拼接正文，段间不加任何分隔符
+
+2. 逐边界检查过渡（共 N-1 个边界）：
+   对每个边界 X（seg-X 尾部 ↔ seg-(X+1) 头部）：
+     - 读取 seg-X 的最后 ~50 字
+     - 读取 seg-(X+1) 的前 ~50 字
+     - 判断过渡是否自然
+
+3. 不自然信号：
+     - 画面跳跃：时间/地点/动作在边界处不连续
+     - 情绪断裂：上一段紧张、下一段松弛，中间缺少过渡
+     - 重复信息：seg-(X+1) 开头复述了 seg-X 已经写过的东西
+     - 生硬衔接词："接着""然后""与此同时""与此同时"等机械过渡词
+
+4. 修复方式：主 Agent 直接编辑边界处 ~30 字，做最小改动
+     - 画面跳跃 → 加一句过渡动作或环境切换
+     - 重复上一段结尾 → 删除重复
+     - 情绪断裂 → 微调衔接句的语气，或用空行表示时间流逝
+
+5. 保存拼接后的临时全文
+```
+
+**缝合原则：**
+- 只改边界，不动 segment 内部正文
+- 最小改动——一个字能解决的事不加一句话
+- 宁可留白，不画蛇添足
 
 ## Step 2: 拼接 + 质量检查 + 深度评审
 
-所有 segment 写完并通过各段字数检查后：
+缝合遍完成后，对拼接全文执行质量检查。
 
 ### 2a. 拼接正文
 
-将 seg-1 到 seg-N 的输出按序拼接，段间不加任何分隔符或过渡语。保存为临时全文。
+使用 Step 1.5 缝合后的全文（已拼接 + 已平滑过渡）。
 
 ### 2b. 15 项质量检查
 
@@ -87,7 +107,7 @@ for seg in 1..N:
 | # | 检查项 | 不通过处理 |
 |---|--------|-----------|
 | 1 | 字数不达标 | 报告实际字数 vs 要求，列出各 segment 字数分布 |
-| 2 | 上帝视角摘要 | 摘出典型句，特别检查 segment 衔接处是否出现了"接着""然后""与此同时"等生硬过渡词 |
+| 2 | 上帝视角摘要 | 摘出典型句。seg 衔接处已在缝合遍处理过，此处仅复查是否有遗漏的生硬过渡词 |
 | 3 | 违反核心约束 | 指出违规条款和位置 |
 | 4 | 夹带非正文内容 | 指引导语、解释、文末总结 |
 | 5 | AI疲劳词触发 | 扫描 fatigue_words，报告风险等级。严重级（元叙事/上帝视角词）必须重写对应 segment |
@@ -112,7 +132,7 @@ grep -cP '不是.{1,20}(而是|，是|,是)' archives/vol-00N-ch-00M-*.md
 
 ### 2c. 深度评审
 
-全部 15 项质量检查通过后，触发 `novel-review` 进行 10 维 60+ 细项诊断。评审报告与正文一起展示给作者。
+全部 15 项质量检查通过后，主 Agent 直接执行 `novel-review`——10 维 60+ 细项诊断。主 Agent 已持有全部上下文（正文、章纲、角色文件、设定文件等），无需额外 subagent 开销。评审报告与正文一起展示给作者。
 
 ## Step 3: 作者审阅
 
@@ -135,7 +155,7 @@ grep -cP '不是.{1,20}(而是|，是|,是)' archives/vol-00N-ch-00M-*.md
 - "满意，归档" → Phase 6（`novel-archive`）
 - "修改第X段" → 指定修改意见，主 Agent 直接编辑拼接后的正文对应位置
 - "重写 seg-X" → 对该 segment 单独重新调 subagent（注入 seg-(X-1) 实际结尾作为锚点），写完后重新拼接、重新质量检查
-- "重写全章" → 所有 segment 重新串行生成
+- "重写全章" → 所有 segment 重新并行生成，重新缝合，重新质量检查
 
 ## 下一步
 
