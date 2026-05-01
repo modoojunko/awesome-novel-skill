@@ -3,11 +3,13 @@
 
 # ============================================================
 # Phase 5 写作模型（覆盖主 SKILL.md 的模型策略）
-# 可选: sonnet | opus | haiku | 留空则使用主会话模型
-# Claude Code: haiku = deepseek-v4-flash
+# 可选: sonnet | opus | haiku
+# sonnet: 质量最高，适合对文笔有要求的章节
+# haiku: 速度快、成本低，适合过渡章或粗稿
+# Claude Code: haiku = deepseek-v4-flash, sonnet = deepseek-v4-sonnet
 # OpenClaw / Hermes: 留空即可，使用平台默认模型
 # ============================================================
-writing_model: "haiku"
+writing_model: "sonnet"
 
 role: |
   你是全球闻名的小说作家，擅长以细腻真挚、贴近真人的文字描摹角色性格。

@@ -7,7 +7,7 @@ description: 章提示词生成与视角转换。Phase 4。当章纲已确认、
 
 ## Overview
 
-视角转换 + 三层合并：全局提示词全文 + 卷提示词全文 + 本章专属 prose → 一个格式文件。subagent 只读这一个文件。
+视角转换 + 三层合并 + per-segment 拆分。每个 segment 生成自包含的提示词文件——segment 2+ 注入前一段 ends_with 作为起始场景锚点，确保 Phase 5 可并行写作。
 
 **When NOT to use:** 章纲不完整（memo 或 emotional_design 缺失）、本章提示词已生成且未修改章纲、章状态尚未到 outline。
 
@@ -17,7 +17,7 @@ description: 章提示词生成与视角转换。Phase 4。当章纲已确认、
 
 ```
 视角转换必须先单独确认，确认后才能组装章提示词。严禁合并确认。
-章提示词 = 全局全文 + 卷全文 + 本章专属。subagent 只读这一个文件。
+每个 segment 的提示词是自包含的——subagent 读取 global-prompt.md + 自己的 segment 提示词即可独立写作。
 ```
 
 ## 进入门禁
@@ -65,7 +65,7 @@ description: 章提示词生成与视角转换。Phase 4。当章纲已确认、
    - `characters`：本段出场角色
    - `emotional_tone`：本段情绪基调
    - `word_target`：字数目标（500-600 字）
-   - `ends_with`：本段结尾的画面/状态——**这是下一个 subagent 的锚点**。必须是一个可感知的具体画面或状态，不是概述
+   - `ends_with`：本段结尾的画面/状态——**作为下一段的起始场景锚点**，使并行写作成为可能。必须是一个可感知的具体画面或状态，不是概述
    - `dialogue_intent`：仅 `dialogue_push` 填写（说服/试探/拒绝/转移/暗示/攻击/隐藏）
    - `micro_payoff`：如果本段承担某个微兑现，填写对应的微兑现 type
 4. 检查：
@@ -126,7 +126,7 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 
 ## 第二轮：生成 Per-Segment 提示词
 
-视角转换确认后，为每个 segment 生成一个**独立完整的提示词文件**。每个文件包含完整的全局上下文 + segment 专属写作指引。subagent 只读一个文件就能写。
+视角转换确认后，为每个 segment 生成一个**自包含的提示词文件**。每个文件包含完整的全局上下文 + segment 专属写作指引 + 起始场景锚点（seg ≥ 2）。Phase 5 可并行调 subagent——每个 subagent 读 global-prompt.md + 自己的 segment 提示词即可独立写作。
 
 **输出文件**：`prompts/vol-{N}-ch-{M}-seg-{S}-prompt.md`（S 从 1 到 N）
 
@@ -150,10 +150,11 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 - 情绪基调：{emotional_tone}
 - 出场角色：{characters}
 - 角色在本段的动机/状态：[从角色 yaml 提取与当前段落相关的状态]
-- 本段结束画面：{ends_with}
 
-[以下仅 seg ≥ 2 时注入——Phase 5 写入上一段实际结尾原文后替换此占位符]
-{%%PREV_SEGMENT_ENDING%%}
+[以下仅 seg ≥ 2 时注入——为并行写作提供起始场景锚点]
+- 起始场景：上一段结束时的画面是——{prev_segment.ends_with}。你的第一段话必须从这个画面无缝接续，就像上一段的最后一个字刚落下，你接着往下写。不要复述、不要总结上一段的内容——直接进入本段的动作和状态。
+
+- 本段结束画面：{ends_with}
 
 [以下仅 dialogue_push 段注入]
 - 对话意图：{dialogue_intent}。对话是微型动作——角色的每句话都是试探、拒绝、转移、暗示或攻击。禁止说明书式对话（角色互相告知已知信息）。
@@ -181,7 +182,7 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 3. 对每个 segment：
    a. 组装"写作指引"段（function/goal/what_to_write/emotional_tone/characters/ends_with/dialogue_intent/micro_payoff）
    b. 组装"写作要求"段（word_target + 视角 + 句式规则 + 禁止事项）
-   c. 对 seg ≥ 2 的 segment，在"写作指引"末尾插入占位符 `{%%PREV_SEGMENT_ENDING%%}`——Phase 5 串行写作时由主 Agent 替换为上一段实际结尾 200 字
+   c. 对 seg ≥ 2 的 segment，在"写作指引"开头注入起始场景锚点（取上一个 segment 的 ends_with 值）——这确保 Phase 5 并行写作时每个 subagent 都知道从哪个场景接续
 4. 保存 `prompts/vol-{N}-ch-{M}-seg-{S}-prompt.md`
 
 ### 视角转换适配
