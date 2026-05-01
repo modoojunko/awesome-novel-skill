@@ -104,7 +104,7 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 ## 模型门禁（MODEL-GATE）
 
 ```
-深度推理阶段（Phase 1-4 + review）→ 主会话必须使用 sonnet。
+深度推理阶段（Phase 1-4）→ 主会话必须使用 sonnet。
 若不满足 → STOP，告知用户切换模型后再继续。不得在 haiku 下执行深度推理。
 ```
 
