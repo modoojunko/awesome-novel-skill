@@ -31,16 +31,18 @@ description: 章节归档与状态更新。Phase 6。正文审阅满意后归档
 
 ## 归档步骤
 
-1. 复核 archives/ 中归档文件内容无误
-2. 分析角色变化，追加 state_history
-3. 更新角色 yaml 当前状态字段（location、abilities、relationships、worldview、summary）
-4. 追记 emotional_arc（情绪状态、触发事件、强度、弧线方向、表达方式）
-5. 更新 hooks.yaml（mention/resolve/defer），运行钩子健康检查
-6. 运行情节推进停滞检测（最近 3 章是否有实质性推进）
-7. 将 chapter.yaml status 更新为 `archived`
-8. 更新 story.yaml chapters 列表
-9. **更新卷提示词**：往 `prompts/volume-{N}-prompt.md` 追加本章一句话摘要
-10. **滑动窗口审视 current-focus.md**：
+1. 将草稿文件重命名，去掉 `-draft` 标记：
+   `archives/vol-{N}-ch-{M}-{slug}.draft.md` → `archives/vol-{N}-ch-{M}-{slug}.md`
+2. 复核 archives/ 中归档文件内容无误
+3. 分析角色变化，追加 state_history
+4. 更新角色 yaml 当前状态字段（location、abilities、relationships、worldview、summary）
+5. 追记 emotional_arc（情绪状态、触发事件、强度、弧线方向、表达方式）
+6. 更新 hooks.yaml（mention/resolve/defer），运行钩子健康检查
+7. 运行情节推进停滞检测（最近 3 章是否有实质性推进）
+8. 将 chapter.yaml status 更新为 `archived`
+9. 更新 story.yaml chapters 列表
+10. **更新卷提示词**：往 `prompts/volume-{N}-prompt.md` 追加本章一句话摘要
+11. **滑动窗口审视 current-focus.md**：
     - 标记本章为 ✅
     - 以最近 3 章为窗口检查优先级、节奏意图、钩子是否仍然适用
     - 3 的倍数章（3/6/9…）→ 必须引导作者主动更新

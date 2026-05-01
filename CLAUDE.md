@@ -92,7 +92,7 @@ SKILL.md 定义完整的 6 阶段工作流，是此项目的核心：
 **文件职责分离（核心架构原则）**：
 - `chapters/` — 只放章纲（outline + status），**禁止放正文**
 - `prompts/` — 只放提示词，**.md prose 格式**（非 YAML），5 段结构：角色定位→原则禁忌→故事背景→写作指引→写作要求
-- `archives/` — 正文唯一存放处，Phase 5 直接写入，Phase 6 定稿
+- `archives/` — 正文唯一存放处，Phase 5 写入草稿（`-draft` 标记），Phase 6 定稿后去掉 `-draft`
 
 **流程护栏**：
 - 所有 YAML 和正文必须经作者讨论确认后才写入——Agent 是引导者，不能代笔
@@ -103,7 +103,8 @@ SKILL.md 定义完整的 6 阶段工作流，是此项目的核心：
 - Phase 5 正文必须通过 anti-ai.yaml 的六项检测（含 AI 疲劳词和句式违规）
 
 **归档约定**：
-- 命名: `vol-{N}-ch-{M}-{slugified-title}.md`
+- 草稿命名: `vol-{N}-ch-{M}-{slugified-title}.draft.md`（Phase 5 写入，作者审阅用）
+- 定稿命名: `vol-{N}-ch-{M}-{slugified-title}.md`（Phase 6 归档后去掉 `-draft`）
 - story.yaml 是项目索引，通过相对路径引用子文档
 - 角色 state_history 在每次归档时由 Agent 分析正文后自动更新
 - hooks.yaml 在每次归档时更新钩子状态（mention/resolve/defer），并执行钩子健康检查
