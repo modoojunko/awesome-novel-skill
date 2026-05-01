@@ -23,6 +23,7 @@ chapters:
   - path: "./chapters/vol-1-ch-1.yaml"
   - path: "./chapters/vol-1-ch-2.yaml"
   - path: "./chapters/vol-1-ch-3.yaml"
+  - path: "./chapters/vol-1-ch-4.yaml"
 
 current_volume: 1
-current_chapter: 3
+current_chapter: 4
