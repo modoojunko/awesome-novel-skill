@@ -8,7 +8,7 @@
 # 可选值: suspense-crime | urban-romance | ancient-politics | scifi-apocalypse
 # 留空表示未选择类型档案，Phase 4 不注入类型专属指引。
 # ============================================================
-genre_profile: ""
+genre_profile: "urban-romance"
 
 # ============================================================
 # Phase 5 写作模型（覆盖主 SKILL.md 的模型策略）

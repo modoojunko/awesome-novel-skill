@@ -29,6 +29,7 @@ description: 章提示词生成与视角转换。Phase 4。当章纲已确认、
 | 模板版本检查 | 读取 `~/.claude/skills/novel/scripts/templates/writing-style.yaml.template` 头部 `# version: N`，对比项目 `settings/writing-style.yaml` 头部版本号。模板版本更高 → 向作者报告"写作风格模板有更新"，列出新增的 global_rules 和 possible_mistakes 条目，问作者"合并新规则 / 暂不合并"。合并后自动重新生成 `prompts/global-prompt.md` |
 | 章纲完整性 | memo（7段）+ emotional_design 全部有值？任一为空 → **STOP**，退回 `novel-outline` |
 | segments 已存在？ | 若 chapter.yaml 已有 segments（非空列表），跳到 Step 0 仅展示不重新拆分，等作者确认或调整 |
+| genre_profile 是否已选择？ | 读取 `settings/writing-style.yaml` 的 `genre_profile` 字段。为空 → **STOP**，列出 `~/.claude/skills/awesome-novel/genre-corpus/` 下可用类型档案，AskUserQuestion 让作者选择。选择后写入 `genre_profile` 并合并 genre_config 到 writing-style.yaml，然后继续 |
 | author-intent.md 一致性 | 本章与核心主题一致 / 存在偏离？偏离 → **STOP** |
 | current-focus.md 一致性 | 本章在优先级范围内 / 偏离？偏离 → **STOP** |
 
@@ -134,10 +135,17 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 
 ```
 ## 角色定位
-[来自 prompts/global-prompt.md，原样，所有 segment 完全相同]
+[优先取 genre-corpus/{genre_profile}.yaml 的 role_override.role + role_override.personality]
+[若 genre_profile 为空或无 role_override → 回退到 prompts/global-prompt.md 的对应段落]
+[所有 segment 完全相同]
 
 ## 写作原则与禁忌
 [来自 prompts/global-prompt.md，原样，所有 segment 完全相同]
+
+## 类型专属指引
+[来自 genre-corpus/{genre_profile}.yaml 的 prompt_segment 字段]
+[若 writing-style.yaml 的 genre_profile 为空 → 跳过此段]
+[所有 segment 完全相同——同一章使用同一个类型档案]
 
 ## 故事背景
 [组装方式同旧版：world-setting 全局规则 + 场景片段 + 角色快照 + 前章锚定 + 活跃钩子速览]
@@ -197,13 +205,21 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 
 ### 生成步骤
 
-1. 读取 `prompts/global-prompt.md` → 提取"角色定位"和"写作原则与禁忌"两段原文
-2. 按旧版方法组装"故事背景"段（world-setting + 角色快照 + 前章锚定 + 活跃钩子）
-3. 对每个 segment：
+1. 读取 `prompts/global-prompt.md` → 提取"写作原则与禁忌"段原文
+2. 读取 `settings/writing-style.yaml` 的 `genre_profile` 字段（门禁已确保非空），读取 `~/.claude/skills/awesome-novel/genre-corpus/{genre_profile}.yaml`：
+   - 取 `role_override.role` + `role_override.personality` → 作为"角色定位"段
+   - 取 `prompt_segment` → 作为"类型专属指引"段
+3. 按旧版方法组装"故事背景"段（world-setting + 角色快照 + 前章锚定 + 活跃钩子）
+4. 组装 segment 不变部分（每个 segment 文件完全相同）：
+   a. "角色定位"段 ← 类型档案的 role_override（role + personality 拼合）
+   b. "写作原则与禁忌"段 ← global-prompt.md 对应段落原文
+   c. "类型专属指引"段 ← 类型档案的 prompt_segment 原文
+   d. "故事背景"段 ← world-setting + 角色快照 + 前章锚定 + 活跃钩子
+5. 对每个 segment，追加专属内容：
    a. 先对 what_to_write 执行净化（见上方"what_to_write 净化"）。净化后的文本作为 `sanitized_what_to_write` 注入"写作指引"段的"本段场景"字段。同时检查 goal 是否也带分析腔——若是，一并改写
    b. 组装"写作要求"段（word_target + 视角 + 句式规则 + 禁止事项）
    c. 对 seg ≥ 2 的 segment，在"写作指引"开头注入起始场景锚点（取上一个 segment 的 ends_with 值）——这确保 Phase 5 并行写作时每个 subagent 都知道从哪个场景接续
-4. 保存 `prompts/vol-{N}-ch-{M}-seg-{S}-prompt.md`
+6. 保存 `prompts/vol-{N}-ch-{M}-seg-{S}-prompt.md`
 
 ### 视角转换适配
 

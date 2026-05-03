@@ -1,0 +1,47 @@
+# story.yaml - 小说项目核心索引
+# 此文件通过相对路径引用各子文档，避免数据重复
+
+title: "第十六杯咖啡"
+author: "modoojunko"
+created_at: "2026-05-03"
+updated_at: "2026-05-03"
+
+world_setting:
+  path: "./settings/world-setting.yaml"
+  summary: "现代都市背景，老城区独立咖啡店的慢热情感故事。"
+
+characters:
+  path: "./settings/character-setting/"
+  summary: "两个主角：陆知意（建筑设计师/POV角色）和陈序（咖啡师/前程序员）"
+
+writing_style:
+  path: "./settings/writing-style.yaml"
+  summary: "都市言情类型档案。细腻流畅，烟火真实，日常中的心动。"
+
+volumes:
+  - volume: 1
+    title: "三点钟"
+    path: "./volumes/volume-1.yaml"
+    summary: "建立日常，两个陌生人开始互相注意。"
+    chapters:
+      - id: "1-1"
+        title: "三点钟的客人"
+        path: "./chapters/vol-1-ch-1.yaml"
+        status: "archived"
+      - id: "1-2"
+        title: "第十六天"
+        path: "./chapters/vol-1-ch-2.yaml"
+        status: "planned"
+
+chapters:
+  - id: "1-1"
+    title: "三点钟的客人"
+    path: "./chapters/vol-1-ch-1.yaml"
+    status: "archived"
+  - id: "1-2"
+    title: "第十六天"
+    path: "./chapters/vol-1-ch-2.yaml"
+    status: "planned"
+
+current_volume: 1
+current_chapter: 2

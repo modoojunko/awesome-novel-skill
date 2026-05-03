@@ -61,6 +61,7 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 | "创建项目""写小说""导入小说" | Phase 1 | `novel-setup` |
 | "讨论设定""设计角色""世界观""写作风格" | Phase 2 | `novel-setup` |
 | "规划章节""章纲""卷纲""故事线" | Phase 3 | `novel-outline` |
+| "学文风""提取风格""学习写作风格""参考小说""分析文风" | Phase 2 增强 | `novel-style-extract` |
 | "生成提示词""视角转换" | Phase 4 | `novel-prompt` |
 | "写正文""写第X章""继续写""质量检查" | Phase 5 | `novel-write` |
 | "归档""存档" | Phase 6 | `novel-archive` |
@@ -95,6 +96,7 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 调用对应子技能。每个子技能遵循自己的流程，有自己的 STOP 点和确认步骤。
 
 - `novel-setup`：Phase 1+2 — 初始化、世界观、角色、全局提示词
+- `novel-style-extract`：Phase 2 增强 — 从参考小说提取文风，三步流程（统计→定性→合并），注入 writing-style.yaml + anti-ai.yaml + 提示词
 - `novel-outline`：Phase 3 — 卷纲、章纲、memo、情绪设计、卷提示词
 - `novel-prompt`：Phase 4 — 叙事段落拆分、视角转换、per-segment 提示词生成
 - `novel-write`：Phase 5 — 并行 subagent 写各段、主 Agent 缝合、质量检查+深度评审
@@ -111,6 +113,8 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 | Phase | 子技能 | 主会话模型 | 原因 |
 |-------|--------|-----------|------|
 | 1+2 | novel-setup | **sonnet（强制）** | 世界观讨论、角色设计、风格确认——需要深度思考 |
+| 2 | novel-style-extract（主 Agent 调度） | **sonnet（强制）** | 风格分析、规则合并——需要深度推理 |
+| 2 | novel-style-extract（subagent 定性分析） | sonnet | 分层阅读 + 6 维分析——需要深度理解 |
 | 3 | novel-outline | **sonnet（强制）** | 章纲规划、情绪设计、结构推理 |
 | 4 | novel-prompt | **sonnet（强制）** | 视角转换、segment 拆分、提示词组装——最耗推理 |
 | 5 | novel-write（主 Agent 调度） | haiku 可 | 并行调度、缝合正文——机械操作 |
@@ -135,4 +139,6 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 |------|------|---------|
 | `scripts/init.py` | 创建项目骨架 | Phase 1 新建项目时执行 |
 | `scripts/import.py` | 导入已有小说，切分章节 | Phase 1 导入模式时执行 |
+| `scripts/analyze_style.py` | 参考小说文风统计分析（12 项量化指标） | novel-style-extract Step 1 时执行 |
 | `scripts/templates/` | YAML 模板（world-setting、character、writing-style、hooks 等） | 新建项目时 init.py 自动复制；Phase 2 讨论设定时参考字段结构 |
+| `genre-corpus/` | 类型档案（4种预置类型知识库：悬疑刑侦/都市言情/古风权谋/科幻末世） | Phase 2 设定阶段选择类型档案；Phase 4 提示词注入 prompt_segment |
