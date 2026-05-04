@@ -1,13 +1,13 @@
 ---
 name: novel-prompt
-description: 章提示词生成与视角转换。Phase 4。当章纲已确认、需要为 subagent 准备完整写作指令时必须使用——视角转换 + 三层提示词合并（全局+卷+章专属）。触发："生成提示词""视角转换""组装章提示词""准备写作材料"。写正文前必须经此步骤，不可跳过直接写。
+description: 章提示词生成与视角转换。Phase 4。视角转换 + 范本注入 + per-segment 拆分。提示词以"作家对作家"口吻写，不出现文档腔。触发："生成提示词""视角转换""写第X章"。写正文前必须经此步骤，不可跳过。
 ---
 
 # Novel Prompt — 章提示词生成
 
 ## Overview
 
-视角转换 + 三层合并 + per-segment 拆分。每个 segment 生成自包含的提示词文件——segment 2+ 注入前一段 ends_with 作为起始场景锚点，确保 Phase 5 可并行写作。
+视角转换 + 三层合并 + per-segment 拆分 + 范本注入。每个 segment 生成自包含的提示词文件——segment 2+ 注入前一段 ends_with 作为起始场景锚点，确保 Phase 5 可并行写作。约束以大白话表述，写作指引经双轮净化去除AI味。
 
 **When NOT to use:** 章纲不完整（memo 或 emotional_design 缺失）、本章提示词已生成且未修改章纲、章状态尚未到 outline。
 
@@ -17,14 +17,15 @@ description: 章提示词生成与视角转换。Phase 4。当章纲已确认、
 
 ```
 视角转换必须先单独确认，确认后才能组装章提示词。严禁合并确认。
-每个 segment 的提示词是自包含的——subagent 读取 global-prompt.md + 自己的 segment 提示词即可独立写作。
+每个 segment 的提示词是自包含的——subagent 只读自己的 segment 提示词即可独立写作。
+提示词本身必须用"作家对作家"的口吻写，不出现文档腔、emoji分类、系统概念标签。
 ```
 
 ## 进入门禁
 
 | 检查项 | 操作 |
 |--------|------|
-| `prompts/global-prompt.md` 是否存在？ | 不存在 → 生成（从 writing-style.yaml），作者确认 |
+| `prompts/global-prompt.md` 是否存在？ | 不存在 → 生成（从 writing-style.yaml），作者确认。约束以大白话写，不分类不编号 |
 | `prompts/volume-{N}-prompt.md` 是否存在？ | 不存在 → 生成（从 volume.yaml + archives/），作者确认 |
 | 模板版本检查 | 读取 `~/.claude/skills/novel/scripts/templates/writing-style.yaml.template` 头部 `# version: N`，对比项目 `settings/writing-style.yaml` 头部版本号。模板版本更高 → 向作者报告"写作风格模板有更新"，列出新增的 global_rules 和 possible_mistakes 条目，问作者"合并新规则 / 暂不合并"。合并后自动重新生成 `prompts/global-prompt.md` |
 | 章纲完整性 | memo（7段）+ emotional_design 全部有值？任一为空 → **STOP**，退回 `novel-outline` |
@@ -127,37 +128,52 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 
 ## 第二轮：生成 Per-Segment 提示词
 
-视角转换确认后，为每个 segment 生成一个**自包含的提示词文件**。每个文件包含完整的全局上下文 + segment 专属写作指引 + 起始场景锚点（seg ≥ 2）。Phase 5 可并行调 subagent——每个 subagent 读 global-prompt.md + 自己的 segment 提示词即可独立写作。
+视角转换确认后，为每个 segment 生成一个**自包含的提示词文件**。每个 segment 提示词已自包含所有上下文和约束——subagent 只读自己的 segment 提示词即可独立写作。Phase 5 可并行调 subagent。
 
 **输出文件**：`prompts/vol-{N}-ch-{M}-seg-{S}-prompt.md`（S 从 1 到 N）
 
 ### 提示词结构（每个 segment 文件相同结构）
 
 ```
+[范本段落]
+下面这段是前面写好的正文。读一下，感受它的语气、节奏、断句方式：
+
+{前章摘录 200-350字}
+
+接着这个语感往下写。别模仿它写了什么——匹配它的语气和节奏。
+
+---
+
 ## 角色定位
+
 [优先取 genre-corpus/{genre_profile}.yaml 的 role_override.role + role_override.personality]
 [若 genre_profile 为空或无 role_override → 回退到 prompts/global-prompt.md 的对应段落]
 [所有 segment 完全相同]
 
 ## 写作原则与禁忌
-[来自 prompts/global-prompt.md，原样，所有 segment 完全相同]
+
+[从 writing-style.yaml + anti-ai.yaml 实时提炼 8-15 条核心约束。每条一句话，用大白话。不分类（无🔴🟡🟢），不编号。按致命程度排序——最不能犯的排最前面。]
+[所有 segment 完全相同——同一章的约束一致]
 
 ## 类型专属指引
+
 [来自 genre-corpus/{genre_profile}.yaml 的 prompt_segment 字段]
 [若 writing-style.yaml 的 genre_profile 为空 → 跳过此段]
 [所有 segment 完全相同——同一章使用同一个类型档案]
 
 ## 故事背景
+
 [组装方式同旧版：world-setting 全局规则 + 场景片段 + 角色快照 + 前章锚定 + 活跃钩子速览]
 [所有 segment 完全相同，因为同一章的世界背景不变]
 
 ## 写作指引
-[本 segment 专属]
+
+[本 segment 专属。铁律：只写场景里发生什么，不写文学分析。]
 - 叙事功能：{function} — {goal}
-- 本段场景（已净化分析腔，只保留可感知的动作和事件）：{sanitized_what_to_write}
-- 情绪基调：{emotional_tone}
+- 本段场景（已双轮净化——见下方"写作指引反AI味规范"）：{sanitized_what_to_write}
+- 情绪基调：{emotional_tone}。写成可感知的描述——例如不写"紧张"，写"动作快，句子短，呼吸压在喉咙下面"
 - 出场角色：{characters}
-- 角色在本段的动机/状态：[从角色 yaml 提取与当前段落相关的状态]
+- 角色在本段的动机/状态：[从角色 yaml 提取与当前段落相关的状态。大白话，一两句。不分析原因，只描述状态]
 
 [以下仅 seg ≥ 2 时注入——为并行写作提供起始场景锚点]
 - 起始场景：上一段结束时的画面是——{prev_segment.ends_with}。你的第一段话必须从这个画面无缝接续，就像上一段的最后一个字刚落下，你接着往下写。不要复述、不要总结上一段的内容——直接进入本段的动作和状态。
@@ -171,6 +187,7 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 - 微兑现要求：本段需给出 {micro_payoff} 类型的微兑现——{从 emotional_design.micro_payoffs 中取对应 description}
 
 ## 写作要求
+
 - 字数目标：{word_target} 字。不少于目标的 80%，不超过目标的 120%
 - 叙事视角：{narrative_pov}
 - 句式规则：主体叙事用中长句，短句用于节奏切断。相邻 4 句不得以相同代词或连词开头。单段不超过 5 行。
@@ -183,7 +200,72 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
   [若 memo.prohibitions 非空，追加：本章禁止：{prohibitions}]
 ```
 
-### what_to_write 净化
+### 写作指引反AI味规范（第一轮净化——针对"你要写的是"内容）
+
+写作指引是 AI 味最重的重灾区。Agent 在视角转换和 what_to_write 撰写时，容易不自觉变成文学教授——分析角色心理机制、对比概念、教 subagent "怎么写"。**subagent 读到分析腔，正文就会复刻分析腔。**
+
+以下 6 种模式在写作指引中**禁止出现**。这些是 Agent 写"你要写的是"时最常见的 AI 味：
+
+#### 1. 禁止心理机制分析
+
+不写角色"为什么"有某种心理，不拆解心理层次。
+
+```
+❌ "核心心理动作：三次失败→偏激。不是'他不怕死了'——是他把命押上去了。这有区别。不怕死的背后可能是麻木。押命的背后是执念。"
+✅ "今天和前几次不一样——不是试方案，是收命。"
+```
+
+#### 2. 禁止教 subagent "怎么写"
+
+不写"通过X来写，不通过Y来写"——这是教学语言，subagent 会连教学语言一起学走。
+
+```
+❌ "这个认识不通过'他想起'来写。通过身体：后背、后脑、肋骨——上次死的时候被捅穿的位置。"
+✅ "后背、后脑、肋骨——上次被捅穿的位置，在早上醒来的时候凉了一下。身体比脑子先记起来。"
+```
+
+#### 3. 禁止概念对比论证
+
+不写"A和B的区别在于""推演是X，确认是Y"。直接描述状态，不对比论证。
+
+```
+❌ "方案在心里跑的时候——不是在'推演'，是在'确认'。区别在于：推演是'这样能行吗'，确认是'这样就行'。林默今天的脑子在做的是后者。"
+✅ "方案在心里跑了一遍——不是推演能不能行，是确认每个步骤。今天不需要说服自己。"
+```
+
+#### 4. 禁止"林默在后者""本章做的是前者"等代词指代分析结论
+
+这是论文语言。subagent 读到的是一道选择题的答案，不是场景。
+
+```
+❌ "本章林默在后者。他不需要说服自己——方案已经是确定的了。他只是在脑子里把它跑一遍，像开机自检。"
+✅ "方案已经是确定的了。他在脑子里把它跑一遍，像开机自检。"
+```
+
+#### 5. 禁止 bullet list 式的分层心理指引
+
+不逐条拆解心理层次。合并为连贯的场景叙述。
+
+```
+❌ 心理刻画指引：
+    - 核心心理动作：三次失败→偏激。
+    - "每一次死的滋味他都记得"——这个认识不通过"他想起"来写。
+    - 方案在心里跑的时候——不是在"推演"，是在"确认"。
+✅ 三次失败堆在身体里。铝水没用上。喷枪追不上。三角漏了缝。今天早上睁眼——不是试方案，是收命。环形火阵在脑子里跑了一遍。自己和它都在圈里。自己也在圈里——这个选择本身比任何分析都说明问题。
+```
+
+#### 6. 禁止情绪标签化描述
+
+不写"情绪基调：偏激""心理状态：紧张"。写成可感知的身体状态或氛围。
+
+```
+❌ "情绪基调：不是安静笃定——是偏激。是三次死亡堆出来的那种冷。"
+✅ "情绪：冷。不是平静——是火烧完之后压成密度更大的东西的那种冷。"
+```
+
+**净化后的写作指引应读起来像场景笔记**——一个编剧在分镜脚本边上写的注，不是一篇文学评论。
+
+### what_to_write 净化（第二轮净化——词句层面）
 
 将 what_to_write 注入提示词前必须先净化分析腔。章纲阶段写 what_to_write 时不可避免带有分析性语言（"陆征做出决定""老邱犹豫了一下"），subagent 读到这种概述腔后会在正文中复刻——"他意识到""他做出了决定"就是这样漏进正文的。
 
@@ -205,21 +287,102 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 
 ### 生成步骤
 
-1. 读取 `prompts/global-prompt.md` → 提取"写作原则与禁忌"段原文
-2. 读取 `settings/writing-style.yaml` 的 `genre_profile` 字段（门禁已确保非空），读取 `~/.claude/skills/awesome-novel/genre-corpus/{genre_profile}.yaml`：
-   - 取 `role_override.role` + `role_override.personality` → 作为"角色定位"段
-   - 取 `prompt_segment` → 作为"类型专属指引"段
-3. 按旧版方法组装"故事背景"段（world-setting + 角色快照 + 前章锚定 + 活跃钩子）
-4. 组装 segment 不变部分（每个 segment 文件完全相同）：
-   a. "角色定位"段 ← 类型档案的 role_override（role + personality 拼合）
-   b. "写作原则与禁忌"段 ← global-prompt.md 对应段落原文
-   c. "类型专属指引"段 ← 类型档案的 prompt_segment 原文
-   d. "故事背景"段 ← world-setting + 角色快照 + 前章锚定 + 活跃钩子
-5. 对每个 segment，追加专属内容：
-   a. 先对 what_to_write 执行净化（见上方"what_to_write 净化"）。净化后的文本作为 `sanitized_what_to_write` 注入"写作指引"段的"本段场景"字段。同时检查 goal 是否也带分析腔——若是，一并改写
-   b. 组装"写作要求"段（word_target + 视角 + 句式规则 + 禁止事项）
-   c. 对 seg ≥ 2 的 segment，在"写作指引"开头注入起始场景锚点（取上一个 segment 的 ends_with 值）——这确保 Phase 5 并行写作时每个 subagent 都知道从哪个场景接续
-6. 保存 `prompts/vol-{N}-ch-{M}-seg-{S}-prompt.md`
+#### 0. 提取范本段落
+
+从 `archives/` 取前面已归档章节的正文，截取 200-350 字作为范本。优先级：
+1. 本章所属卷的前一章最后一节正文（最佳——语气和节奏最接近）
+2. 同卷已归档的任意一章正文
+3. 若本卷尚无归档章节 → 跳过范本注入（第一卷第一章首段无范本可用）
+
+截取要求：选一段有具体动作/对话/场景的段落，不选纯环境描写或纯内心独白。段落应能独立成立——读者不需要知道前因后果就能感受到语感。
+
+范本注入到每个 segment 提示词的最顶部——在一切规则之前。subagent 读到的第一样东西是正确文风的正文，不是指令。
+
+#### 1. 读取约束来源
+
+- `settings/writing-style.yaml` → 提取 `core_principles`、`possible_mistakes`、`pov_consistency`、`depiction_techniques`
+- `settings/anti-ai.yaml` → 提取 `structural_tic_patterns` 中 severity=high 的项、`dialogue_rules`、`sentence_rules`
+- `chapter.yaml` → 提取 `memo.prohibitions`
+- `prompts/global-prompt.md` → 作为参考（若存在），提取"写作原则与禁忌"段的核心约束
+
+**提炼约束规则：** 从上述来源提炼 8-15 条最关键约束。每条一句话大白话。不分类（无🔴🟡🟢），不编号。按致命程度排序——最不能犯的排最前面。必须包含：POV 限制、禁止抽象情绪词、禁止"不是而是"句式、禁止段尾总结升华、句式多样性。**只说"别做什么"，不说"为什么"。**
+
+#### 2. 提取类型档案内容（若已选择 genre_profile）
+
+读取 `settings/writing-style.yaml` 的 `genre_profile` 字段。若非空，读取 `~/.claude/skills/awesome-novel/genre-corpus/{genre_profile}.yaml`：
+- 取 `role_override.role` + `role_override.personality` → 作为"角色定位"段
+- 取 `prompt_segment` → 作为"类型专属指引"段（原样注入，保持其结构）
+
+若 genre_profile 为空：
+- "角色定位"段回退到 global-prompt.md 的对应段落
+- 跳过"类型专属指引"段
+
+#### 3. 组装"故事背景"段
+
+world-setting 全局规则 + 场景片段 + 角色快照 + 前章锚定 + 活跃钩子速览。所有 segment 完全相同。
+
+#### 4. 组装 segment 通用部分（所有 segment 文件共享）
+
+a. "范本段落" ← Step 0 的正文摘录
+b. "角色定位" ← Step 2 的类型档案 role_override（或 global-prompt.md 回退）
+c. "写作原则与禁忌" ← Step 1 提炼的约束（自然语言，8-15条，不分类不编号）
+d. "类型专属指引" ← Step 2 的类型档案 prompt_segment（若有）
+e. "故事背景" ← Step 3 组装内容
+
+#### 5. 对每个 segment，追加专属内容
+
+a. **双轮净化 what_to_write：**
+   - **第一轮（结构层）：** 按"写作指引反AI味规范"6条规则检查——删除心理机制分析、教学语言、概念对比、代词指代分析、分层心理指引、情绪标签化描述。净化后得到场景笔记式叙述。
+   - **第二轮（词句层）：** 按"what_to_write 净化"5条规则检查——删除分析性动词、总结性判断、动机分析、心理标签。只保留具体可感知的动作、事件、画面。
+   - 两轮净化后的文本作为 `sanitized_what_to_write` 注入"写作指引"段。
+   - **同时检查 goal、emotional_tone 是否带分析腔**——若是，一并改写。例如"情绪基调：紧张"→"动作快，句子短，呼吸压在喉咙下面"
+
+b. 组装"写作指引"段（叙事功能 + sanitized_what_to_write + 情绪基调 + 出场角色 + 角色状态 + ends_with + 条件注入对话意图和微兑现）
+
+c. 对 seg ≥ 2 的 segment，在"写作指引"段注入起始场景锚点（取上一个 segment 的 ends_with 值）
+
+d. 组装"写作要求"段（word_target + 视角 + 句式规则 + 禁止事项）
+
+#### 6. 保存 `prompts/vol-{N}-ch-{M}-seg-{S}-prompt.md`
+
+### AI味自检（保存后强制执行）
+
+生成全部 segment 提示词后，**必须先自检再展示给作者**。逐 segment 扫描"写作指引"段，按"写作指引反AI味规范"的 6 条规则逐条检查。
+
+#### 检测流程
+
+1. 逐 segment 读取"写作指引"段
+2. 逐条对照 6 条规则，标记命中位置和类型
+3. 高命中的 segment 直接修复后重新保存
+4. 将检测结果汇总为报告，展示给作者
+
+#### 检测清单（逐条扫）
+
+| # | 检测项 | 关键词/模式 | 命中即修 |
+|---|--------|------------|---------|
+| 1 | 心理机制分析 | "核心心理动作""心理层次""背后的动机是""这有区别" | ✅ |
+| 2 | 教 subagent 怎么写 | "不通过X来写，通过Y""这个认识不写…而写…""写法是" | ✅ |
+| 3 | 概念对比论证 | "A和B的区别在于""前者…后者…""推演是X，确认是Y" | ✅ |
+| 4 | 代词指代分析结论 | "林默在后者""本章做的是前者""答案是后者" | ✅ |
+| 5 | 分层心理指引 bullet list | 写作指引中出现"核心心理动作：""心理刻画指引："等子标题 | ✅ |
+| 6 | 情绪标签化描述 | "情绪基调：偏激""心理状态：紧张"等抽象标签（应以可感知状态描述） | ✅ |
+| + | 词句层残留 | "他感到""他意识到""他做出决定""这表明""整件事的性质"（第二轮净化漏网） | ✅ |
+
+#### 输出格式
+
+```
+## AI味自检报告
+
+| Segment | 命中项 | 位置 | 处理 |
+|---------|--------|------|------|
+| seg-1 | — | — | 通过 |
+| seg-3 | #1 心理机制分析 | 写作指引第3段 | 已修复 |
+| seg-5 | #3 概念对比论证 | 写作指引第2段 | 已修复 |
+
+通过率：4/6 segments 一轮通过。2 segments 经修复后通过。
+```
+
+全部通过后，进入 STOP 展示样例。若某 segment 命中 ≥3 条且难以修复 → 标注警告，展示时请作者重点关注。
 
 ### 视角转换适配
 
