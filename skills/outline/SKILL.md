@@ -7,13 +7,11 @@ description: 卷纲和章纲规划。Phase 3。当设定完成后需要规划故
 
 ## Overview
 
-引导作者拆分故事线、讨论卷纲、逐章设计章纲（含 memo 读者情绪设计和 emotional_design）。讨论期待值管理、章纲节奏、开篇设计时，参考 `best-practices.md` 中的模式和案例。
+引导作者拆分故事线、讨论卷纲、逐章设计章纲。每章先由角色驱动分析（角色发声：下一章想做什么）推导主线，再从主线填充 memo/情绪设计/钩子。**不做抽象诊断——从角色动机推导剧情。**
 
 **When NOT to use:** 设定未完成（world-setting 为空）、章纲已完成（status = draft 或 archived）、只是想查看已有章纲。
 
-**Announce at start:** "我来引导你规划章节。先确认卷纲，再逐章讨论。"
-
-讨论章纲时参考 `best-practices.md` 中的模式和案例引导作者。
+**Announce at start:** "我来引导你规划章节。先确认卷纲，再逐章讨论。每章先让角色说话，再定剧情。"
 
 ## HARD-GATE
 
@@ -45,21 +43,43 @@ memo 缺失 → Phase 4 subagent 不知道"读者此刻在等什么"。
 
 ### 逐章章纲（每章必做）
 
+#### 0. 角色驱动分析（先于任何讨论）
+
+读上一章结尾状态 + 角色当前设定，让每个活跃角色"发声"——说自己现在的处境和下一步想做什么。
+
+**操作流程：**
+1. 读上一章归档正文 + 角色 state_history（首章读 character.yaml 初始设定）
+2. 对每个活跃角色，生成：
+   ```
+   【{角色名}的处境】当前在哪儿？和谁在一起？掌握什么信息？
+   【{角色名}的感受】对上一章事件的情绪反应
+   【{角色名}想做的事】基于性格和动机，ta 下一步最可能做什么
+   【可能的剧情方向】如果选这条路，可能引出什么冲突/发现/对话
+   ```
+3. 展示给作者，让作者选 1-2 条主线
+4. 从选定的主线推导本章 outline
+
+**为什么先做这步：** 角色动机推导剧情，比抽象诊断（"读者在等什么"）自然得多。角色想做的事 → 冲突/发现 → 这章自然就有了。
+
 #### a. Outline
 讨论剧情要点 → 填入 outline 字段（含 narrative_pov）。若作者未指定视角，沿用上一章设定。
+
+角色驱动分析中选定的主线应直接作为 outline 基础。
 
 #### a2. 禁止清单
 **必须询问：** "本章有没有明确禁止出现的场景、元素或情节？" 记录到 memo.prohibitions。作者说"没有"也要确认一次。
 
 #### b. Chapter Memo（7 段）
-填写每段时触发以下诊断（参考 best-practices.md）：
-- current_task：本章必须完成的具体动作
-- reader_expectation：**诊断：** "这一章读者最想知道答案的问题是什么？你打算回答多少？留多少？"（参考「期待值管理」）
-- payoff_plan：该兑现 / 暂不掀的伏笔
-- downtime_functions：**诊断：** "这个平淡段落的'前因'可以是什么？如果让剧情一层层变得更糟，第一层是什么？"（参考「流水账修复」）
-- key_choices：关键抉择三连问
-- required_changes：章尾必须改变的 1-3 条
-- prohibitions：硬约束红线
+
+从角色驱动分析的输出推导 memo，不再从零诊断：
+
+- current_task：从选定的角色意图推导——"角色想做的事"就是本章任务
+- reader_expectation：角色想知道什么答案？读者的期待跟着角色走
+- payoff_plan：角色驱动的事件自然会触及哪些伏笔
+- downtime_functions：角色在追逐/调查/等待过程中发生的意外
+- key_choices：角色在推进中必须做的决定
+- required_changes：角色意图实现后，世界的状态如何改变
+- prohibitions：硬约束红线（从 a2 来）
 
 #### c. Emotional Design
 primary_mood、mood_progression、intensity_peak、emotional_hook、intensity_level
