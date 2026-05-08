@@ -71,15 +71,21 @@ pwd
 
 ```
 .agent/
-├── status.md          # 当前进度（阶段/卷/章/子阶段/状态/备注）
-├── roundtables/       # 圆桌讨论记录
-│   ├── setting/       # 设定阶段 Q&A
-│   ├── volume/        # 卷纲讨论
-│   ├── chapter/       # 章纲讨论
-│   └── segment/       # 段拆分讨论
-├── reviews/           # 验收报告
-│   └── review-{id}.md
-└── lessons/           # 跨 session 记忆（由 agent 自写）
+├── status.md              # 当前进度（阶段/卷/章/子阶段/状态/备注）
+├── task-registry.md        # 任务注册表（当前章节活跃任务）
+├── roundtables/
+│   ├── setting/            # 设定阶段 Q&A（一次性，保留）
+│   ├── volume/             # 卷纲讨论（一次性，保留）
+│   ├── chapter/            # 章纲讨论（当前卷活跃）
+│   └── segment/            # 段拆分（当前章活跃）
+├── reviews/                # 验收报告（当前章活跃）
+├── archive/                # 已完成章节的归档记录
+│   ├── vol-1-ch-3/         # 每章一个子目录
+│   │   ├── task-registry.md
+│   │   ├── reviews.md
+│   │   └── summary.md
+│   └── ...
+└── lessons/                # 跨 session 记忆（永久保留）
     └── {agent-name}.md
 ```
 
@@ -94,6 +100,32 @@ pwd
 | 卷纲确认 | 子阶段=chapter-roundtable |
 | 一章归档 | 章+=1, 子阶段=segment-split |
 | 整卷完成 | 卷+=1, 章=0, 子阶段=chapter-roundtable |
+
+### 自动清理规则
+
+`.agent/` 按三级生命周期管理，超出范围的自动归档或删除：
+
+| 级别 | 内容 | 保留期 | 清理时机 |
+|------|------|--------|---------|
+| **热** | task-registry.md, segment 圆桌, 当前章 reviews | 当前章完成前 | 章归档时 |
+| **温** | chapter 圆桌, volume 圆桌, 卷 reviews | 当前卷完成前 | 卷完成时 |
+| **冷** | setting 圆桌, lessons/ | 永久保留 | 不移除 |
+| **无用** | 验收中间轮次的 fail 报告 | 下一轮通过后 | 新 review 写入时 |
+
+具体清理操作：
+
+**章归档时（Step 6 review-archive 通过后）**：
+1. 当前章的 task 记录 → 移至 `.agent/archive/vol-{N}-ch-{M}/task-registry.md`
+2. 当前章的 segment 记录 → 移至同一归档目录
+3. 当前章的 review 报告（只留最终 pass 版）→ 移至同一归档目录
+4. 清理 task-registry.md 中已完成的条目
+5. 清理 reviews/ 中已归档章的中间轮次报告
+
+**卷完成时**：
+1. 本章 chapter 圆桌记录 → 移至 `.agent/archive/vol-{N}/`
+2. 当前卷的 review 报告 → 移至归档目录
+
+**主 Agent 不做清理操作，派 exec-archive 在归档步骤中执行**。
 
 ---
 
