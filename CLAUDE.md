@@ -20,6 +20,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 mkdir -p ~/.claude/skills/awesome-novel
 cp SKILL.md ~/.claude/skills/awesome-novel/
 cp -r scripts ~/.claude/skills/awesome-novel/
+cp -r agents ~/.claude/skills/awesome-novel/
 ```
 
 修改 SKILL.md 或模板后需重新执行 `./install.sh` 才能生效——Agent 加载的是安装路径下的副本，不是仓库源文件。
@@ -57,35 +58,75 @@ cp -r scripts ~/.claude/skills/awesome-novel/
 
 ## 目录结构
 
-初始化后的项目骨架及 `example/` 参考：
+### 仓库结构
+
+```
+awesome-novel-skill/
+├── SKILL.md                            # 主 Agent 工作流定义（安装到 skills 目录）
+├── agents/                             # 子 Agent 定义（33 个，圆桌 + 流水线）
+│   ├── index.md                        # Agent 派发表
+│   ├── roundtable/                     # 讨论 Agent（设定/卷纲/章纲/段拆分）
+│   └── pipeline/                       # 流水线 Agent（执行 + 验收）
+├── scripts/                            # 初始化脚本 + 模板
+│   ├── init.py                         # 项目初始化器
+│   ├── import.py                       # 小说导入器
+│   ├── analyze_style.py                # 文风分析器
+│   └── templates/                      # YAML 模板
+└── docs/                               # 设计文档
+```
+
+### 初始化后的小说项目结构
 
 ```
 project/
 ├── story.yaml                          # 项目索引（相对路径引用所有子文档）
 ├── author-intent.md                    # 长周期作者意图（核心主题/终局/信条/伏笔池）
 ├── current-focus.md                    # 1-3章中期聚焦（优先级/支线/钩子/节奏）
+├── .agent/                             # Agent 活动记录
+│   ├── status.md                       # 进度状态
+│   ├── roundtables/                    # Q&A + 圆桌讨论记录
+│   ├── reviews/                        # 验收报告
+│   └── lessons/                        # 跨章节记忆
 ├── settings/
 │   ├── world-setting.yaml              # 世界设定
 │   ├── writing-style.yaml              # 写作风格指南 + 题材配置 + 三层技法分发
-│   ├── anti-ai.yaml                    # AI味检测规则（疲劳词/句式/对话/改写算法）
+│   ├── anti-ai.yaml                    # AI味检测规则
 │   ├── hooks.yaml                      # 伏笔/钩子全生命周期追踪
 │   └── character-setting/              # 角色文件（每角色一个 yaml）
 ├── volumes/                            # 卷文件（卷纲+章节摘要）
 ├── chapters/                           # 章纲（只放 outline，不放正文）
-├── prompts/                            # 提示词（prose .md 格式，非 YAML）
+├── prompts/                            # 提示词（prose .md 格式）
 └── archives/                           # 正文（唯一存放处，markdown）
 ```
 
 ## SKILL.md 架构
 
-SKILL.md 定义完整的 6 阶段工作流，是此项目的核心：
+SKILL.md 已被重写为**主 Agent 编排器**，不再是单体工作流。核心变更：
 
-1. **Phase 1: Init** — 调用 `scripts/init.py` 创建目录结构。新建模式进入 Phase 2，导入模式调用 `scripts/import.py` 切分章节，Agent 反向提取设定后进入 Phase 4
-2. **Phase 2: 设定** — 讨论世界设定 + 角色设定 + 写作风格确认 + 题材选择 + 钩子初始化
-3. **Phase 3: 故事线拆分** — 逐卷逐章讨论章纲 + 同步更新 hooks.yaml（埋/提/收钩子）
-4. **Phase 4: 提示词生成** — 两轮操作：第一轮视角转换（上帝视角章纲→沉浸式指引），第二轮组装 prose 提示词 + 生成 3 个变体。提示词按 L1/L2 三层技法分发
-5. **Phase 5: 正文生成** — subagent 读取 prose 提示词生成正文，主 Agent 执行六项质量检查（含 anti-ai.yaml 疲劳词和句式检测）
-6. **Phase 6: 归档** — 正文已在 Phase 5 写入 archives/，更新角色 state_history、hooks.yaml、story.yaml
+1. **主 Agent（pro 模型）**：不创作、不验收、不改文。只做调度和决策。
+2. **子 Agent（flash 模型）**：33 个 Agent 分散到 `agents/` 目录，分两类：
+   - **圆桌 Agent**（15 个）：设定/卷纲/章纲/段拆分，互看方案、收敛矛盾
+   - **流水线 Agent**（17 个）：执行 + 验收，文件传递，5 轮协议
+3. **通信**：Agent 之间通过文件传递，不通过对话。主 Agent 只读 status。
+4. **记忆**：执行 Agent 在验收通过后自写 `.agent/lessons/`，下次派活时注入。
+5. **日间/夜间模式**：白天 3 次→升级作者，夜间→降级+标记。
+
+### 完整流程
+
+```
+一次性：
+  Step 1 初始化          → exec-init + review-init
+  Step 2 设定圆桌        → 5 讨论 Agent 问作者 → 圆桌收敛 → exec 落盘
+  Step 3.1 卷纲圆桌       → volume.yaml
+
+每卷循环：
+  Step 3.2 章纲圆桌       → N 份 chapter.yaml
+  For each chapter:
+    Step 3.3 段拆分圆桌    → segment 方案
+    Step 4 提示词组装      → exec-prompt + review-prompt
+    Step 5 正文 + 去AI味  → exec-prose(并行) → exec-stitch → exec-de-ai → review-prose
+    Step 6 归档            → exec-archive + review-archive
+```
 
 ## 关键约定
 
@@ -96,11 +137,10 @@ SKILL.md 定义完整的 6 阶段工作流，是此项目的核心：
 
 **流程护栏**：
 - 所有 YAML 和正文必须经作者讨论确认后才写入——Agent 是引导者，不能代笔
-- Phase 4 视角转换必须先单独经作者确认，确认后才能生成变体
-- 提示词必须注入 writing-style 四个字段（role / core_principles / possible_mistakes / depiction_techniques），缺失任何一个 subagent 都会放飞
+- Phase 4 提示词必须注入 writing-style 四个字段（role / core_principles / possible_mistakes / depiction_techniques），缺失任何一个 subagent 都会放飞
 - 提示词应按 skill_layers 三层分发：L1 结构层→叙事约束，L2 内容层→写作原则段，L3 审查层→保留给 Phase 5
-- 禁止用上帝视角章纲直接喂给 subagent——必须先经视角转换
-- Phase 5 正文必须通过 anti-ai.yaml 的六项检测（含 AI 疲劳词和句式违规）
+- Phase 5 正文必须通过 review-prose 的六项检测（含 anti-ai.yaml 疲劳词和句式违规）
+- 5 轮协议：执行→验收循环，第 5 轮仍不一致则升级作者
 
 **归档约定**：
 - 草稿命名: `vol-{N}-ch-{M}-{slugified-title}.draft.md`（Phase 5 写入，作者审阅用）

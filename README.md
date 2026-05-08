@@ -37,6 +37,7 @@ cd awesome-novel-skill
 mkdir -p ~/.claude/skills/awesome-novel
 cp SKILL.md ~/.claude/skills/awesome-novel/
 cp -r scripts ~/.claude/skills/awesome-novel/
+cp -r agents ~/.claude/skills/awesome-novel/
 ```
 
 > Hermes 用户把路径换成 `~/.hermes/skills/awesome-novel`，OpenClaw 用户换成 `~/.openclaw/skills/awesome-novel`。
