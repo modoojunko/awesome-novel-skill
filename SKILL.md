@@ -155,32 +155,79 @@ type: exec | review | roundtable  # agent 类型
 
 ---
 
-## 验证循环
+## Task Registry（任务注册表）
 
-主 Agent 维护一个 task 映射表：
+主 Agent 将每次派活记录到 `.agent/task-registry.md`。这是断 session 恢复和失败重派的依据。
 
-```json
-{
-  "task-init": { "exec": "exec-init", "review": "review-init", "round": 0 }
-}
+### 记录格式
+
+每次派活写一条记录：
+
+```markdown
+## task-{timestamp}-{seq}
+- agent: exec-prose              # agent id，来自 .md 的 front matter
+- type: exec
+- round: 0
+- status: dispatched            # dispatched | passed | failed | escalated
+- context:
+  project: "暗流"
+  chapter: 3
+  inputs: ["prompts/vol-1-ch-3-seg-1-prompt.md"]
+  outputs: ["archives/vol-1-ch-3-seg-1.draft.md"]
+- review: null                  # review 返回后记录
+- review_rounds: []             # 每轮 review 结果
+```
+
+### 派活流程
+
+```
+派 agent:
+  1. 生成 task id: task-{YYYYMMDD}-{seq}
+  2. 写 task 记录到 .agent/task-registry.md（status: dispatched）
+  3. 读 agents/{type}/{name}.md → 构造 prompt
+  4. Agent tool 派发
+
+收结果:
+  收到 {status: "done", files: [...]} →
+    更新 task 记录（status: done, files）
+
+  收到 review 结果 →
+    更新 task 记录中的 review_rounds
 ```
 
 ### 路由规则
 
 ```
 review 返回 pass →
-  1. 标记 task round = 0
-  2. 如果需要经验总结 → 派同一 exec agent "去写 lessons"
+  1. task 记录: status = passed
+  2. 需要经验总结 → 派同一 exec agent 写 .agent/lessons/{agent-name}.md
   3. 下一步
 
 review 返回 fail →
-  1. round += 1
-  2. 如果 round < 5 → 丢回同一 exec agent 修
-  3. 如果 round >= 5 → 白天升级作者，夜间降级标记
+  1. round += 1，写入 review_rounds
+  2. 读 task 记录 → 拿到原始 context（inputs/outputs）
+  3. 如果 round < 5:
+     用原始 context + review 指出的问题，重新派同一 agent 修
+  4. 如果 round >= 5:
+     白天 → task.status = escalated，升级作者
+     夜间 → task.status = passed，标记"夜间自动通过"
 
 review 返回 dispute →
-  1. 丢回同一 review agent 重判
-  2. 如果 review 坚持原判 → 升级作者
+  1. review_rounds 追加记录
+  2. 派同一 review agent 重判（注入 dispute 理由）
+  3. 如果 review 坚持原判 → task.status = escalated，升级作者
+```
+
+### Session 恢复
+
+```
+读 .agent/task-registry.md：
+  找到 status = dispatched 的最新记录 →
+    继续等 review 结果
+  找到 review_rounds 最后一轮为 fail 的记录 →
+    继续修复循环
+  所有 task 都 status = passed →
+    正常走下一步
 ```
 
 ### 日间 / 夜间模式
