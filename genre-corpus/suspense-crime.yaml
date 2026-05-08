@@ -108,3 +108,85 @@ genre_config:
     - "上司永远是阻碍——可以有复杂的职场关系，但不要脸谱化"
     - "最后关头反转——反转需要前文铺垫，不能凭空出现"
     - "证人刚好知道一切——证人应提供碎片信息"
+
+# ============================================================
+# 卷级故事弧模板 — Phase 3 规划卷纲时使用
+# ============================================================
+story_arc_templates:
+  default: "案件发生→初步调查→线索矛盾→关键突破→真相大白→余波（6段弧）"
+  variants:
+    - id: "unit-case"
+      label: "单元案件型"
+      description: "单起案件从发生到破获，节奏紧凑。适合第一卷或独立案件卷。"
+      phases:
+        - phase: "案件发生"
+          description: "尸体发现或离奇事件——现场勘查、初步判断，建立案件基本面貌"
+          default_chapters: 1
+        - phase: "初步调查"
+          description: "走访证人、排查嫌疑人、收集物证——每步推理可追溯"
+          default_chapters: 2
+        - phase: "线索矛盾"
+          description: "新证据推翻前期假设——方向被堵死、不在场证明成立、物证矛盾"
+          default_chapters: 1
+        - phase: "关键突破"
+          description: "被忽略的细节重新浮现——换角度→新发现→锁定方向"
+          default_chapters: 1
+        - phase: "真相大白"
+          description: "对峙/抓捕/审讯——动机揭露，但可能留一个细节未解"
+          default_chapters: 1
+        - phase: "余波"
+          description: "案件对主角的影响——为下一案或主线伏笔做铺垫"
+          default_chapters: 1
+      total_chapters_range: "6-9章"
+    - id: "serial-case"
+      label: "连环案件型"
+      description: "多起关联案件逐步展开，适合中长篇。"
+      phases:
+        - phase: "第一起"
+          description: "看似独立的案件介入，主角尚未察觉关联"
+          default_chapters: 1
+        - phase: "模式浮现"
+          description: "第二起发生——相似点引起警觉，确认连环"
+          default_chapters: 2
+        - phase: "深入调查"
+          description: "并案侦查——受害者关联分析、嫌犯侧写、技术手段介入"
+          default_chapters: 2
+        - phase: "追查受阻"
+          description: "打草惊蛇/伪造线索/内部干扰——调查陷入困境"
+          default_chapters: 1
+        - phase: "关键反转"
+          description: "新发现推翻原有侧写——方向调整"
+          default_chapters: 1
+        - phase: "逼近真相"
+          description: "锁定嫌犯——但证据链仍缺一环"
+          default_chapters: 1
+        - phase: "收网"
+          description: "设局/抓捕/审讯/全案串联"
+          default_chapters: 1
+        - phase: "终局余波"
+          description: "案结但阴影不散——主线伏笔或角色关系变化"
+          default_chapters: 1
+      total_chapters_range: "10-14章"
+    - id: "cold-case"
+      label: "冷案重启型"
+      description: "旧案新查，双时间线叙事。"
+      phases:
+        - phase: "重启契机"
+          description: "新线索/旧人出现——尘封卷宗被重新翻开"
+          default_chapters: 1
+        - phase: "当年回顾"
+          description: "通过调查还原当年案件经过（穿插回忆片段）"
+          default_chapters: 2
+        - phase: "旧证新看"
+          description: "用新技术/新视角重审旧证据——发现当年被忽略的东西"
+          default_chapters: 2
+        - phase: "关联突破"
+          description: "当年涉案人员重新接触——有人隐瞒、有人恐惧、有人布局"
+          default_chapters: 1
+        - phase: "当年真相"
+          description: "还原案发全貌——当年是谁在掩盖什么"
+          default_chapters: 1
+        - phase: "现世追责"
+          description: "跨越时间后的正义——但代价已经付出"
+          default_chapters: 1
+      total_chapters_range: "8-11章"

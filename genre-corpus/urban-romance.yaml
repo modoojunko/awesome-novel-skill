@@ -93,3 +93,82 @@ genre_config:
     - "醉酒必吐真言——可以有，但别每段关系都靠喝酒推进"
     - "分手必下雨——天气不是情绪的遥控器"
     - "前任必是极品——前任也可以是个正常人"
+
+# ============================================================
+# 卷级故事弧模板 — Phase 3 规划卷纲时使用
+# ============================================================
+story_arc_templates:
+  default: "日常相遇→关系升温→外部阻力→情感危机→和解/成长（5段弧）"
+  variants:
+    - id: "slow-burn"
+      label: "甜宠型"
+      description: "从相遇逐步靠近，温暖治愈向。适合轻松甜宠主线。"
+      phases:
+        - phase: "初遇/重逢"
+          description: "命运般的相遇或久别重逢——建立第一印象和基本的接触动机"
+          default_chapters: 2
+        - phase: "擦出火花"
+          description: "因工作/生活/共同圈子频繁接触——开始在意彼此"
+          default_chapters: 2
+        - phase: "暧昧拉扯"
+          description: "友达以上——试探、吃醋、不经意的关心和照顾"
+          default_chapters: 2
+        - phase: "外部阻力"
+          description: "误会/家庭/职场/前任——让两人犹豫的现实因素"
+          default_chapters: 1
+        - phase: "确认心意"
+          description: "关键事件推动一方迈出一步——告白或行动"
+          default_chapters: 1
+        - phase: "甜蜜确认"
+          description: "关系确定后的日常——但不等于问题全部消失"
+          default_chapters: 1
+      total_chapters_range: "9-12章"
+    - id: "angst"
+      label: "虐恋型"
+      description: "情感拉扯与误会纠葛。适合情感张力强、有悲剧色彩的主线。"
+      phases:
+        - phase: "关系建立"
+          description: "因某种羁绊捆绑在一起——不一定是自愿，但不得不相处"
+          default_chapters: 2
+        - phase: "心动滋生"
+          description: "在相处中发现对方的另一面——好感萌芽但不敢承认"
+          default_chapters: 2
+        - phase: "误会/阻碍"
+          description: "信息差导致误解——或现实困境让两人无法靠近"
+          default_chapters: 2
+        - phase: "拉扯加深"
+          description: "想靠近又推开——情绪反复、试探、伤害"
+          default_chapters: 2
+        - phase: "冲突爆发"
+          description: "矛盾积累到顶点——争吵/冷战/分离"
+          default_chapters: 1
+        - phase: "真相浮现"
+          description: "误会解开——原来彼此都误解了对方"
+          default_chapters: 1
+        - phase: "重新选择"
+          description: "知道真相后，还要不要在一起——走向和解或释然放手"
+          default_chapters: 1
+      total_chapters_range: "11-15章"
+    - id: "realistic"
+      label: "现实向型"
+      description: "现实生活背景下的情感叙事。适合都市烟火气、成长向主线。"
+      phases:
+        - phase: "日常世界"
+          description: "主角的日常生活和状态——工作/朋友/生活节奏"
+          default_chapters: 1
+        - phase: "相遇"
+          description: "因为生活中的真实场景而认识——不是刻意安排的相遇"
+          default_chapters: 2
+        - phase: "自然靠近"
+          description: "慢热但真实的相处——一起熬夜加班、顺路吃饭、互相帮忙"
+          default_chapters: 2
+        - phase: "现实考验"
+          description: "不是狗血冲突而是现实压力——买房/异地/职业选择/家庭责任"
+          default_chapters: 2
+        - phase: "各自成长"
+          description: "面对压力，各自的选择和变化——成长方向是否一致"
+          default_chapters: 1
+        - phase: "抉择"
+          description: "继续同行还是各自安好——基于成熟的选择而非情绪冲动"
+          default_chapters: 1
+      total_chapters_range: "9-12章"

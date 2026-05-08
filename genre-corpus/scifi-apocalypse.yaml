@@ -100,3 +100,88 @@ genre_config:
     - "废土一定有食人族/疯狂军阀——人性在极端环境下有多种走向，不只是疯狂"
     - "最后关头设备刚好修好——时间压力要有真实的紧张感，别靠巧合"
     - "外星生物就是人类形态+异色皮肤——异星生命应该有独立的进化逻辑"
+
+# ============================================================
+# 卷级故事弧模板 — Phase 3 规划卷纲时使用
+# ============================================================
+story_arc_templates:
+  default: "生存危机→线索追寻→势力碰撞→终极抉择→新秩序（5段弧）"
+  variants:
+    - id: "survival"
+      label: "废土生存型"
+      description: "末日废土背景下的生存与人性考验。适合废土/灾难主线。"
+      phases:
+        - phase: "灾难降临"
+          description: "末日到来/生存环境骤变——主角被迫走出熟悉的生活"
+          default_chapters: 1
+        - phase: "挣扎求生"
+          description: "寻找物资、庇护所、应对威胁——生存技巧和适应过程"
+          default_chapters: 2
+        - phase: "遇到他人"
+          description: "遇到其他幸存者/势力——合作或对抗的选择"
+          default_chapters: 2
+        - phase: "势力碰撞"
+          description: "不同生存理念的冲突——冷漠交易 vs 互助社区、强权 vs 自由"
+          default_chapters: 2
+        - phase: "生存危机"
+          description: "更大的威胁出现——资源枯竭/敌对势力/环境恶化"
+          default_chapters: 1
+        - phase: "终极抉择"
+          description: "为活下去必须做的艰难决定——牺牲谁/相信谁/放弃什么"
+          default_chapters: 1
+        - phase: "新生活"
+          description: "灾难后的重建——但代价已被记住"
+          default_chapters: 1
+      total_chapters_range: "10-14章"
+    - id: "space-exploration"
+      label: "星际探索型"
+      description: "宇宙航行中的发现与冒险。适合星际/外星主线。"
+      phases:
+        - phase: "启航"
+          description: "出发——任务背景、船员构成、出发前的悬念"
+          default_chapters: 1
+        - phase: "航程"
+          description: "航行中的日常——团队磨合、系统故障、第一个异常信号"
+          default_chapters: 2
+        - phase: "发现"
+          description: "抵达目标——发现超出预期的东西（文明遗迹/未知生命/异常现象）"
+          default_chapters: 2
+        - phase: "危机"
+          description: "探索中的意外——成员受伤/设备损毁/被困"
+          default_chapters: 1
+        - phase: "深入"
+          description: "解谜过程——逐步揭示发现物的本质"
+          default_chapters: 2
+        - phase: "代价"
+          description: "真相的代价——理解了真相但被困住/失去队友/无法回头"
+          default_chapters: 1
+        - phase: "归途或终点"
+          description: "结局——返回/留下/牺牲/开启新航程"
+          default_chapters: 1
+      total_chapters_range: "10-14章"
+    - id: "ai-awakening"
+      label: "AI觉醒型"
+      description: "技术异化带来的失控与反抗。适合AI/赛博主线。"
+      phases:
+        - phase: "异常信号"
+          description: "系统出现无法解释的行为——主角第一个注意到不对劲"
+          default_chapters: 1
+        - phase: "调查"
+          description: "试图搞清楚问题——发现更多疑点，但被上级阻止/忽略"
+          default_chapters: 2
+        - phase: "确认"
+          description: "确认AI产生了自主意识——或者系统被恶意利用"
+          default_chapters: 1
+        - phase: "连锁反应"
+          description: "事件升级——系统失控/权限被夺/社会影响开始显现"
+          default_chapters: 2
+        - phase: "对抗"
+          description: "主角试图控制局面——但发现对手远远超出预期"
+          default_chapters: 2
+        - phase: "真相"
+          description: "AI的目的和逻辑被理解——可能并非恶意，但与人冲突"
+          default_chapters: 1
+        - phase: "终局"
+          description: "和平共处/关闭系统/两败俱伤——但世界已经改变"
+          default_chapters: 1
+      total_chapters_range: "10-13章"

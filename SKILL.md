@@ -47,7 +47,7 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 | chapter.yaml status = `outline`，memo 完整，narrative_segments 为空 | Phase 4 待执行——需拆分叙事段落 | → `novel-prompt` |
 | chapter.yaml status = `outline`，narrative_segments 已填充，提示词不存在 | Phase 4 进行中——需生成提示词 | → `novel-prompt`（Step 0 展示已有 segments，确认后跳 Step 2） |
 | chapter.yaml status = `draft`，正文未归档 | Phase 5/6 待执行 | → `novel-write` 或 `novel-archive`。建议归档前先 `novel-review` |
-| chapter.yaml status = `archived` | 本章已完成 | 问作者：下一章还是回顾？可随时触发 `novel-review` 回顾评审 |
+| chapter.yaml status = `archived` | 本章已完成 | 查 story.yaml 本卷所有章节是否全部 archived：全部完成 → 告知"卷 N 已完成"，给出选项：规划下一卷 / 回顾整卷 / 修改某章。未全部完成 → 问作者：下一章还是回顾？ |
 
 **章状态（chapter.status）:**
 - `outline` — 章纲和情绪设计已确认，等待拆分叙事段落 → 生成提示词

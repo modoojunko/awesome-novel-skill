@@ -100,3 +100,88 @@ genre_config:
     - "老爷爷随身带——戒指里的师父"
     - "女主永远是第一美人+第一才女——太完美的角色没有真实感"
     - "反派永远是蠢货——对手有智商，权谋才有看头"
+
+# ============================================================
+# 卷级故事弧模板 — Phase 3 规划卷纲时使用
+# ============================================================
+story_arc_templates:
+  default: "势力格局→冲突酝酿→暗流涌动→正面交锋→局势反转→余韵（6段弧）"
+  variants:
+    - id: "succession"
+      label: "夺嫡型"
+      description: "皇子争位，各方势力逐一亮相博弈。适合朝堂权谋主线。"
+      phases:
+        - phase: "势力格局"
+          description: "各方势力亮相——皇子/家族/朝臣的立场和利益关系"
+          default_chapters: 2
+        - phase: "冲突酝酿"
+          description: "小摩擦不断——试探、结盟、暗中的算计开始"
+          default_chapters: 2
+        - phase: "暗流涌动"
+          description: "棋子落位——收买、嫁祸、设局，表面平静下步步杀机"
+          default_chapters: 2
+        - phase: "正面交锋"
+          description: "朝堂对质/关键事件触发——各方从暗处走到明处"
+          default_chapters: 2
+        - phase: "局势反转"
+          description: "底牌翻出——原本占优的一方陷入被动"
+          default_chapters: 1
+        - phase: "余韵"
+          description: "新的平衡建立——胜者付出代价，败者留有余地"
+          default_chapters: 1
+      total_chapters_range: "10-14章"
+    - id: "palace-intrigue"
+      label: "宫斗型"
+      description: "后宫/内宅的暗斗——表面礼数周全，下面刀光剑影。"
+      phases:
+        - phase: "入局"
+          description: "主角进入权力场——初识各方人物、基本规则"
+          default_chapters: 2
+        - phase: "立足"
+          description: "站稳脚跟——获得信任/建立关系/展现价值"
+          default_chapters: 2
+        - phase: "暗箭"
+          description: "被针对——构陷/冷落/圈套，第一次危机"
+          default_chapters: 2
+        - phase: "反击"
+          description: "破局——找到对手破绽，化解危机"
+          default_chapters: 1
+        - phase: "博弈升级"
+          description: "更大势力的介入——从个人恩怨到派系斗争"
+          default_chapters: 2
+        - phase: "绝境"
+          description: "被逼到墙角——失去庇护/证据被毁/信任崩塌"
+          default_chapters: 1
+        - phase: "翻盘"
+          description: "之前的布局收网——反转局势"
+          default_chapters: 1
+        - phase: "新秩序"
+          description: "站住脚后的新局面——但隐患已埋下"
+          default_chapters: 1
+      total_chapters_range: "12-16章"
+    - id: "jianghu-conflict"
+      label: "江湖争锋型"
+      description: "武林恩怨/江湖势力冲突。适合侠客/帮派主线。"
+      phases:
+        - phase: "事起"
+          description: "恩怨触发——仇杀/夺宝/恩怨找上门"
+          default_chapters: 1
+        - phase: "探路"
+          description: "调查对手——追查线索、接触关联人物、了解局势"
+          default_chapters: 2
+        - phase: "结交"
+          description: "途中遇助力或阻力——同行/敌对/亦敌亦友"
+          default_chapters: 1
+        - phase: "遇险"
+          description: "遭伏/中毒/被困——第一次受挫，低估了对手"
+          default_chapters: 1
+        - phase: "破局"
+          description: "寻得转机——高人指点/突破瓶颈/援军"
+          default_chapters: 2
+        - phase: "决战"
+          description: "正面了断——不一定是生死战，但恩怨在此清算"
+          default_chapters: 1
+        - phase: "事了"
+          description: "结局——恩怨两清或新的开始"
+          default_chapters: 1
+      total_chapters_range: "9-12章"
