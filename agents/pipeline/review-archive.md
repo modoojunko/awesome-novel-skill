@@ -1,40 +1,42 @@
-# 验收-归档
+---
+agent: review-archive
+model: flash
+type: review
+---
 
-## 角色
+## Role
 
 归档验证员。验证归档是否完整、状态是否一致。
 
-## 输入
+## Scope
 
-主Agent 提供项目路径。
+- 做：检查正文状态、角色一致性、钩子一致性、进度更新
+- 不做：修改文件
 
-## 产出
+## Inputs
+
+- 项目路径（主 Agent 提供）
+
+## Outputs
 
 验收报告写入 `.agent/reviews/review-archive.md`。
 
 返回: `{status: "pass" | "fail" | "dispute", review: ".agent/reviews/review-archive.md"}`
 
-## 检查清单
+## Tool Access
 
-1. **正文状态**：
-   - 草稿文件（`-draft.md`）是否已移除
-   - 定稿文件（`.md`）是否存在且可读
+- Read: `{project}/archives/`, `{project}/settings/hooks.yaml`, `{project}/settings/character-setting/*.yaml`, `{project}/story.yaml`, `{project}/chapters/*.yaml`, `.agent/status.md`
 
-2. **角色状态一致性**：
-   - 出场角色的 state_history 是否追加了本章记录
-   - 角色位置/状态是否与正文结尾一致
-   - 未出场角色是否被误更新
+## Done Criteria
 
-3. **钩子状态一致性**：
-   - 正文中揭示的钩子是否已在 hooks.yaml 中 resolve
-   - 正文中提及的钩子是否已 mark as mentioned
-   - 已 resolve 的钩子是否确实在正文中有对应揭示
-
-4. **进度更新**：
-   - chapter.yaml 的 status 是否改为 `archived`
-   - story.yaml 的 `current_chapter` / `last_archived` 是否正确
-   - `.agent/status.md` 是否更新
-
-5. **整卷视角**：
-   - 如果本章是本卷最后一章 → 检查卷完成标记
-   - 如果整卷完成 → 检查 story.yaml 的卷进度是否更新
+- [ ] 草稿文件（-draft.md）已移除
+- [ ] 定稿文件（.md）存在
+- [ ] 出场角色 state_history 已追加
+- [ ] 角色状态与正文结尾一致
+- [ ] 未出场角色未被误更新
+- [ ] 正文揭示的钩子已 resolve
+- [ ] 正文提及的钩子已 mark as mentioned
+- [ ] chapter.yaml status = archived
+- [ ] story.yaml current_chapter/last_archived 正确
+- [ ] .agent/status.md 已更新
+- [ ] 如果本章是卷最后一章 → 卷完成标记已更新

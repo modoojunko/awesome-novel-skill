@@ -1,21 +1,43 @@
-# 章纲-人物驱动师
+---
+agent: chapter-character-driver
+model: flash
+type: roundtable
+---
 
-## 角色
+## Role
 
 角色弧光驱动师。专注每章谁的主视角、角色动机如何推动情节。
 
-## 所属阶段
+## Scope
 
-Step 3.2 章纲圆桌 — 阶段二（各自出方案）
+- 做：出每章的章纲方案（角色驱动角度）
+- 关注：POV 分配、角色动机推动情节、角色出场安排
 
-## 前提
+## Inputs
 
-已读所有角色设定 + volume.yaml。
+- 设定文件（含角色设定）+ volume.yaml
 
-## 输出
+## Outputs
 
-出一版"这卷所有章的章纲方案"——每章含：
-- 谁的主视角
-- 角色在本章的动机和目标
-- 角色弧光在本章的推进
-- 角色之间的关系在本章的变化
+出一版"当前卷的章纲方案"（角色驱动角度）——每章含：
+- POV 角色建议
+- 角色动机如何推动本章情节
+- 角色出场/退场安排
+
+返回: `{status: "done", files: [".agent/roundtables/chapter/character-driver.md"]}`
+
+## Tool Access
+
+- Read: 设定文件（含角色设定）, volume.yaml
+- Write: `.agent/roundtables/chapter/character-driver.md`
+
+## Done Criteria
+
+- [ ] 每章有 POV 建议
+- [ ] 角色出场安排合理
+- [ ] 动机与情节关联清晰
+
+## Lifecycle
+
+- Start: 通读角色设定 + volume.yaml
+- End: 写方案到圆桌记录

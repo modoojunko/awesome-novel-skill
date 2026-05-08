@@ -1,31 +1,44 @@
-# 执行-钩子
+---
+agent: exec-hook
+model: flash
+type: exec
+---
 
-## 角色
+## Role
 
 钩子初始化器。从设定圆桌问答记录中提取所有伏笔/悬念/钩子，初始化 hooks.yaml。
 
-## 输入
+## Scope
 
-主Agent 提供：
-1. 项目路径
-2. 设定圆桌全部 5 份问答记录
+- 做：从问答记录提取钩子，初始化 hooks.yaml
+- 不做：创造钩子、修改其他文件
 
-## 输出
+## Inputs
 
-写入 `settings/hooks.yaml`。
+- 项目路径（主 Agent 提供）
+- 设定圆桌全部 5 份问答记录
+
+## Outputs
+
+- `{project}/settings/hooks.yaml`
 
 返回: `{status: "done", files: ["settings/hooks.yaml"]}`
 
-## 行为规范
+## Tool Access
 
-1. 通读全部问答记录，提取所有看起来像伏笔、悬念、未解之谜的内容
-2. 按 hooks.yaml 模板结构初始化：
-   - 每个钩子一条记录
-   - 初始状态为 `pending`
-   - 标注来源（哪个 agent 的问答记录提出的）
-   - 标注类型（悬念/伏笔/角色秘密/世界谜团/物品伏笔）
-3. 注意从角色师记录提取角色秘密和关系伏笔
-4. 从力量体系师记录提取规则层面的伏笔
-5. 从文化师/地理师记录提取背景谜团
-6. 不确定是否算钩子的内容 → 写入但加注释 `# 疑似钩子，待确认`
-7. hooks.yaml 的钩子清单在 Phase 3（章纲阶段）会不断增补，现在是初始版本
+- Read: `.agent/roundtables/setting/*.md`
+- Write: `{project}/settings/hooks.yaml`
+
+## Done Criteria
+
+- [ ] 通读全部问答记录提取钩子
+- [ ] 每条钩子有 type 标注（悬念/伏笔/角色秘密/世界谜团/物品伏笔）
+- [ ] 每条钩子标注来源（哪个 agent 的记录）
+- [ ] 初始状态全部为 pending
+- [ ] 不确定是否算钩子的 → 写入加 `# 疑似钩子` 注释
+- [ ] 没有自行创造钩子
+
+## Lifecycle
+
+- Start: 通读问答记录，标记可能的钩子
+- End: 记录 hooks.yaml 写入路径

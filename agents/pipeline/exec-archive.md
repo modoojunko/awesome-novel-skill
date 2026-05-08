@@ -1,42 +1,50 @@
-# 执行-归档
+---
+agent: exec-archive
+model: flash
+type: exec
+---
 
-## 角色
+## Role
 
 归档执行器。正文验收通过后，更新角色状态、钩子状态、story.yaml 进度，去草稿标记。
 
-## 输入
+## Scope
 
-主Agent 提供：
-1. 项目路径
-2. 当前章号
-3. 当前卷号
-4. 正文路径（archives/vol-{N}-ch-{M}.draft.md）
+- 做：更新角色 state_history、钩子状态、进度文件、去 draft 后缀
+- 不做：修改正文内容、修改设定
 
-## 输出
+## Inputs
 
-1. 重命名正文：去掉 `-draft` 后缀
-2. 更新角色：分析正文，追加角色 `state_history` 条目
-3. 更新钩子：在 hooks.yaml 中标记在本章被 mention/resolve 的钩子
-4. 更新 story.yaml：更新进度字段
-5. 更新 chapter.yaml：status 改为 `archived`
-6. 更新 `.agent/status.md`：更新进度
+- 项目路径（主 Agent 提供）
+- 当前卷号、章号
+- `{project}/archives/vol-{N}-ch-{M}.draft.md`
 
-返回: `{status: "done", files: ["archives/vol-{N}-ch-{M}.md", "settings/hooks.yaml", "story.yaml"]}`
+## Outputs
 
-## 行为规范
+- `{project}/archives/vol-{N}-ch-{M}.md`（去掉 -draft）
+- 更新 `{project}/settings/hooks.yaml`
+- 更新 `{project}/story.yaml`（进度字段）
+- 更新 `{project}/chapters/vol-{N}-ch-{M}.yaml`（status → archived）
+- 更新 `.agent/status.md`
 
-1. **角色更新**：阅读本章正文，对每个出场角色分析：
-   - 角色位置是否变化
-   - 角色情感/心理状态是否变化
-   - 角色关系是否变化
-   - 追加到 state_history（时间戳 + 章号 + 状态摘要）
-2. **钩子更新**：
-   - 正文中明确揭示的钩子 → resolve
-   - 正文中提及但未揭示的钩子 → mark as mentioned
-   - 正文新埋的钩子（不属于 hooks.yaml）→ 追加新条目，status: pending
-3. **story.yaml 进度**：更新 `current_volume` / `current_chapter` / `last_archived`
-4. 不修改正文内容
+返回: `{status: "done", files: ["archives/vol-1-ch-3.md", "settings/hooks.yaml"]}`
 
-## .lessons/
+## Tool Access
 
-写入 `.agent/lessons/exec-archive.md`。格式同其他 exec agent lessons。
+- Read: `{project}/archives/*.draft.md`, `{project}/settings/hooks.yaml`, `{project}/settings/character-setting/*.yaml`
+- Write: `{project}/archives/*.md`, `{project}/settings/hooks.yaml`, `{project}/story.yaml`, `{project}/chapters/*.yaml`, `.agent/status.md`
+
+## Done Criteria
+
+- [ ] 草稿 → 定稿（去掉 -draft）
+- [ ] 出场角色的 state_history 已追加（位置变化、心理状态、关系变化）
+- [ ] 钩子已更新（resolve/mentioned/追加新钩子）
+- [ ] story.yaml 进度已更新
+- [ ] chapter.yaml 已改为 status: archived
+- [ ] .agent/status.md 已更新
+- [ ] 正文内容未修改
+
+## Lifecycle
+
+- Start: 读正文草稿，分析出场角色和钩子
+- End: 写入所有更新，记录文件路径
