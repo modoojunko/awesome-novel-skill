@@ -2,8 +2,8 @@
 # 类型档案 — 悬疑刑侦+微科幻
 
 id: "suspense-crime"
-label: "悬疑刑侦+微科幻"
-description: "现代都市背景下的刑侦探案，融入微量科幻元素。适合警察/侦探主角、单元案件或连环案件结构。"
+label: "悬疑刑侦"
+description: "悬疑、刑侦、探案、灵异、恐怖、诡异复苏、规则怪谈等。覆盖悬疑灵异和悬疑脑洞两大方向。"
 
 role_override:
   role: |
@@ -36,6 +36,9 @@ style_blueprint:
     - "主角执念驱动（未破的旧案/个人恩怨）"
     - "暗中查案与信息不对称"
     - "证人/嫌疑人的不可靠叙述"
+    - "灵异元素（风水、鬼怪、灵异事件、民间法术）——用于灵异方向"
+    - "超自然规则（诡异复苏、规则怪谈、惊悚游戏）——用于脑洞方向"
+    - "生存压力下的智斗和自我保全——用于脑洞方向"
   pov: "third_person_limited"
   pov_description: |
     第三人称限知视角，紧贴主角。只写主角看到的、摸到的、听到的、
@@ -80,6 +83,19 @@ prompt_segment: |
   - 慢节奏留白。每段线索推进后留1-2段反应时间，不让主角立刻想通一切。
   - 推理过程必须有可追溯的步骤——看到A、联想B、验证C、得出结论D，不能从A直接跳到D。
   - 信息释放节奏：每章最多给1-2个线索碎片，让读者有拼图感。
+
+  **灵异方向额外约束（悬疑灵异）**
+  - 灵异元素应有内在规则——鬼怪不是无敌的，风水不是万能的，民间法术有代价。
+  - 恐怖感来自未知和无力感——不靠突然惊吓（jump scare），靠氛围的缓慢积累。
+  - 灵异设定与现实逻辑的平衡——可以见鬼，但角色的反应应符合现实人的反应。
+  - 禁止为了恐怖而让角色降智——角色在灵异场景中的行为应有求生本能驱动。
+
+  **脑洞方向额外约束（悬疑脑洞）**
+  - 超自然规则（诡异复苏/规则怪谈/惊悚游戏）必须在前期清晰建立，读者需要知道"这个世界的规则是什么"。
+  - 主角在超自然规则下的破局依靠观察和推理——不靠硬刚、不靠系统给的万能解法。
+  - 惊悚游戏类：游戏规则→探索→危险→破解→奖励/惩罚，循环递进。
+  - 禁止规则前后矛盾——规则一旦揭示，后续剧情必须遵守。
+  - 脑洞向允许更强的主角主动性和策略性——但推理过程仍可追溯。
 
   **类型专属禁忌**
   - 不直白揭秘、不跳过推理过程、不插入与主线无关的感情戏。
@@ -188,5 +204,54 @@ story_arc_templates:
           default_chapters: 1
         - phase: "现世追责"
           description: "跨越时间后的正义——但代价已经付出"
+          default_chapters: 1
+      total_chapters_range: "8-11章"
+    - id: "paranormal-investigation"
+      label: "灵异探案型"
+      description: "灵异事件调查，风水鬼怪与探案结合。适合灵异方向。"
+      phases:
+        - phase: "异象"
+          description: "灵异事件发生——闹鬼/中邪/风水异变，有人求助或主角被卷入"
+          default_chapters: 1
+        - phase: "调查"
+          description: "现场勘查——了解事件全貌、询问当事人、寻找规律"
+          default_chapters: 2
+        - phase: "深入"
+          description: "接触灵异核心——亲身经历超自然现象，确认不是人为"
+          default_chapters: 1
+        - phase: "溯源"
+          description: "寻找灵异的源头——历史恩怨/风水格局/某人的执念"
+          default_chapters: 2
+        - phase: "应对"
+          description: "解法探索——驱邪/超度/破风水/谈判"
+          default_chapters: 1
+        - phase: "了结"
+          description: "事件解决——灵异平息，但可能留下未完全解决的隐患"
+          default_chapters: 1
+        - phase: "余韵"
+          description: "事件对主角的影响——灵力消耗/对世界的认知变化"
+          default_chapters: 1
+      total_chapters_range: "9-12章"
+    - id: "rule-bizarre"
+      label: "规则怪谈型"
+      description: "诡异复苏、规则怪谈、惊悚游戏。适合脑洞方向。"
+      phases:
+        - phase: "异变"
+          description: "规则降临/诡异事件触发——主角被迫进入超自然场景"
+          default_chapters: 1
+        - phase: "探索规则"
+          description: "观察和试探——通过试错理解当前场景的规则和禁忌"
+          default_chapters: 2
+        - phase: "生存"
+          description: "在规则下求生——躲藏/应对/利用规则漏洞"
+          default_chapters: 2
+        - phase: "破解"
+          description: "找到通关方式——推理+验证+执行"
+          default_chapters: 1
+        - phase: "通关/逃离"
+          description: "脱离异常场景——但不一定赢了，可能是惨胜"
+          default_chapters: 1
+        - phase: "新常态"
+          description: "通关后世界的变化——发现更大的诡异规则体系在运行"
           default_chapters: 1
       total_chapters_range: "8-11章"

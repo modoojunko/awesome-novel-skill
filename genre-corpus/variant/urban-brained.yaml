@@ -1,0 +1,29 @@
+# variant: 都市脑洞 — extends urban.yaml
+# 差异化：系统/金手指规则
+
+genre_elements_add:
+  - "系统/金手指（功能明确、规则自洽、升级路径清晰）"
+  - "脑洞设定（穿越/重生/系统/异能/平行世界）"
+  - "信息差带来的优势（利用前后认知差获利）"
+
+taboos_add:
+  - "禁止金手指规则前后矛盾——系统的功能边界一开始就要清晰"
+  - "禁止无代价成长——获得金手指应有代价或限制条件"
+  - "禁止金手指取代主角判断——系统是辅助工具，不是主角的脑子"
+
+genre_config:
+  satisfaction_types: ["系统升级", "打脸装逼", "获得新能力", "隐藏身份揭晓"]
+  chapter_types: ["系统任务", "日常装逼", "危机应对", "脑洞展开", "成长升级"]
+  pacing_rules:
+    max_consecutive_action_chapters: 2
+    max_consecutive_daily_chapters: 2
+    beat_density_min: 2
+
+anti_cliches:
+  - "系统是万能的——系统应有专业边界（商城系统不能帮主角打架）"
+  - "穿越者靠现代知识碾压一切——古人/原住民不是傻子"
+  - "金手指一开始就满级——成长才有代入感"
+
+story_arc_templates:
+  default: "获得系统→熟悉规则→积累资源→升级挑战→更大舞台"
+  variants: null

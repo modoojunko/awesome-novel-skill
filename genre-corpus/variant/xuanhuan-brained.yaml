@@ -1,0 +1,28 @@
+# variant: 玄幻脑洞 — extends xuanhuan.yaml
+# 差异化：脑洞向设定，不局限于传统玄幻套路
+
+genre_elements_add:
+  - "独特世界观设定（非传统玄幻的底层规则）"
+  - "反套路设计（打破读者预期的剧情走向）"
+  - "脑洞向力量体系（不局限于斗气/武魂等传统体系）"
+
+taboos_add:
+  - "禁止脑洞设定不完整——独特的设定需要完整的规则体系支撑"
+  - "禁止为了脑洞牺牲逻辑——再脑洞的世界也要内部自洽"
+  - "禁止套路化——既然叫脑洞就不要用标准玄幻的结构"
+
+genre_config:
+  satisfaction_types: ["设定揭秘", "规则利用", "反杀", "打破预期", "脑洞兑现"]
+  chapter_types: ["设定展开", "脑洞探索", "规则博弈", "战斗对决", "世界观揭示"]
+  pacing_rules:
+    max_consecutive_action_chapters: 3
+    max_consecutive_daily_chapters: 2
+    beat_density_min: 2
+
+anti_cliches:
+  - "脑洞但最后还是走传统玄幻升级路线——脑洞应该贯穿始终"
+  - "前期脑洞后期变套路——保持创意的新鲜度"
+
+story_arc_templates:
+  default: "异变→探索→理解规则→利用规则→破局→新维度"
+  variants: null

@@ -1,0 +1,37 @@
+# variant: 抗战谍战 — extends historical.yaml
+# 差异化：军事战争、谍战情报、抗战背景
+
+genre_elements_add:
+  - "抗战/民国历史背景（真实历史事件为骨架）"
+  - "军事战斗（枪械/战术/军队运作的真实感）"
+  - "谍战情报（暗号/接头/反侦察、双面间谍的心理压力）"
+  - "家国情怀与个人恩怨的交织"
+
+taboos_add:
+  - "禁止神剧化——不写徒手撕鬼子/手榴弹炸飞机/八百里外一枪毙敌"
+  - "禁止历史虚无主义——真实历史事件不能歪曲，英雄人物不能抹黑"
+  - "禁止谍战智商掉线——情报战的每一步都应经得起推敲"
+  - "禁止感情线喧宾夺主——感情可以是战士柔软的一面但不是主线"
+
+genre_config:
+  satisfaction_types: ["战斗胜利", "情报突破", "锄奸成功", "任务完成", "战友得救"]
+  chapter_types: ["军事战斗", "谍战暗线", "情报博弈", "日常军旅", "生死抉择"]
+  pacing_rules:
+    max_consecutive_action_chapters: 3
+    max_consecutive_daily_chapters: 2
+    beat_density_min: 1
+
+genre_fatigue_words:
+  - "八年抗战"
+  - "打鬼子"
+  - "小鬼子"
+
+anti_cliches:
+  - "日寇都是蠢货——侵华日军训练有素，低估对手就是对自己人的不负责"
+  - "国军都是逃跑的——正面战场的国军将士也有血性"
+  - "谍战就是暗号接暗号——情报战更重人际博弈和心理控制"
+  - "主角永远不死——战争是残酷的，生死不由人"
+
+story_arc_templates:
+  default: "入伍→训练→初战→磨砺→硬仗→蜕变→决战"
+  variants: null

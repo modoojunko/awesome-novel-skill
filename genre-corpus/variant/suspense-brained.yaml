@@ -1,0 +1,31 @@
+# variant: 悬疑脑洞 — extends suspense-crime.yaml
+# 差异化：诡异复苏、规则怪谈、惊悚游戏
+
+genre_elements_add:
+  - "超自然规则（诡异复苏/规则怪谈/惊悚游戏/无限流）"
+  - "规则探索与利用（通过试错理解规则、在规则下求生）"
+  - "生存压力驱动的智斗（信息差+有限资源+致命威胁）"
+  - "循环/升级的挑战结构（副本/场景/关卡递进）"
+
+taboos_add:
+  - "禁止规则前后矛盾——怪谈/游戏的规则一旦揭示必须遵守"
+  - "禁止主角硬刚——在未知规则下，观察和推理比武力更重要"
+  - "禁止规则解释过于复杂——读者需要能理解和记住规则"
+  - "禁止无限流变成单纯的打怪升级——每个世界应有独特的主题和解法"
+
+genre_config:
+  satisfaction_types: ["规则破解", "惊险逃生", "打脸系统", "副本通关", "真相揭露"]
+  chapter_types: ["规则探索", "生存危机", "智斗博弈", "副本通关", "现实影响"]
+  pacing_rules:
+    max_consecutive_action_chapters: 3
+    max_consecutive_daily_chapters: 1
+    beat_density_min: 2
+
+anti_cliches:
+  - "惊悚游戏中的npc都是工具人——可以给npc更丰富的层次"
+  - "规则怪谈的规则不需要逻辑——好的规则怪谈有内在逻辑"
+  - "无限流的每个世界都是独立的——世界之间的关联才是长期看点"
+
+story_arc_templates:
+  default: "规则降临→探索→破解→闯关→新规则→更强挑战"
+  variants: null
