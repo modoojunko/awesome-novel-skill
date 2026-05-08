@@ -83,24 +83,24 @@ SKILL.md 定义完整的 6 阶段工作流，是此项目的核心：
 1. **Phase 1: Init** — 调用 `scripts/init.py` 创建目录结构。新建模式进入 Phase 2，导入模式调用 `scripts/import.py` 切分章节，Agent 反向提取设定后进入 Phase 4
 2. **Phase 2: 设定** — 讨论世界设定 + 角色设定 + 写作风格确认 + 题材选择 + 钩子初始化
 3. **Phase 3: 故事线拆分** — 逐卷逐章讨论章纲 + 同步更新 hooks.yaml（埋/提/收钩子）
-4. **Phase 4: 提示词生成** — 两轮操作：第一轮视角转换（上帝视角章纲→沉浸式指引），第二轮组装 prose 提示词 + 生成 3 个变体。提示词按 L1/L2 三层技法分发
-5. **Phase 5: 正文生成** — subagent 读取 prose 提示词生成正文，主 Agent 执行六项质量检查（含 anti-ai.yaml 疲劳词和句式检测）
+4. **Phase 4: 提示词生成** — 两轮操作：第一轮视角转换（上帝视角章纲→沉浸式指引），第二轮将叙事段落组装为章提示词文件。提示词按 L1/L2/L3 三层技法分发
+5. **Phase 5: 正文生成** — subagent 读取章提示词文件生成正文，主 Agent 执行 15 项质量检查（含 anti-ai.yaml 疲劳词和句式检测）+ 10 维深度评审
 6. **Phase 6: 归档** — 正文已在 Phase 5 写入 archives/，更新角色 state_history、hooks.yaml、story.yaml
 
 ## 关键约定
 
 **文件职责分离（核心架构原则）**：
 - `chapters/` — 只放章纲（outline + status），**禁止放正文**
-- `prompts/` — 只放提示词，**.md prose 格式**（非 YAML），5 段结构：角色定位→原则禁忌→故事背景→写作指引→写作要求
+- `prompts/` — 只放提示词，**.md prose 格式**（非 YAML），章提示词包含共享约束+逐段叙事指引
 - `archives/` — 正文唯一存放处，Phase 5 写入草稿（`-draft` 标记），Phase 6 定稿后去掉 `-draft`
 
 **流程护栏**：
 - 所有 YAML 和正文必须经作者讨论确认后才写入——Agent 是引导者，不能代笔
-- Phase 4 视角转换必须先单独经作者确认，确认后才能生成变体
+- Phase 4 视角转换必须先单独经作者确认，确认后才能组装章提示词
 - 提示词必须注入 writing-style 四个字段（role / core_principles / possible_mistakes / depiction_techniques），缺失任何一个 subagent 都会放飞
 - 提示词应按 skill_layers 三层分发：L1 结构层→叙事约束，L2 内容层→写作原则段，L3 审查层→保留给 Phase 5
 - 禁止用上帝视角章纲直接喂给 subagent——必须先经视角转换
-- Phase 5 正文必须通过 anti-ai.yaml 的六项检测（含 AI 疲劳词和句式违规）
+- Phase 5 正文必须通过 15 项质量检查（含 AI 疲劳词和句式违规）+ 10 维深度评审
 
 **归档约定**：
 - 草稿命名: `vol-{N}-ch-{M}-{slugified-title}.draft.md`（Phase 5 写入，作者审阅用）
