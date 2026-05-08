@@ -99,7 +99,7 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 - `novel-style-extract`：Phase 2 增强 — 从参考小说提取文风，三步流程（统计→定性→合并），注入 writing-style.yaml + anti-ai.yaml + 提示词
 - `novel-outline`：Phase 3 — 卷纲、章纲、memo、情绪设计、卷提示词
 - `novel-prompt`：Phase 4 — 叙事段落拆分、视角转换、per-segment 提示词生成
-- `novel-write`：Phase 5 — 并行 subagent 写各段、主 Agent 缝合、质量检查+深度评审
+- `novel-write`：Phase 5 — 单 subagent 写全章、质量检查+深度评审
 - `novel-archive`：Phase 6 — 归档、角色更新、钩子更新、滑动窗口审视
 - `novel-review`：Phase 5→6 推荐评审 — 10 维 60+ 细项诊断，对照全部设定文件逐条评审章正文
 
@@ -117,7 +117,7 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 | 2 | novel-style-extract（subagent 定性分析） | sonnet | 分层阅读 + 6 维分析——需要深度理解 |
 | 3 | novel-outline | **sonnet（强制）** | 章纲规划、情绪设计、结构推理 |
 | 4 | novel-prompt | **sonnet（强制）** | 视角转换、segment 拆分、提示词组装——最耗推理 |
-| 5 | novel-write（主 Agent 调度） | haiku 可 | 并行调度、缝合正文——机械操作 |
+| 5 | novel-write（主 Agent 调度） | haiku 可 | 单 agent 写全章、质量检查——机械操作 |
 | 5 | novel-write（subagent 写作） | 从 `writing_model` 读取 | 正文生成，默认 haiku。对质量要求高的章节可改为 sonnet |
 | 6 | novel-archive | haiku 可 | 归档、状态更新——机械操作 |
 | review | novel-review（主 Agent） | haiku 可 | 主 Agent 已持有全部上下文，直接对照检查——无 subagent 开销 |

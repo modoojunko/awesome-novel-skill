@@ -7,7 +7,7 @@ description: 章提示词生成与视角转换。Phase 4。视角转换 + 范本
 
 ## Overview
 
-视角转换 + 三层合并 + per-segment 拆分 + 范本注入。每个 segment 生成自包含的提示词文件——segment 2+ 注入前一段 ends_with 作为起始场景锚点，确保 Phase 5 可并行写作。约束以大白话表述，写作指引经双轮净化去除AI味。
+视角转换 + 三层合并 + per-segment 拆分 + 范本注入。每个 segment 生成自包含的提示词文件——segment 2+ 注入前一段 ends_with 作为起始场景锚点。约束以大白话表述，写作指引经双轮净化去除AI味。
 
 **When NOT to use:** 章纲不完整（memo 或 emotional_design 缺失）、本章提示词已生成且未修改章纲、章状态尚未到 outline。
 
