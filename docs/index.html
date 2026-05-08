@@ -134,20 +134,24 @@
   .step h3{margin-bottom:6px}
   .step p{font-size:.9rem;color:var(--ink-light)}
 
-  /* ── Genre Cards ── */
-  .genre-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
-  .genre-card{
+  /* ── Genre Categories ── */
+  .genre-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+  .genre-cat{
     background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);
-    padding:28px 24px;transition:all .3s;cursor:default;
-    border-left:4px solid transparent;
+    padding:24px;transition:all .3s;
   }
-  .genre-card:nth-child(1){border-left-color:#8b4513}
-  .genre-card:nth-child(2){border-left-color:#5b7a9a}
-  .genre-card:nth-child(3){border-left-color:#6b3a3a}
-  .genre-card:nth-child(4){border-left-color:#c4756b}
-  .genre-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
-  .genre-card h3{font-size:1.15rem;margin-bottom:6px}
-  .genre-card p{font-size:.9rem;color:var(--ink-light);line-height:1.6}
+  .genre-cat:hover{box-shadow:var(--shadow-md)}
+  .genre-cat-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .genre-cat-header .icon{font-size:1.4rem}
+  .genre-cat-header h3{font-size:1rem;font-weight:700;color:var(--ink)}
+  .genre-cat-header .count{font-size:.78rem;color:var(--muted);background:var(--paper-dark);padding:2px 10px;border-radius:12px;font-weight:600}
+  .genre-cat-tags{display:flex;flex-wrap:wrap;gap:8px}
+  .genre-tag{
+    display:inline-block;padding:4px 12px;border-radius:14px;
+    font-size:.82rem;color:var(--ink-light);background:var(--paper);
+    border:1px solid var(--border);transition:all .2s;
+  }
+  .genre-tag:hover{background:var(--gold-bg);border-color:var(--gold-light);color:var(--gold)}
 
   /* ── Install ── */
   .install-tabs{max-width:800px;margin:0 auto}
@@ -235,7 +239,7 @@
       <span class="badge"><span class="dot green"></span> 6 阶段工作流</span>
       <span class="badge"><span class="dot blue"></span> 去 AI 味检测</span>
       <span class="badge"><span class="dot purple"></span> 伏笔自动追踪</span>
-      <span class="badge">4 套题材画像</span>
+      <span class="badge">24 种题材画像</span>
       <span class="badge">文风提取</span>
     </div>
     <div class="btn-group">
@@ -325,7 +329,7 @@
       <div class="step">
         <div class="step-num">5</div>
         <h3>正文写作</h3>
-        <p>AI 执笔生成正文，通过六项质量检测后才交付</p>
+        <p>AI 执笔生成正文，通过 15 项质量检测 + 10 维深度评审后才交付</p>
       </div>
       <div class="step">
         <div class="step-num">6</div>
@@ -340,26 +344,91 @@
 <section id="genres">
   <div class="container">
     <div class="section-header">
-      <h2>4 套预置题材画像</h2>
-      <p>不想从头设定写作风格？选一套直接开始，每套含角色人设、叙事语气和章节提示词模板</p>
+      <h2>20 种题材画像</h2>
+      <p>不想从头设定写作风格？选一个类型直接开始。每套含角色人设、叙事语气、章节提示词模板和类型专属禁忌——题材越具体，提示词越精准</p>
     </div>
     <div class="genre-grid">
-      <div class="genre-card">
-        <h3>🏯 古代权谋</h3>
-        <p>庙堂博弈、世家大族、制度性压抑下的个人选择。适合历史正剧向的权谋故事。</p>
+
+      <div class="genre-cat">
+        <div class="genre-cat-header">
+          <span class="icon">🏙️</span>
+          <h3>都市</h3>
+          <span class="count">6 种</span>
+        </div>
+        <div class="genre-cat-tags">
+          <span class="genre-tag">都市日常</span>
+          <span class="genre-tag">都市脑洞</span>
+          <span class="genre-tag">都市种田</span>
+          <span class="genre-tag">都市高武</span>
+          <span class="genre-tag">都市修真</span>
+          <span class="genre-tag">战神赘婿</span>
+        </div>
       </div>
-      <div class="genre-card">
-        <h3>🌃 科幻末世</h3>
-        <p>废土生存、文明重建、末日伦理困境。聚焦极端环境下的人性抉择。</p>
+
+      <div class="genre-cat">
+        <div class="genre-cat-header">
+          <span class="icon">🏯</span>
+          <h3>历史</h3>
+          <span class="count">3 种</span>
+        </div>
+        <div class="genre-cat-tags">
+          <span class="genre-tag">历史古代</span>
+          <span class="genre-tag">历史脑洞</span>
+          <span class="genre-tag">抗战谍战</span>
+        </div>
       </div>
-      <div class="genre-card">
-        <h3>🔍 悬疑犯罪</h3>
-        <p>刑侦推理、社会派悬疑、证据链驱动的节奏控制。层层剥茧式叙事。</p>
+
+      <div class="genre-cat">
+        <div class="genre-cat-header">
+          <span class="icon">🐉</span>
+          <h3>玄幻</h3>
+          <span class="count">2 种</span>
+        </div>
+        <div class="genre-cat-tags">
+          <span class="genre-tag">传统玄幻</span>
+          <span class="genre-tag">玄幻脑洞</span>
+        </div>
       </div>
-      <div class="genre-card">
-        <h3>💌 都市言情</h3>
-        <p>日常生活的情感递进，以细节和动作传达情绪，克制而真实的情感描写。</p>
+
+      <div class="genre-cat">
+        <div class="genre-cat-header">
+          <span class="icon">🔍</span>
+          <h3>悬疑</h3>
+          <span class="count">3 种</span>
+        </div>
+        <div class="genre-cat-tags">
+          <span class="genre-tag">悬疑刑侦</span>
+          <span class="genre-tag">悬疑灵异</span>
+          <span class="genre-tag">悬疑脑洞</span>
+        </div>
       </div>
+
+      <div class="genre-cat">
+        <div class="genre-cat-header">
+          <span class="icon">🤖</span>
+          <h3>科幻</h3>
+          <span class="count">1 种</span>
+        </div>
+        <div class="genre-cat-tags">
+          <span class="genre-tag">科幻末世</span>
+        </div>
+      </div>
+
+      <div class="genre-cat">
+        <div class="genre-cat-header">
+          <span class="icon">🧙</span>
+          <h3>独立类型</h3>
+          <span class="count">5 种</span>
+        </div>
+        <div class="genre-cat-tags">
+          <span class="genre-tag">西方奇幻</span>
+          <span class="genre-tag">东方仙侠</span>
+          <span class="genre-tag">男频衍生</span>
+          <span class="genre-tag">动漫衍生</span>
+          <span class="genre-tag">游戏体育</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
