@@ -30,7 +30,7 @@ type: roundtable
 
 ## Done Criteria
 
-连续 3 回合作者没有新信息补充，或无新问题可问。
+连续 3 回合作者没有新信息补充，且当主 Agent 问"还有问题吗？"时明确回答"没有"。
 
 ## Lifecycle
 

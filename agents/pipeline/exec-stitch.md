@@ -17,7 +17,7 @@ type: exec
 
 - 项目路径（主 Agent 提供）
 - 当前章号
-- 本章所有 segment 草稿路径列表
+- 段总数（主 Agent 提供，从 chapter.yaml segments 长度获取）
 
 ## Outputs
 
@@ -32,12 +32,11 @@ type: exec
 
 ## Done Criteria
 
-- [ ] 所有 segment 已合并
-- [ ] 段间过渡自然（加过渡句/分隔符/时间标注）
+- [ ] 所有 segment 已合并（按 seg-1 到 seg-N 顺序）
+- [ ] 段间过渡自然
 - [ ] POV 切换有标记
-- [ ] 前后段没有矛盾（角色状态、位置、物品）
+- [ ] 前后段没有矛盾
 - [ ] 各段实质内容未修改
-- [ ] 笔误和错别字已修正
 
 ## Lifecycle
 

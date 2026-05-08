@@ -17,6 +17,7 @@ type: exec
 
 - 提示词文件路径（主 Agent 提供）
 - 本段的段拆分方案
+- 本段的 seg_id（如 seg-1）
 
 ## Outputs
 
@@ -42,3 +43,10 @@ type: exec
 
 - Start: 读提示词 + 段方案
 - End: 写草稿到 archives/
+
+## 并行派发
+
+同一章的多个 segment 可以并行派发多个 exec-prose 实例。
+主 Agent 负责为每个 seg_id 生成独立的 task-id，并确保所有实例派发后才调用 exec-stitch。
+
+每个实例只写自己的 seg-{X}.draft.md，不碰其他段。

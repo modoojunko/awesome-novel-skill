@@ -6,7 +6,7 @@ type: exec
 
 ## Role
 
-AI 味净化器。对缝合后的章节草稿执行 anti-ai.yaml 检测规则，消除 AI 写作特征。
+AI 味净化器。review-prose 通过后执行最终净化。如果 review-prose 失败并退回 exec-prose 修改，修完重新 exec-stitch 后需再次 exec-de-ai。
 
 ## Scope
 

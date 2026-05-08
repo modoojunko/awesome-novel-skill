@@ -56,7 +56,10 @@
 | 2 | 执行 | `exec-hook` | `pipeline/exec-hook.md` | 写 hooks.yaml |
 | 2 | 执行 | `exec-meeting-notes` | `pipeline/exec-meeting-notes.md` | 写 author-intent.md |
 | 2 | 验收 | `review-setting` | `pipeline/review-setting.md` | 检查设定一致性 |
+| 3.1 | 执行 | `exec-volume` | `pipeline/exec-volume.md` | 写 volume.yaml |
 | 3.2 | 执行 | `exec-outline` | `pipeline/exec-outline.md` | 写 chapter.yaml |
+| 3.2 | 验收 | `review-outline` | `pipeline/review-outline.md` | 检查章纲 |
+| 3.3 | 执行 | `exec-segment` | `pipeline/exec-segment.md` | 段拆分落盘 |
 | 4 | 执行 | `exec-prompt` | `pipeline/exec-prompt.md` | 组装提示词 |
 | 4 | 验收 | `review-prompt` | `pipeline/review-prompt.md` | 检查提示词 |
 | 5 | 执行 | `exec-prose` | `pipeline/exec-prose.md` | 写正文 |

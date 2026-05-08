@@ -272,25 +272,82 @@ review 返回 dispute →
 
 ---
 
+## 圆桌收敛协议
+
+圆桌阶段（设定/卷纲/章纲/段拆分）需要多个 agent 从不同角度出方案，然后收敛到一致结论。主 Agent 按以下协议执行收敛。
+
+### 阶段一：各自出方案
+
+```
+主 Agent 派 5 个圆桌 agent 依次（或并行出方案，但卷纲/章纲agent
+需要先读设定，所以顺序执行）。
+每个 agent 写一份方案到 .agent/roundtables/{阶段}/{agent-id}.md。
+```
+
+### 阶段二：找矛盾
+
+```
+主 Agent 派"收敛员"（临时角色，复用 flash 模型）：
+  1. 读全部 5 份方案
+  2. 找出不一致/矛盾的点（如：结构师说分6章，节奏师说分8章）
+  3. 输出矛盾清单到 .agent/roundtables/{阶段}/conflicts.md
+
+主 Agent 读矛盾清单（只读清单，不读方案内容）：
+  - 如果无矛盾 → 收敛完成，进入 exec 落盘
+  - 如果有矛盾 → 进入阶段三
+```
+
+### 阶段三：逐条裁决
+
+```
+对每个矛盾点：
+  1. 主 Agent 将矛盾点描述发给涉及的 agent（各 1-2 个）
+  2. 每个 agent 回复调整后的立场
+  3. 如果仍然不一致 → 升级给作者决策
+  4. 如果达成一致 → 记录最终结论
+
+收敛员更新 .agent/roundtables/{阶段}/conflicts.md 标记 resolved。
+```
+
+### 阶段四：落盘
+
+```
+收敛完成 → 派 exec agent 根据最终结论写产物文件。
+```
+
+### 收敛员的 Done Criteria
+
+- [ ] 全部 5 份方案已读
+- [ ] 所有矛盾点已标记
+- [ ] 所有矛盾点 resolved 或升级给作者
+- [ ] 最终结论已记录
+
+---
+
 ## 完整流程索引
 
 ### 一次性（整个项目周期只跑一次）
 
 ```
-Step 1  初始化           → exec-init → review-init
-Step 2  设定圆桌          → 5 讨论 Agent 逐个 Q&A → 圆桌收敛 → exec 落盘
-Step 3.1 卷纲圆桌         → 5 讨论 Agent 逐个 Q&A → 圆桌收敛 → volume.yaml
+Step 1  初始化             → exec-init → review-init
+Step 2  设定圆桌            → 5 agent Q&A → 圆桌收敛 → exec-world → exec-character
+                            → exec-style → exec-hook → exec-meeting-notes → review-setting
+Step 3.1 卷纲圆桌           → 5 agent 出方案 → 圆桌收敛 → exec-volume
 ```
 
 ### 每卷循环
 
 ```
 Step 3.2 章纲圆桌（一卷一次，定所有章）
+  → 5 agent 出方案 → 圆桌收敛 → exec-outline → review-outline
+
 For each chapter:
-  Step 3.3 段拆分圆桌
-  Step 4   提示词组装      → exec-prompt → review-prompt
-  Step 5   正文 + 去AI味   → exec-prose(并行) → exec-stitch → exec-de-ai → review-prose
-  Step 6   归档            → exec-archive → review-archive
+  Step 3.3 段拆分圆桌   → 5 agent 出方案 → 圆桌收敛 → exec-segment
+  Step 4   提示词组装    → exec-prompt → review-prompt
+  Step 5   正文 + 去AI味 → exec-prose(并行) → exec-stitch → review-prose
+                         → fail → exec-prose修 → exec-stitch → exec-de-ai → review-prose
+                         → pass → 下一步
+  Step 6   归档          → exec-archive → review-archive
 ```
 
 每一步的顺序映射表在 `agents/index.md` 中定义。

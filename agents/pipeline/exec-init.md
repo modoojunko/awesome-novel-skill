@@ -28,6 +28,13 @@ type: exec
 - `{project}/prompts/` — 空目录
 - `{project}/archives/` — 空目录
 - `.agent/status.md` — 初始进度记录
+- `.agent/roundtables/setting/` — 空目录
+- `.agent/roundtables/volume/` — 空目录
+- `.agent/roundtables/chapter/` — 空目录
+- `.agent/roundtables/segment/` — 空目录
+- `.agent/reviews/` — 空目录
+- `.agent/lessons/` — 空目录
+- `.agent/archive/` — 空目录
 
 返回: `{status: "done", files: ["{project}/story.yaml"]}`
 
@@ -43,6 +50,7 @@ type: exec
 - [ ] story.yaml 必填字段非空
 - [ ] writing-style.yaml genre_profile 匹配题材
 - [ ] settings/ volumes/ chapters/ prompts/ archives/ 目录都存在
+- [ ] .agent/ 下所有子目录（roundtables/setting roundtables/volume roundtables/chapter roundtables/segment reviews lessons archive）已创建
 - [ ] .agent/status.md 写入初始进度
 
 ## Lifecycle

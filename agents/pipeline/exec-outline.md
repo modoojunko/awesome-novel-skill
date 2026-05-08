@@ -46,3 +46,8 @@ type: exec
 
 - Start: 读圆桌共识记录，确定章数
 - End: 记录所有 chapter.yaml 文件路径
+
+## 依赖
+
+- 在前：volume.yaml 已存在（exec-volume 完成）
+- 在后：review-outline 检查其质量
