@@ -27,48 +27,32 @@ description: 正文生成与质量检查。Phase 5。一个 subagent 读全部 s
 | `prompts/vol-{N}-ch-{M}-seg-{1}-prompt.md` 存在？ | 不存在 → **STOP**，退回 `novel-prompt` |
 | chapter.yaml status = draft？ | 不是 → **STOP**，检查前面 Phase 是否完成 |
 
-## Step 1: Subagent 写全章
+## Step 1: 派 exec-prose 写全章
 
-一个 subagent 读全部 segment 提示词 + chapter.yaml 章纲，一次性写完整章正文。
+读 `agents/pipeline/exec-prose.md` 获取 agent 定义，构造 prompt 注入章号和巻号参数，派发单个 Agent tool 调用。
 
 ```
 Agent(
-  description: "写第{N}卷第{M}章全文",
-  subagent_type: "general-purpose",
+  agent_file: "agents/pipeline/exec-prose.md",
   model: "{writing_model}",
+  context: {
+    volume: {N},
+    chapter: {M},
+    total_words: {total_words}
+  },
   prompt: "
-你先读以下两份材料，然后写正文。
-
-【材料一：章纲】
-读取 chapters/vol-{N}-ch-{M}.yaml，关注：
-- summary（本章一句话概要）
-- memo（7 段起承转合结构）
-- emotional_design（情绪曲线）
-- scene_list（场景清单）
-
-【材料二：segment 提示词】
-读取 prompts/目录下本章所有 seg-*-prompt.md 文件：
-- seg-1-prompt.md 到 seg-{N}-prompt.md
-- 每份提示词定义了该段落的叙事功能（氛围/角色/对话/动作/信息揭露/情绪落点）
-- 按 seg-1 → seg-N 顺序阅读，理解本章的完整叙事流
-
-【写作要求】
-- 写一整章，不是写一段。字数 {total_words} 字左右
-- 按 seg-1 → seg-N 的自然顺序写，确保段落间过渡流畅
-- 每个 segment 的写作指引必须兑现——氛围段写够氛围，情绪落地段收好情绪
+【写作要求补充】
+- 字数 {total_words} 字左右
+- 按 seg-1 → seg-N 的自然顺序写，段落间过渡流畅
+- 每个 segment 的写作指引必须兑现
 - 结尾停在最后一段的 ends_with 指定画面/状态
-- 仅输出小说正文。从第一个字开始就是小说正文，最后一个字结束
-- 禁止出现解释、说明、注释、'以下是正文'等引导语
-
-【全局写作参照】
-如果有 prompts/global-prompt.md，也读它作为整体风格和技法依据。
 "
 )
-
-写完后，保存全文到 archives/：
-  archives/vol-{N}-ch-{M}-{slug}.draft.md
-  作者可随时打开此文件审阅草稿。
 ```
+
+写完后，文件保存在：
+  `archives/vol-{N}-ch-{M}-{slug}.draft.md`
+  作者可随时打开此文件审阅草稿。
 
 ## Step 2: 质量检查 + 深度评审
 
