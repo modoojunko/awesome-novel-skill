@@ -138,4 +138,4 @@ upsert（埋新）→ 归档时从正文提取 seed_text / mention（推进）/ 
 
 ## 下一步
 
-完成后引导进入 Phase 4。当作者说"生成提示词"或"写第X章"时，母技能路由到 `novel-prompt`。
+完成后引导进入 Phase 4。当作者说"生成提示词"或"写第X章"时，主 Agent Read `skills/prompt/SKILL.md` 进入 Phase 4。

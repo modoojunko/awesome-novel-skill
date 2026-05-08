@@ -36,7 +36,7 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 
 ### Step 1: 检测当前进度
 
-读取项目根目录的 `story.yaml`。若不存在 → 项目未创建，路由到 `novel-setup`（Phase 1）。
+读取项目根目录的 `story.yaml`。若不存在 → 项目未创建，Read `skills/setup/SKILL.md` 执行 Phase 1。
 
 若存在，读取最近操作的 `chapter.yaml`（按 `story.yaml` 的 chapters 列表找），判断：
 
@@ -44,14 +44,14 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 |------|-----------|--------|
 | world-setting.yaml 字段大量为空 | Phase 2 未完成 | → `novel-setup` |
 | chapter.yaml status = `outline`，memo 不完整 | Phase 3 进行中 | → `novel-outline` |
-| chapter.yaml status = `outline`，memo 完整，segments 为空 | Phase 4 待执行——需拆 segment | → `novel-prompt` |
-| chapter.yaml status = `outline`，segments 已填充，提示词不存在 | Phase 4 进行中——需生成提示词 | → `novel-prompt`（Step 0 展示已有 segments，确认后跳 Step 2） |
+| chapter.yaml status = `outline`，memo 完整，narrative_segments 为空 | Phase 4 待执行——需拆分叙事段落 | → `novel-prompt` |
+| chapter.yaml status = `outline`，narrative_segments 已填充，提示词不存在 | Phase 4 进行中——需生成提示词 | → `novel-prompt`（Step 0 展示已有 segments，确认后跳 Step 2） |
 | chapter.yaml status = `draft`，正文未归档 | Phase 5/6 待执行 | → `novel-write` 或 `novel-archive`。建议归档前先 `novel-review` |
 | chapter.yaml status = `archived` | 本章已完成 | 问作者：下一章还是回顾？可随时触发 `novel-review` 回顾评审 |
 
 **章状态（chapter.status）:**
-- `outline` — 章纲和情绪设计已确认，等待拆 segment → 生成提示词
-- `draft` — segment 提示词已生成，正文写作/修改中，等待归档
+- `outline` — 章纲和情绪设计已确认，等待拆分叙事段落 → 生成提示词
+- `draft` — 章提示词已生成，正文写作/修改中，等待归档
 - `archived` — 正文已归档
 
 ### Step 2: 匹配用户意图
@@ -73,7 +73,7 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 若目标 Phase > 当前 Phase + 1，检查前面 Phase 的产出是否完整：
 
 - 目标 Phase 4 → 检查 chapter.yaml 的 memo 7 段是否填满、segments 是否已拆分
-- 目标 Phase 5 → 检查 `prompts/vol-{N}-ch-{M}-seg-{1}-prompt.md` 是否存在
+- 目标 Phase 5 → 检查 `prompts/vol-{N}-ch-{M}-prompt.md` 是否存在
 - 目标 Phase 6 → 检查正文是否已写入 archives/
 
 缺失 → **STOP**。告知作者"XX 还没完成，先补这一环"，路由到前置 Phase 的子技能。
@@ -93,15 +93,19 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 
 ### Step 5: 分发
 
-调用对应子技能。每个子技能遵循自己的流程，有自己的 STOP 点和确认步骤。
+匹配用户意图后，根据目标 Phase 选择对应子技能，**Read 子技能文件并按其中流程执行**：
 
-- `novel-setup`：Phase 1+2 — 初始化、世界观、角色、全局提示词
-- `novel-style-extract`：Phase 2 增强 — 从参考小说提取文风，三步流程（统计→定性→合并），注入 writing-style.yaml + anti-ai.yaml + 提示词
-- `novel-outline`：Phase 3 — 卷纲、章纲、memo、情绪设计、卷提示词
-- `novel-prompt`：Phase 4 — 叙事段落拆分、视角转换、per-segment 提示词生成
-- `novel-write`：Phase 5 — 单 subagent 写全章、质量检查+深度评审
-- `novel-archive`：Phase 6 — 归档、角色更新、钩子更新、滑动窗口审视
-- `novel-review`：Phase 5→6 推荐评审 — 10 维 60+ 细项诊断，对照全部设定文件逐条评审章正文
+| 目标 Phase | 子技能 | 读取路径 |
+|-----------|--------|---------|
+| Phase 1+2 | novel-setup — 初始化、世界观、角色、全局提示词 | `skills/setup/SKILL.md` |
+| Phase 2 增强 | novel-style-extract — 从参考小说提取文风，三步流程 | `skills/style-extract/SKILL.md` |
+| Phase 3 | novel-outline — 卷纲、章纲、memo、情绪设计、卷提示词 | `skills/outline/SKILL.md` |
+| Phase 4 | novel-prompt — 叙事段落拆分、视角转换、章提示词生成 | `skills/prompt/SKILL.md` |
+| Phase 5 | novel-write — 单 subagent 写全章、质量检查+深度评审 | `skills/write/SKILL.md` |
+| Phase 6 | novel-archive — 归档、角色更新、钩子更新、滑动窗口审视 | `skills/archive/SKILL.md` |
+| 独立评审 | novel-review — 10 维 60+ 细项诊断 | `skills/review/SKILL.md` |
+
+子技能文件位于主技能安装目录的 `skills/` 下，即 `~/.claude/skills/awesome-novel/skills/{name}/SKILL.md`。
 
 ## 模型门禁（MODEL-GATE）
 

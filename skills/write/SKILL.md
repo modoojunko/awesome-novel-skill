@@ -1,15 +1,15 @@
 ---
 name: novel-write
-description: 正文生成与质量检查。Phase 5。一个 subagent 读全部 segment 提示词写全章，15 项质量检查和深度评审通过后展示给作者。触发："写正文""写第X章""继续写""生成正文""质量检查"。必须确认 segment 提示词已存在才能使用。
+description: 正文生成与质量检查。Phase 5。一个 subagent 读章提示词写全章，15 项质量检查和深度评审通过后展示给作者。触发："写正文""写第X章""继续写""生成正文""质量检查"。
 ---
 
 # Novel Write — 正文生成与质量检查
 
 ## Overview
 
-一个 subagent 读本章全部 segment 提示词和 chapter.yaml 章纲，一次性写完整章正文。写完后执行 15 项硬性质量检查 + 10 维深度评审，正文和评审报告一起展示给作者。
+一个 subagent 读章提示词文件和 chapter.yaml 章纲，一次性写完整章正文。写完后执行 15 项硬性质量检查 + 10 维深度评审，正文和评审报告一起展示给作者。
 
-**When NOT to use:** segment 提示词不存在、正文已生成且通过质量检查、章状态不是 draft。
+**When NOT to use:** 章提示词不存在、正文已生成且通过质量检查、章状态不是 draft。
 
 **Announce at start:** "我来写第{N}卷第{M}章正文。"
 
@@ -24,7 +24,7 @@ description: 正文生成与质量检查。Phase 5。一个 subagent 读全部 s
 
 | 检查项 | 操作 |
 |--------|------|
-| `prompts/vol-{N}-ch-{M}-seg-{1}-prompt.md` 存在？ | 不存在 → **STOP**，退回 `novel-prompt` |
+| `prompts/vol-{N}-ch-{M}-prompt.md` 存在？ | 不存在 → **STOP**，Read `skills/prompt/SKILL.md` 生成提示词 |
 | chapter.yaml status = draft？ | 不是 → **STOP**，检查前面 Phase 是否完成 |
 
 ## Step 1: 派 exec-prose 写全章
@@ -43,9 +43,9 @@ Agent(
   prompt: "
 【写作要求补充】
 - 字数 {total_words} 字左右
-- 按 seg-1 → seg-N 的自然顺序写，段落间过渡流畅
-- 每个 segment 的写作指引必须兑现
-- 结尾停在最后一段的 ends_with 指定画面/状态
+- 按叙事段落的自然顺序依次写作，段落间过渡流畅
+- 每个段落的写作指引必须兑现
+- 结尾停在最后一个段落的指定结束画面
 "
 )
 ```

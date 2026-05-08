@@ -328,8 +328,8 @@ Subagent 必须严格按以下格式输出评审报告：
 作者可能的选择：
 - "按关键问题修改" → 主 Agent 直接编辑 archives/ 中的正文
 - "部分修改" → 指定要改的条目编号，主 Agent 逐条修改
-- "已知悉，继续归档" → 进入 Phase 6（`novel-archive`）
-- "重新生成" → 退回 Phase 5（`novel-write`），将关键问题作为补充约束注入 subagent prompt
+- "已知悉，继续归档" → Phase 6（Read `skills/archive/SKILL.md`）
+- "重新生成" → 退回 Phase 5（Read `skills/write/SKILL.md`），将关键问题作为补充约束注入 subagent prompt
 
 ## 授权模式
 
@@ -337,4 +337,4 @@ Subagent 必须严格按以下格式输出评审报告：
 
 ## 下一步
 
-评审完成后，作者可选择修改正文、归档（→ `novel-archive`）、或重写（→ `novel-write`）。
+评审完成后，作者可选择修改正文、归档（Read `skills/archive/SKILL.md`）、或重写（Read `skills/write/SKILL.md`）。
