@@ -66,15 +66,28 @@ description: 章提示词生成与视角转换。Phase 4。视角转换 + 范本
    - `what_to_write`：3-5 句叙述，描述本段具体写什么。**不写对话、不写动作细节**，只描述事件和走向。**用大白话写场景，别写分析结论**——写"天还没亮，陆征拨通电话"，别写"陆征做出决定：不再被动等待后主动出击"
    - `characters`：本段出场角色
    - `emotional_tone`：本段情绪基调
-   - `word_target`：字数目标（500-600 字）
+   - `word_target`：按段落 function 推算（见下表）。留 `null`，Phase 4 组装提示词时自动填入。作者有特殊需要可手动覆盖
    - `ends_with`：本段结尾的画面/状态——**作为下一段的起始场景锚点**，使段落间无缝接续。必须是一个可感知的具体画面或状态，不是概述
    - `dialogue_intent`：仅 `dialogue_push` 填写（说服/试探/拒绝/转移/暗示/攻击/隐藏）
    - `micro_payoff`：如果本段承担某个微兑现，填写对应的微兑现 type
+
+   **word_target 推算表**（Phase 4 组装时使用）：
+
+   | function | 建议字数 | 原因 |
+   |----------|---------|------|
+   | `atmosphere` | 200-400 | 环境描写单段不超 2 行是硬约束 |
+   | `character_beat` | 400-800 | 动作→神态→内心，需要叙事空间 |
+   | `dialogue_push` | 300-600 | 对话密度高，字符消耗少 |
+   | `action_beat` | 500-1200 | 逐帧动作描写，天然最长 |
+   | `revelation` | 200-500 | 信息揭露重在冲击力，长了反而稀释 |
+   | `emotional_landing` | 300-600 | 需要留白和余味，过犹不及 |
+   | `transition` | 100-300 | 越长越像流水账 |
+
 4. 检查：
    - key_points 是否全部有对应的 segment？
    - emotional_tone 序列是否与 mood_progression 一致？
    - 章末 emotional_landing 是否留下了 emotional_hook 类型的钩子？
-   - 总字数是否接近章纲字数下限？
+   - 推算字数总和是否接近章纲字数下限？
 5. **STOP：展示全部 segment 列表给作者确认/调整。确认后写入 chapter.yaml 的 segments 字段。**
 
 ### 拆分示例
@@ -90,12 +103,12 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 
 | # | function | goal | word_target |
 |---|----------|------|-------------|
-| 1 | atmosphere | 老城区早晨的市井气息，陆征的日常 | 400 |
-| 2 | dialogue_push | 委托人讲述失踪经过，陆征接案 | 600 |
-| 3 | character_beat | 陆征独自整理信息，决定先走访出租屋 | 400 |
-| 4 | action_beat | 走访出租屋，发现未带走的充电器 | 500 |
-| 5 | revelation | 物流公司同事说法矛盾，朋友圈地址查无此址 | 600 |
-| 6 | emotional_landing | 陆征看着地图上的空地址，买了一包烟 | 500 |
+| 1 | atmosphere | 老城区早晨的市井气息，陆征的日常 | 300 |
+| 2 | dialogue_push | 委托人讲述失踪经过，陆征接案 | 500 |
+| 3 | character_beat | 陆征独自整理信息，决定先走访出租屋 | 600 |
+| 4 | action_beat | 走访出租屋，发现未带走的充电器 | 700 |
+| 5 | revelation | 物流公司同事说法矛盾，朋友圈地址查无此址 | 400 |
+| 6 | emotional_landing | 陆征看着地图上的空地址，买了一包烟 | 400 |
 
 ## 第一轮：视角转换
 
@@ -372,7 +385,7 @@ b. 组装段落内容（sanitized_what_to_write + 情绪基调 + 出场角色 + 
 
 c. 对段落 2+，在段落开头注入起始场景锚点（取上一个 segment 的 ends_with 值）
 
-d. 写入该段落的字数目标 `{word_target}`
+d. 写入该段落的字数目标。若 `word_target` 为 `null`，按 Step 0 的 function 推算表自动填入（取建议范围中值）。若作者手动指定了数值，使用手动值
 
 #### 6. 保存 `prompts/vol-{N}-ch-{M}-prompt.md`
 

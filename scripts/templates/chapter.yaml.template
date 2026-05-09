@@ -94,7 +94,7 @@ segments:
     what_to_write: ""      # 具体写什么（3-5句叙述，subagent据此写作）
     characters: []         # 出场角色
     emotional_tone: ""     # 情绪基调（紧张/放松/好奇/温情/压抑/爽快/悲伤）
-    word_target: 500       # 字数目标
+    word_target: null       # 字数目标。null = Phase 4 根据 function 自动推算。作者手动填入数值则优先
     ends_with: ""          # 段落结束时的画面/状态——下一段 subagent 的锚点
     dialogue_intent: ""    # 对话意图（仅 dialogue_push 填写：说服/试探/拒绝/转移/暗示/攻击/隐藏）
     micro_payoff: null     # 微兑现类型（仅承担微兑现的段落填写：info/relationship/emotion/clue/ability/resource/recognition）
