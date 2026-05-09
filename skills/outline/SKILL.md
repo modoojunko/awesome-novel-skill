@@ -285,12 +285,12 @@ upsert（埋新）→ 归档时从正文提取 seed_text / mention（推进）/ 
    - AI 味自检清单（7 项检测 + 命中自动修复）
 
 2. 按规则自动完成以下步骤：
-   a. 拆 segment → 写入 chapter.yaml
+   a. 拆 segment（不持久化到 YAML，直接进入视角转换和 prompt 组装）
    b. 视角转换 → 双轮净化（结构层 + 词句层）
    c. 读 writing-style.yaml / anti-ai.yaml / genre-corpus / world-setting / archives
    d. 组装 prompts/vol-{N}-ch-{M}-prompt.md
    e. AI 味自检 → 命中自动修复 → 二次扫描确认
-   f. chapter.yaml status → `draft`，prompt_path → 提示词文件
+   f. chapter.yaml status → `draft`
 
 3. 汇报结果：
 
