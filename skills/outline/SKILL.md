@@ -271,6 +271,46 @@ upsert（埋新）→ 归档时从正文提取 seed_text / mention（推进）/ 
 
 全部通过后，**STOP：作者确认。**
 
-## 下一步
+## 章纲确认后：自动生成提示词（Phase 4 自动执行）
 
-完成后引导进入 Phase 4。当作者说"生成提示词"或"写第X章"时，主 Agent Read `skills/prompt/SKILL.md` 进入 Phase 4。
+章纲确认后，Agent 自动执行 Phase 4——无 STOP 等待确认，但执行完整的质量防护流程（双轮净化 + AI 味自检 + 自动修复）。
+
+### 执行方法
+
+1. Read `skills/prompt/SKILL.md`，获取以下规则的具体内容：
+   - 叙事功能段落拆分规则（7 种 function 类型 + 拆分流程 + 检查项）
+   - 视角转换规则（上帝视角→沉浸式指引 + 钩子锚定 + 爽感循环）
+   - 提示词文件组装规则（范本段落 + 角色定位 + 约束提炼 + 类型指引 + 故事背景 + 叙事段落注入）
+   - 双轮净化规则（结构层 6 条反AI味规范 + 词句层 5 条净化规则）
+   - AI 味自检清单（7 项检测 + 命中自动修复）
+
+2. 按规则自动完成以下步骤：
+   a. 拆 segment → 写入 chapter.yaml
+   b. 视角转换 → 双轮净化（结构层 + 词句层）
+   c. 读 writing-style.yaml / anti-ai.yaml / genre-corpus / world-setting / archives
+   d. 组装 prompts/vol-{N}-ch-{M}-prompt.md
+   e. AI 味自检 → 命中自动修复 → 二次扫描确认
+   f. chapter.yaml status → `draft`，prompt_path → 提示词文件
+
+3. 汇报结果：
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  提示词已自动生成
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  章节: 第{N}卷第{M}章《{title}》
+  segment: {N} 段（{function_list}）
+  AI 味检测:
+    - 视角转换残留: {N} 处（已按反AI味规范修复）
+    - 词句层净化漏网: {N} 处（已按净化规则修复）
+    - 自检二次扫描: {N} 处命中 → 已修复（类型）
+  提示词文件: prompts/vol-{N}-ch-{M}-prompt.md
+
+  直接写正文，还是想看一眼提示词？
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+4. 根据作者响应：
+   - "写正文" / "写" → 主 Agent Read `skills/write/SKILL.md` 进入 Phase 5
+   - "看一眼" → 展示提示词文件内容 + "没问题就写正文，想改告诉我改哪段"
+   - "我自己调" → 主 Agent Read `skills/prompt/SKILL.md` 进入 Phase 4（手动模式）
