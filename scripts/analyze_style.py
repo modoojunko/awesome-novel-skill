@@ -40,51 +40,37 @@ def load_and_clean(path: str) -> str:
 
 # ── sentence splitting ──────────────────────────────────────────
 
-SENTENCE_ENDS = re.compile(r'[。！？；!?;]')
-# Chinese quotes
+# Chinese quotes — open→close mapping
 QUOTE_PAIRS = [
     ('“', '”'),  # ""
     ('‘', '’'),  # ''
     ('「', '」'),  # 「」
     ('『', '』'),  # 『』
     ('"', '"'),
-    ('"', '"'),
+    ("'", "'"),
 ]
 
 def split_sentences(text: str) -> list[str]:
     """Split Chinese text into sentences, respecting quote pairs."""
+    QUOTE_MAP = {o: c for o, c in QUOTE_PAIRS}
+
     sentences = []
     buf = ''
-    depth = 0
-    opener = None
-    for ch in text:
-        if opener and ch == opener[1]:
-            depth -= 1
-            if depth == 0:
-                opener = None
-            buf += ch
-        elif not opener:
-            for o, c in QUOTE_PAIRS:
-                if ch == o:
-                    depth = 1
-                    opener = (o, c)
-                    break
-        if not opener:
-            for o, _ in QUOTE_PAIRS:
-                if ch == o:
-                    depth = 1
-                    opener = (o, _)
-                    break
-        if ch == opener[1] if opener else False:
-            depth -= 1
-            if depth == 0:
-                opener = None
+    open_stack = []  # expected closing quote chars, supports nesting
 
+    for ch in text:
         buf += ch
-        if not opener and ch in '。！？；':
+
+        if open_stack and ch == open_stack[-1]:
+            open_stack.pop()
+        elif ch in QUOTE_MAP:
+            open_stack.append(QUOTE_MAP[ch])
+
+        if not open_stack and ch in '。！？；':
             if buf.strip():
                 sentences.append(buf.strip())
             buf = ''
+
     if buf.strip():
         sentences.append(buf.strip())
     return sentences
@@ -163,9 +149,9 @@ def paragraph_stats(text: str, sentences: list[str]) -> dict:
 def dialogue_stats(text: str) -> dict:
     """Estimate dialogue ratio by counting characters inside Chinese quotes."""
     dialogue_chars = 0
-    for o, c in [('“', '”'), ('「', '」'), ('"', '"'), ('‘', '’')]:
-        pattern = re.escape(o) + r'([^' + re.escape(c) + r']*)' + re.escape(c)
-        for m in re.finditer(pattern, text):
+    for o, c in [('“', '”'), ('「', '」'), ('"', '"'), ('‘', '’'), ("'", "'")]:
+        pattern = re.escape(o) + r'(.*?)' + re.escape(c)
+        for m in re.finditer(pattern, text, re.DOTALL):
             dialogue_chars += len(m.group(1))
     total_chars = len(re.sub(r'\s', '', text))
     return {

@@ -52,11 +52,21 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "安装到: $DEST"
 
-# 全量覆盖
-rm -rf "$DEST"
-cp -r "$SCRIPT_DIR" "$DEST"
+# 安全检查：DEST 不能为空、不能是根目录、路径中必须包含 awesome-novel
+if [[ -z "$DEST" || "$DEST" == "/" || "$DEST" != *awesome-novel* ]]; then
+    echo "错误：安装目标路径异常 ($DEST)，中止。"
+    exit 1
+fi
 
-# 清理不需要的文件
-rm -rf "$DEST/.git" "$DEST/.claude" "$DEST/docs" "$DEST/example"
+# 创建技能目录，已存在则清空
+rm -rf "$DEST"
+mkdir -p "$DEST"
+
+# 只复制运行时需要的文件（include list，避免泄露仓库元数据）
+cp "$SCRIPT_DIR/SKILL.md" "$DEST/"
+cp -r "$SCRIPT_DIR/scripts" "$DEST/"
+cp -r "$SCRIPT_DIR/skills" "$DEST/"
+cp -r "$SCRIPT_DIR/genre-corpus" "$DEST/"
+cp -r "$SCRIPT_DIR/agents" "$DEST/"
 
 echo "安装完成!"

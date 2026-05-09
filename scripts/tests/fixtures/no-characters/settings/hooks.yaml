@@ -1,0 +1,4 @@
+hooks:
+- id: "test-hook-1"
+  type: "mystery"
+  status: "pending"

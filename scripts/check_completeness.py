@@ -53,9 +53,6 @@ EXPECTED = {
     },
     "character-setting": {
         "path": "settings/character-setting/",
-        "check": lambda d: sum(1 for f in Path(str(d["_path"]) if isinstance(d.get("_path"), str) else (
-            Path(sys.argv[1]) / "settings/character-setting" if len(sys.argv) > 1 else Path(".")
-        )).glob("*.yaml") if f.is_file() if f.is_file()),
         "label": "至少一个角色文件",
         "is_dir": True,
     },
