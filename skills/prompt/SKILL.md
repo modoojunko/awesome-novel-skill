@@ -29,7 +29,7 @@ description: 章提示词生成与视角转换。Phase 4。视角转换 + 范本
 | `prompts/volume-{N}-prompt.md` 是否存在？ | 不存在 → 生成（从 volume.yaml + archives/），作者确认 |
 | 模板版本检查 | 读取 `~/.claude/skills/novel/scripts/templates/writing-style.yaml.template` 头部 `# version: N`，对比项目 `settings/writing-style.yaml` 头部版本号。模板版本更高 → 向作者报告"写作风格模板有更新"，列出新增的 global_rules 和 possible_mistakes 条目，问作者"合并新规则 / 暂不合并"。合并后自动重新生成 `prompts/global-prompt.md` |
 | 章纲完整性 | memo（7段）+ emotional_design 全部有值？任一为空 → **STOP**，Read `skills/outline/SKILL.md` 补全章纲 |
-| segments 已存在？ | 若 chapter.yaml 已有 segments（非空列表），跳到 Step 0 仅展示不重新拆分，等作者确认或调整 |
+| segments 已存在？ | 若 chapter.yaml 已有 segments（非空列表），跳到展示确认，不重新拆分，等作者确认或调整 |
 | genre_profile 是否已选择？ | 读取 `settings/writing-style.yaml` 的 `genre_profile` 字段。为空 → **STOP**，列出 `~/.claude/skills/awesome-novel/genre-corpus/index.yaml` 下可用类型档案，AskUserQuestion 让作者选择。选择后写入 `genre_profile` 并合并 genre_config 到 writing-style.yaml，然后继续 |
 | author-intent.md 一致性 | 本章与核心主题一致 / 存在偏离？偏离 → **STOP** |
 | current-focus.md 一致性 | 本章在优先级范围内 / 偏离？偏离 → **STOP** |
@@ -338,7 +338,7 @@ subagent 需要的是场景骨架，不是缩写版正文。what_to_write 超过
 
 #### 1. 读取约束来源
 
-- `settings/writing-style.yaml` → 提取 `core_principles`、`possible_mistakes`、`pov_consistency`、`depiction_techniques`
+- `settings/writing-style.yaml` → 只提取 `core_principles`、`possible_mistakes`、`pov_consistency`、`depiction_techniques`、`genre`、`skill_layers` 字段。**跳过 reader_psychology 到 character_psychology_method 之间的参考文档段**（仅 global-prompt.md 生成或作者问及方法论时读取）
 - `settings/anti-ai.yaml` → 提取 `structural_tic_patterns` 中 severity=high 的项、`dialogue_rules`、`sentence_rules`
 - `chapter.yaml` → 提取 `memo.prohibitions`
 - `prompts/global-prompt.md` → 作为参考（若存在），提取"写作原则与禁忌"段的核心约束

@@ -320,20 +320,21 @@ def body_emotion_stats(text: str) -> dict:
 
 # ── structural tic matching ─────────────────────────────────────
 
-TIC_PATTERNS = [
-    {'name': '不是而是句式', 'pattern': r'不是.{1,20}(而是|，是|,是)', 'threshold': 3, 'severity': 'high'},
-    {'name': '没有X只是Y句式', 'pattern': r'没有.{1,20}(只不过|只是|而是)', 'threshold': 3, 'severity': 'medium'},
-    {'name': '否定-纠正句式', 'pattern': r'(不[,，]?\s*不是这样|其实并非如此|更准确[地性]说|不[,，]?\s*[他她它那这])', 'threshold': 2, 'severity': 'high'},
-    {'name': '破折号解释句式', 'pattern': r'——(他|她|它|这|那)', 'threshold': 5, 'severity': 'medium'},
-    {'name': '公式化副词', 'pattern': r'(不由得|不禁|忍不住|不由自主地|下意识地|鬼使神差地)', 'threshold': 4, 'severity': 'high'},
-    {'name': '一边一边句式', 'pattern': r'一边.{1,20}一边', 'threshold': 2, 'severity': 'medium'},
-    {'name': '就在这时句式', 'pattern': r'(就在这时|正在这时|突然[,，])', 'threshold': 5, 'severity': 'medium'},
-    {'name': '身体部位情绪模板', 'pattern': r'(眼神|目光|瞳孔|心头|心里|心中|心底|手心|指尖|喉咙).{0,10}(一|微|暗|沉|紧|颤|抖|缩|松|暖|寒|凉|热|酸)', 'threshold': 6, 'severity': 'high'},
-]
+def load_tic_patterns() -> list[dict]:
+    """从 tic-patterns.yaml 加载结构性句式癖好模式列表。
+
+    规范源在 scripts/tic-patterns.yaml。anti-ai.yaml.template 的
+    structural_tic_patterns 字段与此保持一致。
+    """
+    tic_file = Path(__file__).parent / "tic-patterns.yaml"
+    with open(tic_file, 'r', encoding='utf-8') as f:
+        data = yaml.safe_load(f)
+    return data["patterns"]
 
 def structural_tic_stats(text: str) -> list[dict]:
+    patterns = load_tic_patterns()
     results = []
-    for tic in TIC_PATTERNS:
+    for tic in patterns:
         matches = re.findall(tic['pattern'], text)
         results.append({
             'name': tic['name'],

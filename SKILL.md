@@ -44,8 +44,8 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 |------|-----------|--------|
 | world-setting.yaml 字段大量为空 | Phase 2 未完成 | → `novel-setup` |
 | chapter.yaml status = `outline`，memo 不完整 | Phase 3 进行中 | → `novel-outline` |
-| chapter.yaml status = `outline`，memo 完整，narrative_segments 为空 | Phase 4 待执行——需拆分叙事段落 | → `novel-prompt` |
-| chapter.yaml status = `outline`，narrative_segments 已填充，提示词不存在 | Phase 4 进行中——需生成提示词 | → `novel-prompt`（Step 0 展示已有 segments，确认后跳 Step 2） |
+| chapter.yaml status = `outline`，memo 完整，segments 为空 | Phase 4 待执行——需拆分叙事段落 | → `novel-prompt` |
+| chapter.yaml status = `outline`，segments 已填充，提示词不存在 | Phase 4 进行中——需生成提示词 | → `novel-prompt`（Step 0 展示已有 segments，确认后跳 Step 2） |
 | chapter.yaml status = `draft`，正文未归档 | Phase 5/6 待执行 | → `novel-write` 或 `novel-archive`。建议归档前先 `novel-review` |
 | chapter.yaml status = `archived` | 本章已完成 | 查 story.yaml 本卷所有章节是否全部 archived：全部完成 → 告知"卷 N 已完成"，给出选项：规划下一卷 / 回顾整卷 / 修改某章。未全部完成 → 问作者：下一章还是回顾？ |
 
@@ -80,16 +80,7 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 
 ### Step 4: 模型门禁
 
-读取上方的模型门禁表，检查目标 Phase 的主会话模型要求：
-
-| 目标 Phase | 主会话要求 | 操作 |
-|-----------|-----------|------|
-| 1-4（setup/outline/prompt） | sonnet（强制） | 告知用户："这个阶段需要深度推理能力。请先切换到 Sonnet 模型——输入 `/model` 选择 sonnet，切换后告诉我继续。" **STOP。不切换不继续。** |
-| review | haiku 可 | 主 Agent 直接执行，无 subagent 开销。上下文已热，直接对照检查。 |
-| 5（write） | haiku 可 | 调度是机械操作。仅告知用户当前模型即可，不强制切换。 |
-| 6（archive） | haiku 可 | 无需切换。 |
-
-**用户已切换确认后**，进入 Step 5。
+对照下方「模型门禁（MODEL-GATE）」表，检查目标 Phase 的主会话模型要求。若不满足 → **STOP**，告知用户切换模型后再继续。满足要求 → 进入 Step 5。
 
 ### Step 5: 分发
 
@@ -145,4 +136,4 @@ Phase 顺序不可跳。前置检查不可跳。STOP 点必须等作者确认。
 | `scripts/import.py` | 导入已有小说，切分章节 | Phase 1 导入模式时执行 |
 | `scripts/analyze_style.py` | 参考小说文风统计分析（12 项量化指标） | novel-style-extract Step 1 时执行 |
 | `scripts/templates/` | YAML 模板（world-setting、character、writing-style、hooks 等） | 新建项目时 init.py 自动复制；Phase 2 讨论设定时参考字段结构 |
-| `genre-corpus/` | 类型档案（4种预置类型知识库：悬疑刑侦/都市言情/古风权谋/科幻末世） | Phase 2 设定阶段选择类型档案；Phase 4 提示词注入 prompt_segment |
+| `genre-corpus/` | 类型档案（24 种预置类型，7 个基类 + 变体覆盖） | Phase 2 设定阶段选择类型档案；Phase 4 提示词注入 prompt_segment |

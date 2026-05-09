@@ -153,7 +153,7 @@ Agent 输出写入两个文件：
 ### 3c. 注入 Few-shot 到提示词
 
 1. 在 `prompts/global-prompt.md` 新增"风格参考范例"段，放入全部 8-12 个参考段落
-2. 在 Phase 4 的章提示词中，按 narrative_segment function 追加对应类型的参考段落：
+2. 在 Phase 4 的章提示词中，按叙事段落 function 追加对应类型的参考段落：
 
 | 叙事段落功能 | 注入的 example 类型 |
 |-----------------|-------------------|

@@ -97,6 +97,7 @@ sentence_rules:
 
 # 结构性句式癖好检测（正则匹配，超过阈值触发警告）
 # 这些是 LLM 生成中文文本时的高频统计癖好，不是写作风格问题，是模型惯性
+# 规范列在 scripts/tic-patterns.yaml——新增或修改模式时应同步更新两处
 structural_tic_patterns:
   - pattern: '不是[^，。,\.]{1,20}(而是|是)'
     name: "不是而是句式"
