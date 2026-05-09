@@ -1,15 +1,29 @@
 # Novel Agent — 和 AI 一起写小说
 
-让 Claude 成为你的小说创作搭档。从世界观搭建到角色塑造，从章节规划到正文写作，一步步陪你完成整部小说。
+让 AI 成为你的小说创作搭档——支持 Claude、DeepSeek 等主流模型。从世界观搭建到角色塑造，从章节规划到正文写作，一步步陪你完成整部小说。
 
 ## 你需要什么
 
-- 安装了以下任一工具的电脑：[Claude Code](https://docs.anthropic.com/zh-CN/docs/claude-code/overview)、[Hermes](https://github.com/hermes/hermes) 或 [OpenClaw](https://github.com/openclaw/openclaw)
+- 安装了以下任一工具的电脑：[Claude Code](https://docs.anthropic.com/zh-CN/docs/claude-code/overview)、[DeepSeek TUI](https://github.com/hust-open-atom-club/DeepSeek-TUI)、[Hermes](https://github.com/hermes/hermes) 或 [OpenClaw](https://github.com/openclaw/openclaw)
 - 大概 1 分钟完成安装
 
 ## 安装
 
 根据你用的工具，复制对应那行命令，在终端里粘贴执行：
+
+### DeepSeek TUI
+
+```bash
+git clone https://github.com/modoojunko/awesome-novel-skill.git && cd awesome-novel-skill && ./install.sh deepseek-tui
+```
+
+### DeepSeek V4（通过 Hermes 或 OpenClaw）
+
+```bash
+git clone https://github.com/modoojunko/awesome-novel-skill.git && cd awesome-novel-skill && ./install.sh hermes
+```
+
+> 也支持 `./install.sh openclaw`，看你用哪个工具。
 
 ### Claude Code
 
@@ -39,13 +53,13 @@ cp SKILL.md ~/.claude/skills/awesome-novel/
 cp -r scripts ~/.claude/skills/awesome-novel/
 ```
 
-> Hermes 用户把路径换成 `~/.hermes/skills/awesome-novel`，OpenClaw 用户换成 `~/.openclaw/skills/awesome-novel`。
+> Hermes 用户把路径换成 `~/.hermes/skills/awesome-novel`，OpenClaw 用户换成 `~/.openclaw/skills/awesome-novel`，DeepSeek TUI 用户换成 `~/.deepseek/skills/awesome-novel`。
 
 看到 "安装完成" 就可以了。
 
 ## 开始写小说
 
-打开终端，在你想放小说的目录下启动你的 AI 编程工具（Claude Code / Hermes / OpenClaw），然后用自然语言告诉它你想做什么。比如：
+打开终端，在你想放小说的目录下启动你的 AI 编程工具（Claude Code / DeepSeek TUI / Hermes / OpenClaw），然后用自然语言告诉它你想做什么。比如：
 
 > **我想写一本玄幻小说，帮我开始**
 

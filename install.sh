@@ -21,7 +21,7 @@ set -e
 
 usage() {
     echo "用法: $0 <平台>"
-    echo "平台: claude-code, hermes, openclaw"
+    echo "平台: claude-code, hermes, openclaw, deepseek-tui"
     exit 1
 }
 
@@ -40,6 +40,9 @@ case "$PLATFORM" in
         ;;
     openclaw)
         SKILLS_DIR="$HOME/.openclaw/skills"
+        ;;
+    deepseek-tui)
+        SKILLS_DIR="$HOME/.deepseek/skills"
         ;;
     *)
         echo "不支持的平台: $PLATFORM"
