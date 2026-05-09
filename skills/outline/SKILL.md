@@ -5,6 +5,8 @@ description: 卷纲和章纲规划。Phase 3。当设定完成后需要规划故
 
 # Novel Outline — 卷纲与章纲
 
+> 摘要：Agent 推理 3-4 个情节方向 → 作者选 → 自动填 outline + memo + 情绪设计。卷 N+1 走角色发声。
+
 ## Overview
 
 引导作者拆分故事线、讨论卷纲、逐章设计章纲。每章 Agent 先基于前文推理 3-4 个情节方向，作者选一个后自动填充 outline/memo/情绪设计。**不给分析，给选项。**
@@ -15,12 +17,10 @@ description: 卷纲和章纲规划。Phase 3。当设定完成后需要规划故
 
 **Announce at start:** "我来引导你规划章节。先确认卷纲，再逐章讨论。每章我给你几个方向，你选一个。"
 
-## HARD-GATE
+## 执行前提
 
-```
-章纲 memo（7 段）和 emotional_design 逐章讨论，不可跳过。
-memo 缺失 → Phase 4 subagent 不知道"读者此刻在等什么"。
-```
+填写 memo 或 emotional_design 前，read_file 读取 chapter.yaml 确认相应字段非空。
+memo 任一段为空 → 不可进入 Phase 4。
 
 ## 进入门禁
 

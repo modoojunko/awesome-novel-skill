@@ -5,6 +5,8 @@ description: 章节归档与状态更新。Phase 6。正文审阅满意后归档
 
 # Novel Archive — 归档
 
+> 摘要：完整性检查 → 去 draft 标记 → 更新角色 state_history + hooks → 卷完成检测 → 滑动审视 current-focus。
+
 ## Overview
 
 正文落盘后，更新项目状态——角色状态、情绪弧线、钩子、卷提示词、current-focus 滑动审视。
@@ -13,11 +15,9 @@ description: 章节归档与状态更新。Phase 6。正文审阅满意后归档
 
 **Announce at start:** "我来归档第{N}卷第{M}章。"
 
-## HARD-GATE
+## 执行前提
 
-```
-归档前必须通过 Workflow 完整性检查。任意一项不通过 → STOP，修复后再归档。
-```
+归档前 read_file 执行 Step 0 完整性检查表。任意一项不通过 → 报告作者缺少哪项。
 
 ## 归档前完整性检查（Step 0）
 
