@@ -277,7 +277,7 @@ upsert（埋新）→ 归档时从正文提取 seed_text / mention（推进）/ 
 
 ### 执行方法
 
-1. Read `skills/prompt/SKILL.md`，获取以下规则的具体内容：
+1. 按以下规则执行（规则内联自 `skills/prompt/SKILL.md`）：
    - 叙事功能段落拆分规则（7 种 function 类型 + 拆分流程 + 检查项）
    - 视角转换规则（上帝视角→沉浸式指引 + 钩子锚定 + 爽感循环）
    - 提示词文件组装规则（范本段落 + 角色定位 + 约束提炼 + 类型指引 + 故事背景 + 叙事段落注入）
@@ -287,7 +287,7 @@ upsert（埋新）→ 归档时从正文提取 seed_text / mention（推进）/ 
 2. 按规则自动完成以下步骤：
    a. 拆 segment（不持久化到 YAML，直接进入视角转换和 prompt 组装）
    b. 视角转换 → 双轮净化（结构层 + 词句层）
-   c. 读 writing-style.yaml / anti-ai.yaml / genre-corpus / world-setting / archives
+   c. 读 writing-style.yaml / genre-corpus / world-setting / archives（anti-ai.yaml 已废弃，AI 味检测移至 review 技能的自检 checklist）
    d. 组装 prompts/vol-{N}-ch-{M}-prompt.md
    e. AI 味自检 → 命中自动修复 → 二次扫描确认
    f. chapter.yaml status → `draft`
@@ -313,4 +313,4 @@ upsert（埋新）→ 归档时从正文提取 seed_text / mention（推进）/ 
 4. 根据作者响应：
    - "写正文" / "写" → 主 Agent Read `skills/write/SKILL.md` 进入 Phase 5
    - "看一眼" → 展示提示词文件内容 + "没问题就写正文，想改告诉我改哪段"
-   - "我自己调" → 主 Agent Read `skills/prompt/SKILL.md` 进入 Phase 4（手动模式）
+   - "我自己调" → 直接编辑 `prompts/vol-{N}-ch-{M}-prompt.md` 文件，或参考 `skills/prompt/SKILL.md` 中的规则手动调整
