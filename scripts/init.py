@@ -80,7 +80,7 @@ def init_project(project_name: str, author: str = "") -> None:
 
     # 复制控制文档（markdown 格式）
     copy_md_template("author-intent", project_path / "author-intent.md")
-    copy_md_template("current-focus", project_path / "current-focus.md")
+    # current-focus.md 为纯手动文档，不做模板复制
 
     # 创建空的character-setting目录（角色文件后续讨论时创建）
 

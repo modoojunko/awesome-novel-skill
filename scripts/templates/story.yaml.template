@@ -1,10 +1,9 @@
 # story.yaml - 小说项目核心索引
-# 此文件通过相对路径引用各子文档，避免数据重复
+# 各子文档通过相对路径引用，章节状态从 chapters/ 目录派生
 
 title: ""
 author: ""
 created_at: ""
-updated_at: ""
 
 world_setting:
   path: "./settings/world-setting.yaml"
@@ -18,8 +17,6 @@ writing_style:
   path: "./settings/writing-style.yaml"
   summary: ""
 
-volumes: []
-chapters: []
-
-current_volume: 1
-current_chapter: 1
+volumes:
+  - volume: 1
+    title: ""

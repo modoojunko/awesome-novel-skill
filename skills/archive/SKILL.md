@@ -1,15 +1,17 @@
 ---
 name: novel-archive
-description: 章节归档与状态更新。Phase 6。正文审阅满意后归档——更新角色状态、情绪弧线、钩子追踪、卷提示词、滑动窗口审视 current-focus。触发："归档""存档""这章完成了""满意了"。归档前必须先通过 Workflow 完整性检查，不完整章节拒绝归档。
+description: 章节归档与状态更新（参考文档，已内化到 chapter-loop）。正文审阅满意后归档——更新角色状态、情绪弧线、钩子追踪、卷提示词、滑动窗口审视。触发："归档""存档""这章完成了""满意了"。归档前必须先通过 Workflow 完整性检查，不完整章节拒绝归档。
 ---
+
+> 参考文档——归档步骤已内化到 `skills/chapter-loop/SKILL.md` Step 6。此文件保留为详细操作参考，不再独立路由。
 
 # Novel Archive — 归档
 
-> 摘要：完整性检查 → 去 draft 标记 → 更新角色 state_history + hooks → 卷完成检测 → 滑动审视 current-focus。
+> 摘要：完整性检查 → 去 draft 标记 → 更新角色 state_history + hooks → 卷完成检测 → 滑动审视。
 
 ## Overview
 
-正文落盘后，更新项目状态——角色状态、情绪弧线、钩子、卷提示词、current-focus 滑动审视。
+正文落盘后，更新项目状态——角色状态、情绪弧线、钩子、卷提示词、滑动审视。
 
 **When NOT to use:** 正文未写入 archives/、质量检查未通过、章状态已是 archived。
 
@@ -23,9 +25,9 @@ description: 章节归档与状态更新。Phase 6。正文审阅满意后归档
 
 | 检查项 | 操作 |
 |--------|------|
-| chapter.yaml 完整性 | memo（7段）+ emotional_design 全部有值？缺失 → Read `skills/outline/SKILL.md` 补全章纲 |
+| chapter.yaml 完整性 | memo（7段）+ emotional_design 全部有值？缺失 → Read `skills/chapter-loop/SKILL.md` Step 2 补全章纲 |
 | 章提示词文件存在？ | `prompts/vol-{N}-ch-{M}-prompt.md` 存在？缺失 → Read `skills/prompt/SKILL.md` 生成 |
-| 正文通过全部质量检查？ | 未通过 → Read `skills/write/SKILL.md` 修复 |
+| 正文通过全部质量检查？ | 未通过 → 返回到 Phase 3（`skills/chapter-loop/SKILL.md` Step 4）修复 |
 | 深度评审已完成？ | 建议归档前先触发 `novel-review`（10 维诊断），未评审 → 提醒作者可选评审 |
 
 ## 归档步骤
@@ -36,17 +38,16 @@ description: 章节归档与状态更新。Phase 6。正文审阅满意后归档
 3. 分析角色变化，追加 state_history
 4. 更新角色 yaml 当前状态字段（location、abilities、relationships、worldview、summary）
 5. 追记 emotional_arc（情绪状态、触发事件、强度、弧线方向、表达方式）
-6. 更新 hooks.yaml（mention/resolve/defer），运行钩子健康检查
+6. 更新角色 yaml 中的 hooks 引用（全局 hooks.yaml 不再维护——真相源在各 chapter.yaml 的 hooks 字段），运行钩子健康检查
 7. 运行情节推进停滞检测（最近 3 章是否有实质性推进）
 8. 将 chapter.yaml status 更新为 `archived`
 9. 更新 story.yaml chapters 列表
 10. **更新卷提示词**：往 `prompts/volume-{N}-prompt.md` 追加本章一句话摘要
-11. **滑动窗口审视 current-focus.md**：
-    - 标记本章为 ✅
+11. **滑动窗口审视**：
     - 以最近 3 章为窗口检查优先级、节奏意图、钩子是否仍然适用
-    - 3 的倍数章（3/6/9…）→ 必须引导作者主动更新
-    - 状态不符 → 报告差异并建议更新
-    - 状态一致 → 报告"无需更新"
+    - 3 的倍数章（3/6/9…）→ 必须引导作者主动回顾方向
+    - 状态不符 → 报告差异并建议调整
+    - 状态一致 → 报告"无需调整"
 12. **检测卷边界**：
     - 读 `story.yaml` 的 chapters 列表，过滤 `volume == current_volume` 的所有章节
     - 检查这些章节的 status 是否全部为 `archived`
@@ -62,7 +63,7 @@ description: 章节归档与状态更新。Phase 6。正文审阅满意后归档
       {逐章列出标题和归档状态}
 
       下一步选项：
-      1. 规划卷 {N+1} — 进入 Phase 3，AI 推理方向选项
+      1. 规划卷 {N+1} — 进入 Phase 2（`novel-volume`），AI 推理方向选项
       2. 回顾整卷 — 触发 novel-review 做整卷回顾评审
       3. 修改某章 — 指定章节重新生成
 
@@ -97,9 +98,9 @@ emotional_arc:
 
 ## 下一步
 
-归档完成后告知作者。根据滑动窗口审视结果，建议下一章或调整 current-focus。
+归档完成后告知作者。根据滑动窗口审视结果提出下一章方向建议。
 
 **卷边界时：** 步骤 12 检测到卷全部完成时，展示卷完成报告，路由选择：
-- "规划下一卷" → 主 Agent Read `skills/outline/SKILL.md` 进入 Phase 3，走 0.1 角色驱动分析
+- "规划下一卷" → 主 Agent Read `skills/outline/SKILL.md` 规划下一卷纲
 - "回顾整卷" → Read `skills/review/SKILL.md` 做整卷评审
-- "修改某章" → 指定章节，Read `skills/write/SKILL.md` 重新生成
+- "修改某章" → 指定章节，Read `skills/chapter-loop/SKILL.md` 重新生成
