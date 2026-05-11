@@ -41,7 +41,7 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
 6. 更新角色 yaml 中的 hooks 引用（全局 hooks.yaml 不再维护——真相源在各 chapter.yaml 的 hooks 字段），运行钩子健康检查
 7. 运行情节推进停滞检测（最近 3 章是否有实质性推进）
 8. 将 chapter.yaml status 更新为 `archived`
-9. 更新 story.yaml chapters 列表
+9. 更新 story.md chapters 列表
 10. **更新卷提示词**：往 `prompts/volume-{N}-prompt.md` 追加本章一句话摘要
 11. **滑动窗口审视**：
     - 以最近 3 章为窗口检查优先级、节奏意图、钩子是否仍然适用
@@ -49,7 +49,7 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
     - 状态不符 → 报告差异并建议调整
     - 状态一致 → 报告"无需调整"
 12. **检测卷边界**：
-    - 读 `story.yaml` 的 chapters 列表，过滤 `volume == current_volume` 的所有章节
+    - 读 `chapters/` 目录，筛选当前卷的章节文件（`vol-{N}-ch-*.yaml`）
     - 检查这些章节的 status 是否全部为 `archived`
     - 未全部完成 → 不做额外操作
     - 全部完成 → **输出卷完成报告：**

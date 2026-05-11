@@ -24,7 +24,7 @@ Step 1 脚本 exit code 必须为 0。Step 2 outputs 必须包含原文引用。
 | 检查项 | 操作 |
 |--------|------|
 | 参考小说 .txt 文件存在？ | 不存在 → 询问作者提供文件路径 |
-| 项目 story.yaml 存在？ | 不存在 → **STOP**，请先完成 Phase 1 初始化 |
+| 项目 story.md 存在？ | 不存在 → **STOP**，请先完成 Phase 1 初始化 |
 | jieba + pyyaml 已安装？ | 未安装 → `pip3 install --break-system-packages jieba pyyaml` |
 
 ## Step 1: 统计分析脚本

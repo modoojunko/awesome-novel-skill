@@ -72,7 +72,7 @@ def init_project(project_name: str, author: str = "") -> None:
     create_directory_structure(project_path)
 
     # 复制模板文件
-    copy_template("story", project_path / "story.yaml")
+    copy_md_template("story", project_path / "story.md")
     copy_template("world-setting", project_path / "settings" / "world-setting.yaml")
     copy_template("writing-style", project_path / "settings" / "writing-style.yaml")
     copy_template("anti-ai", project_path / "settings" / "anti-ai.yaml")

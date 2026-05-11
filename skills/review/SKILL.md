@@ -35,7 +35,7 @@ description: 章节深度评审。Phase 4——对已完成正文进行 10 维 6
 
 ### Step 1: 确定评审目标
 
-若作者指定了卷号和章号 → 评审指定章节。若作者只说"评审这章" → 读取 `story.yaml` 找到 `current_volume` 和 `current_chapter`。
+若作者指定了卷号和章号 → 评审指定章节。若作者只说"评审这章" → 读取 `story.md` 找到 `current_volume` 和 `current_chapter`。
 
 ### Step 2: 收集全部上下文
 

@@ -101,7 +101,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 ```
 {project-name}/
-├── story.yaml              # ★ 必有：项目索引（标题/作者/卷映射）
+├── story.md              # ★ 必有：项目索引（元信息/引用路径/主线拆纲）
 ├── settings/
 │   ├── world-setting.yaml  # 世界观（core: geography/politics/rules, extended: ...）
 │   ├── writing-style.yaml  # 写作风格
@@ -138,14 +138,15 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 下面每个产出完成后，必须先自检 → 修复 → 再汇报/推进：
 
-| 产出 | 自检清单出处 |
-|------|-------------|
-| 设定阶段完成（world-setting + 角色 yaml + writing-style + genre-setting） | `references/world-setup-style.md`（世界观）+ `references/character-setting-style.md`（角色）+ `references/writing-style.md`（写作风格）+ `references/genre-style.md`（题材） |
-| 主线拆纲完成（story.yaml story_arc + volumes 列表） | `references/story-arc-style.md` |
-| 卷纲完成（volume yaml） | `references/volume-checklist.md` |
-| 章纲完成（chapter.yaml） | `references/chapter-outline-checklist.md` |
-| 提示词完成（prompt.md） | `references/prompt-checklist.md` |
-| 正文完成（archives/ 定稿） | `references/chapter-body-checklist.md` + 深度评审（可选） |
+| 产出 | 生命周期 | 自检清单出处 |
+|------|---------|-------------|
+| 世界观 + 写作风格 + 题材设定 | 一次性（基本不改） | `references/world-setup-style.md` + `references/writing-style.md` + `references/genre-style.md` |
+| 角色设定 | 基础一次性，后续可追加 | `references/character-setting-style.md` |
+| 主线拆纲（story.md 故事主线 + 分卷规划） | 一次性（Phase 2 入口处） | `references/story-arc-style.md` |
+| 卷纲（volume yaml） | 每卷一次 | `references/volume-checklist.md` |
+| 章纲（chapter.yaml） | 每章一次 | `references/chapter-outline-checklist.md` |
+| 提示词（prompt.md） | 每章一次 | `references/prompt-checklist.md` |
+| 正文（archives/ 定稿） | 每章一次 | `references/chapter-body-checklist.md` + 深度评审（可选） |
 
 **执行方式（按能力降级，优先用更隔离的方式）：**
 
@@ -161,8 +162,8 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 | 阶段 / 路由 | 必读（每次都看） | 一次性看完 / 按需查 |
 |------------|-----------------|-------------------|
-| **Phase 1 设定**（novel-setup） | `story.yaml`（项目索引，检查是否已初始化）+ `world-setting.yaml`（8 字段填写进度，引导逐项讨论）+ `scripts/templates/*` 全部 yaml 模板（字段结构参考） | `references/genre-example/index.md`（选类型时浏览 24 种 + 推荐）+ 自检：完成后逐项过 `references/world-setup-style.md`（世界观）+ `references/character-setting-style.md`（角色）+ `references/writing-style.md`（写作风格）+ `references/genre-style.md`（题材） |
-| **Phase 2 卷纲**（novel-volume） | `story.yaml`（story_arc + 卷映射——总主线和分卷规划）+ `world-setting.yaml` core（geography / politics / rules——冲突空间来源）+ `writing-style.yaml`（role——叙事身份）+ `genre-setting.md`（pacing_rules——节奏基准） | `references/genre-example/` 对应类型的 `story_arc_templates`（卷结构参考）+ 角色 yaml（按需看动机）+ 自检：完成后逐项过 `references/volume-checklist.md` |
+| **Phase 1 设定**（novel-setup） | `story.md`（项目索引，检查是否已初始化）+ `world-setting.yaml`（8 字段填写进度，引导逐项讨论）+ `scripts/templates/*` 全部 yaml 模板（字段结构参考） | `references/genre-example/index.md`（选类型时浏览 24 种 + 推荐）+ 自检：完成后逐项过 `references/world-setup-style.md`（世界观）+ `references/character-setting-style.md`（角色）+ `references/writing-style.md`（写作风格）+ `references/genre-style.md`（题材） |
+| **Phase 2 卷纲**（novel-volume） | `story.md`（story_arc + 卷映射——总主线和分卷规划）+ `world-setting.yaml` core（geography / politics / rules——冲突空间来源）+ `writing-style.yaml`（role——叙事身份）+ `genre-setting.md`（pacing_rules——节奏基准） | `references/genre-example/` 对应类型的 `story_arc_templates`（卷结构参考）+ 角色 yaml（按需看动机）+ 自检：完成后逐项过 `references/volume-checklist.md` |
 | **Phase 3.1 方向提案**（×N 次，每章一次） | 最新 `chapter.yaml#hooks`（pending / partial_advance 状态的钩子——读者期待来源）+ `volume-N.yaml#chapters_summary`（本章在卷内的定位）+ `genre-setting.md`（pacing_rules + satisfaction_types——节奏和爽点约束）+ 最近 1 章 `archives/` 结尾段（上一章结尾的情绪状态） | 所有角色 yaml（活跃角色的当前动机和冲突）+ `world-setting.yaml`（环境约束）+ 最近 3 章 `chapter.yaml#emotional_design`（情绪类型，避免连续同类型） |
 | **Phase 3.2 章纲** | 方向提案确认结果 + `volume-N.yaml#chapters_summary`（本章占位章纲）+ 所有角色 yaml（性格 / 动机 / 关系——决策合理性来源） | hooks 相关的其他 `chapter.yaml`（跨章钩子追溯）+ 自检：完成后逐项过 `references/chapter-outline-checklist.md` |
 | **Phase 3.3 自动提示词**（自动执行，×N 次） | **`writing-style.yaml` 四字段**（role / core_principles / possible_mistakes / depiction_techniques——缺一不可，缺失则 subagent 放飞）+ `references/genre-example/` 对应类型的 `prompt_segment`（题材特有叙事约束）+ 前文 `archives/` 最近 3 章（文风一致性）+ `world-setting.yaml`（场景 / 环境描述来源） | 角色 yaml（性格细节注入提示词 `character_voice`）+ 自检：组装后逐项过 `references/prompt-checklist.md` |
@@ -179,7 +180,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 ### Step 1: 检测当前进度
 
-读取项目根目录的 `story.yaml`。若不存在 → 项目未创建，Read `skills/setup/SKILL.md`。
+读取项目根目录的 `story.md`。若不存在 → 项目未创建，Read `skills/setup/SKILL.md`。
 
 若存在：
 
@@ -219,7 +220,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 | 目标 | 检查项 |
 |------|--------|
-| novel-volume | story.yaml story_arc 已定义（至少已完成主线拆纲）、settings/world-setting.yaml 非模板、writing-style.yaml 非模板 |
+| novel-volume | story.md story_arc 已定义（至少已完成主线拆纲）、settings/world-setting.yaml 非模板、writing-style.yaml 非模板 |
 | novel-chapter-loop | volume-N.yaml 存在且 chapters_summary 非空 |
 | novel-review | archives/ 下存在正文文件 |
 

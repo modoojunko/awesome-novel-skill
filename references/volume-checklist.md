@@ -4,7 +4,7 @@
 
 > **主线拆纲前置**（全卷纲检的前置条件，详细指南+验收见 `references/story-arc-style.md`）：
 >
-> 1. **story_arc 已定义**——`story.yaml` 中有 `story_arc.core_conflict`（一句话全书主线）+ 分卷列表
+> 1. **story_arc 已定义**——`story.md` 中有 `story_arc.core_conflict`（一句话全书主线）+ 分卷列表
 > 2. **每卷有核心冲突**——列表中每卷的 `core_conflict` 不等于空，表述为"谁+做什么+被什么阻碍"
 > 3. **分卷覆盖全书**——所有分卷合起来能讲完 `story_arc.core_conflict`，没有漏掉的弧线段
 
