@@ -147,8 +147,8 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 主线拆纲（story.md 故事主线 + 分卷规划） | 一次性（Phase 2 入口处） | `references/story-arc-style.md` |
 | 卷纲（volume-N.yaml） | 每卷一次 | `references/volume-setting-style.md` |
 | 章纲（chapter.yaml） | 每章一次 | `references/chapter-setting-style.md` |
-| 提示词（prompt.md） | 每章一次 | `references/prompt-checklist.md` |
-| 正文（archives/ 定稿） | 每章一次 | `references/chapter-body-checklist.md` + 深度评审（可选） |
+| 提示词（prompt.md） | 每章一次 | `references/prompt-setting-style.md` |
+| 正文（archives/ 定稿） | 每章一次 | `references/chapter-quality-setting-style.md` + 深度评审（可选） |
 
 **执行方式（按能力降级，优先用更隔离的方式）：**
 
@@ -168,7 +168,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | **Phase 2 卷纲**（novel-volume） | `story.md`（story_arc + 卷映射——总主线和分卷规划）+ `world-setting.yaml` core（geography / politics / rules——冲突空间来源）+ `writing-style.yaml`（role——叙事身份）+ `genre-setting.md`（pacing_rules——节奏基准） | `references/genre-example/` 对应类型的 `story_arc_templates`（卷结构参考）+ 角色文件（按需看动机）+ 自检：完成后逐项过 `references/volume-setting-style.md` |
 | **Phase 3.1 方向提案**（×N 次，每章一次） | 最新 `chapter.yaml#emotional_design`（上一章的情绪落点——读者期待来源）+ `volume-N.yaml#chapters_summary`（本章在卷内的定位）+ `genre-setting.md`（pacing_rules + satisfaction_types——节奏和爽点约束）+ 最近 1 章 `archives/` 结尾段（上一章结尾的情绪状态） | 所有角色文件（活跃角色的当前动机和冲突）+ `world-setting.yaml`（环境约束）+ 最近 3 章 `chapter.yaml#emotional_design`（情绪类型，避免连续同类型） |
 | **Phase 3.2 章纲** | 方向提案确认结果 + `volume-N.yaml#chapters_summary`（本章占位章纲）+ 所有角色文件（性格 / 动机 / 关系——决策合理性来源） | 自检：完成后逐项过 `references/chapter-setting-style.md` |
-| **Phase 3.3 自动提示词**（自动执行，×N 次） | **`writing-style.yaml` 四字段**（role / core_principles / possible_mistakes / depiction_techniques——缺一不可，缺失则 subagent 放飞）+ `references/genre-example/` 对应类型的 `prompt_segment`（题材特有叙事约束）+ 前文 `archives/` 最近 3 章（文风一致性）+ `world-setting.yaml`（场景 / 环境描述来源） | 角色文件（性格细节注入提示词 `character_voice`）+ 自检：组装后逐项过 `references/prompt-checklist.md` |
+| **Phase 3.3 自动提示词**（自动执行，×N 次） | **`writing-style.yaml` 四字段**（role / core_principles / possible_mistakes / depiction_techniques——缺一不可，缺失则 subagent 放飞）+ `references/genre-example/` 对应类型的 `prompt_segment`（题材特有叙事约束）+ 前文 `archives/` 最近 3 章（文风一致性）+ `world-setting.yaml`（场景 / 环境描述来源） | 角色文件（性格细节注入提示词 `character_voice`）+ 自检：组装后逐项过 `references/prompt-setting-style.md` |
 | **Phase 3.4 正文生成**（×N 次，被 3.3 调用） | `prompts/vol-N-ch-M-prompt.md` 单一入口——segment 拆分 + 逐段叙事指引 + 视角约束 + writing-style 注入 + genre prompt_segment / `agents/pipeline/exec-prose.md`（subagent 写作契约：输出格式 + 质量门禁 15 项 + 完工自检） | `archives/` 前文（文风参考，卡壳才翻——先按提示词自由写，不要抄袭前文句式） |
 | **Phase 3.6 归档** | 当前 `chapter.yaml`（status→archived）+ 各角色文件（追加 状态历史 + 情绪弧线——每归档一章状态历史条目数 +1） | 最近 3 章 `chapter.yaml`（滑动窗口审视参考）+ `prompts/volume-N-prompt.md`（追加本章一句话摘要） |
 | **novel-review** | 目标正文 `archives/` + `writing-style.yaml`（评分基准：role / core_principles / possible_mistakes / depiction_techniques） | 角色文件（角色一致性校验）+ `world-setting.yaml`（设定一致性校验） |
