@@ -51,7 +51,6 @@ description: 章节深度评审。Phase 4——对已完成正文进行 10 维 6
 | `settings/writing-style.yaml` | 写作风格——core_principles/possible_mistakes/depiction_techniques/genre/skill_layers/reader_psychology/desire_engine/immersion_pillars/emotional_pacing/creative_constitution/character_psychology_method/pov_consistency/natural_expression |
 | `settings/hooks.yaml` | 伏笔/钩子——hooks 列表、状态、payoff_timing、hook_health_rules |
 | `settings/anti-ai.yaml`（若存在） | 原有 AI 味规则（评审时参考，不重复 chapter-loop 检查）。新项目不再生成此文件——AI 味检测由下方 checklist 执行 |
-| `author-intent.md` | 作者意图——核心主题、终局方向、写作信条、绝不妥协、长期伏笔池 |
 | `archives/vol-{N}-ch-{M-1}-*.md`（上一章正文结尾 200 字） | 前文延续——章节衔接是否无缝 |
 | `prompts/vol-{N}-ch-{M}-prompt.md`（若存在） | 写作指令——对照 subagent 收到的完整指令，检查执行度 |
 
@@ -195,17 +194,7 @@ description: 章节深度评审。Phase 4——对已完成正文进行 10 维 6
 | 7.7 | 钩子强度分布 | `hook_health_rules.strength_distribution` | 是否连续 weak 钩子超过 3 章？是否每 5 章至少有 1 个 strong 钩子？ |
 | 7.8 | 章末钩子质量 | 正文末尾 | 章末是否有有效的阅读动力（信息缺口/情感悬念/行动中断/两难选择）？钩子类型是否与 emotional_design.emotional_hook 一致？ |
 
-### 维度 8：作者意图对齐（对照 author-intent.md）
-
-| # | 细项 | 对照字段 | 评审方法 |
-|---|------|---------|---------|
-| 8.1 | 核心主题共鸣 | `核心主题` | 本章是否在情节/角色/意象层面呼应了核心主题？完全脱节 → 标记 |
-| 8.2 | 终局方向一致 | `终局方向` | 本章的剧情走向是否在朝着终局方向推进（而非背离）？ |
-| 8.3 | 写作信条遵守 | `写作信条[]` | 逐条检查本章是否遵守了作者的写作信条。违反 → 摘出原文 |
-| 8.4 | 绝不妥协遵守 | `绝不妥协[]` | 本章是否出现了作者明确禁止的内容（过于理想化的和解/机械降神/说教式总结等）？ |
-| 8.5 | 伏笔池机会 | `长期伏笔池[]` | 本章是否有合适的时机从伏笔池中埋下新伏笔？有合适时机但未利用 → 标记为"错失机会" |
-
-### 维度 9：作者意图一致性
+### 维度 8：作者意图一致性
 
 先问作者："你最近写这一章的时候，心里有没有什么想优先推进的方向或想避免的问题？"
 简记作者的回答（2-3句话）。

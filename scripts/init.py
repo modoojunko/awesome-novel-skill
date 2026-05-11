@@ -79,9 +79,6 @@ def init_project(project_name: str, author: str = "") -> None:
     copy_template("hooks", project_path / "settings" / "hooks.yaml")
 
     # 复制控制文档（markdown 格式）
-    copy_md_template("author-intent", project_path / "author-intent.md")
-    # current-focus.md 为纯手动文档，不做模板复制
-
     # 创建空的character-setting目录（角色文件后续讨论时创建）
 
     print(f"项目已创建: {project_path}")

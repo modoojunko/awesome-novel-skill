@@ -38,7 +38,6 @@ description: 提示词手动调整参考。Phase 3（已自动执行）。章纲
 | 章纲完整性 | memo（7段）+ emotional_design 全部有值？任一为空 → **STOP**，Read `skills/chapter-loop/SKILL.md` Step 2 补全章纲 |
 | segments 已存在？ | segments 不持久化到 YAML，每次从 outline + memo + emotional_design 在内存中重新拆分 |
 | genre_profile 是否已选择？ | 读取 `settings/writing-style.yaml` 的 `genre_profile` 字段。为空 → **STOP**，列出 `~/.claude/skills/awesome-novel/genre-corpus/index.yaml` 下可用类型档案，AskUserQuestion 让作者选择。选择后写入 `genre_profile` 并合并 genre_config 到 writing-style.yaml，然后继续 |
-| author-intent.md 一致性 | 本章与核心主题一致 / 存在偏离？偏离 → **STOP** |
 
 ## Step 0: 叙事功能段落拆分
 
