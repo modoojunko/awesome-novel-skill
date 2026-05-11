@@ -17,6 +17,14 @@ writing_style:
   path: "./settings/writing-style.yaml"
   summary: ""
 
+story_arc:
+  template: ""              # 短篇/三卷式/五卷式/多卷连载
+  total_volumes: 0
+  core_conflict: ""         # 一句话全书主线
+
 volumes:
   - volume: 1
     title: ""
+    arc_position: ""        # 在全篇弧线中的位置：起/承/转/合
+    core_conflict: ""       # 本卷核心冲突
+    estimated_chapters: 0   # 预估章节数

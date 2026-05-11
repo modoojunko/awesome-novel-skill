@@ -5,7 +5,7 @@ description: 和 AI 协作写小说的工作流系统。流程：一次设定→
 
 # Novel — 小说创作工作流
 
-和 AI 一起写小说。**一次设定**世界观/角色/写作风格 → **规划卷纲**（结构模板或角色驱动）→ **逐章写作循环**（方向提案→章纲→自动提示词→正文生成→质量门禁→归档→下一章）。每一章都是独立的"提案→确认→生成→检查"闭环，不批量作业。产出物 = 按卷/章拆分的小说正文 + 角色状态追踪。
+和 AI 一起写小说。**一次设定**世界观/角色/写作风格 → **主线拆纲+卷纲展开**（总主线→拆几卷→每卷冲突，再逐卷展开）→ **逐章写作循环**（方向提案→章纲→自动提示词→正文生成→质量门禁→归档→下一章）。每一章都是独立的"提案→确认→生成→检查"闭环，不批量作业。产出物 = 按卷/章拆分的小说正文 + 角色状态追踪。
 
 ## 适用场景
 
@@ -39,12 +39,14 @@ Phase 1   设定
                       □ 题材类型已选定，genre_config 已配置
                       ↓ 任意一项缺失 → 返回 Phase 1 补全
    ▼
-Phase 2   卷纲
+Phase 2   主线拆纲 + 卷纲展开
+   2.0  主线拆纲（总主线 → 拆几卷 → 每卷核心冲突）
    2.1  卷方向确定（角色发声 / 结构模板）
    2.2  卷纲讨论（核心冲突 + 章节列表）
    2.3  卷提示词生成
    ▼
 [Checkpoint Volume]  ← 必须停。确认以下卷纲已就绪：
+                      □ story_arc 已定义（主线一句话 + 分卷规划：总卷数、每卷冲突）
                       □ 卷方向确定（角色发声分析完成 / 结构模板选定）
                       □ 核心冲突已明确定义
                       □ 章节列表完整（占位章纲已写入）
@@ -139,6 +141,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 产出 | 自检清单出处 |
 |------|-------------|
 | 设定阶段完成（world-setting + 角色 yaml + writing-style + genre-setting） | `references/world-setup-style.md`（世界观）+ `references/character-setting-style.md`（角色）+ `references/writing-style.md`（写作风格）+ `references/genre-style.md`（题材） |
+| 主线拆纲完成（story.yaml story_arc + volumes 列表） | `references/story-arc-style.md` |
 | 卷纲完成（volume yaml） | `references/volume-checklist.md` |
 | 章纲完成（chapter.yaml） | `references/chapter-outline-checklist.md` |
 | 提示词完成（prompt.md） | `references/prompt-checklist.md` |
@@ -159,7 +162,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 阶段 / 路由 | 必读（每次都看） | 一次性看完 / 按需查 |
 |------------|-----------------|-------------------|
 | **Phase 1 设定**（novel-setup） | `story.yaml`（项目索引，检查是否已初始化）+ `world-setting.yaml`（8 字段填写进度，引导逐项讨论）+ `scripts/templates/*` 全部 yaml 模板（字段结构参考） | `references/genre-example/index.md`（选类型时浏览 24 种 + 推荐）+ 自检：完成后逐项过 `references/world-setup-style.md`（世界观）+ `references/character-setting-style.md`（角色）+ `references/writing-style.md`（写作风格）+ `references/genre-style.md`（题材） |
-| **Phase 2 卷纲**（novel-volume） | `world-setting.yaml` core（geography / politics / rules——冲突空间来源）+ `writing-style.yaml`（role——叙事身份）+ `genre-setting.md`（pacing_rules——节奏基准）+ `story.yaml`（卷映射） | `references/genre-example/` 对应类型的 `story_arc_templates`（卷结构参考）+ 角色 yaml（按需看动机）+ 自检：完成后逐项过 `references/volume-checklist.md` |
+| **Phase 2 卷纲**（novel-volume） | `story.yaml`（story_arc + 卷映射——总主线和分卷规划）+ `world-setting.yaml` core（geography / politics / rules——冲突空间来源）+ `writing-style.yaml`（role——叙事身份）+ `genre-setting.md`（pacing_rules——节奏基准） | `references/genre-example/` 对应类型的 `story_arc_templates`（卷结构参考）+ 角色 yaml（按需看动机）+ 自检：完成后逐项过 `references/volume-checklist.md` |
 | **Phase 3.1 方向提案**（×N 次，每章一次） | 最新 `chapter.yaml#hooks`（pending / partial_advance 状态的钩子——读者期待来源）+ `volume-N.yaml#chapters_summary`（本章在卷内的定位）+ `genre-setting.md`（pacing_rules + satisfaction_types——节奏和爽点约束）+ 最近 1 章 `archives/` 结尾段（上一章结尾的情绪状态） | 所有角色 yaml（活跃角色的当前动机和冲突）+ `world-setting.yaml`（环境约束）+ 最近 3 章 `chapter.yaml#emotional_design`（情绪类型，避免连续同类型） |
 | **Phase 3.2 章纲** | 方向提案确认结果 + `volume-N.yaml#chapters_summary`（本章占位章纲）+ 所有角色 yaml（性格 / 动机 / 关系——决策合理性来源） | hooks 相关的其他 `chapter.yaml`（跨章钩子追溯）+ 自检：完成后逐项过 `references/chapter-outline-checklist.md` |
 | **Phase 3.3 自动提示词**（自动执行，×N 次） | **`writing-style.yaml` 四字段**（role / core_principles / possible_mistakes / depiction_techniques——缺一不可，缺失则 subagent 放飞）+ `references/genre-example/` 对应类型的 `prompt_segment`（题材特有叙事约束）+ 前文 `archives/` 最近 3 章（文风一致性）+ `world-setting.yaml`（场景 / 环境描述来源） | 角色 yaml（性格细节注入提示词 `character_voice`）+ 自检：组装后逐项过 `references/prompt-checklist.md` |
@@ -216,7 +219,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 | 目标 | 检查项 |
 |------|--------|
-| novel-volume | settings/world-setting.yaml 非模板、writing-style.yaml 非模板 |
+| novel-volume | story.yaml story_arc 已定义（至少已完成主线拆纲）、settings/world-setting.yaml 非模板、writing-style.yaml 非模板 |
 | novel-chapter-loop | volume-N.yaml 存在且 chapters_summary 非空 |
 | novel-review | archives/ 下存在正文文件 |
 
@@ -238,7 +241,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 |------|--------|---------|
 | novel-setup | 创建项目 + 设定 | `skills/setup/SKILL.md` |
 | novel-style-extract | 文风提取（三步） | `skills/style-extract/SKILL.md` |
-| novel-volume | 卷纲规划 | `skills/outline/SKILL.md`（卷纲部分） |
+| novel-volume | 主线拆纲+卷纲规划 | `skills/outline/SKILL.md`（主线拆纲 + 卷纲部分） |
 | novel-chapter-loop | 逐章写作循环 | `skills/chapter-loop/SKILL.md` |
 | novel-review | 深度评审 | `skills/review/SKILL.md` |
 
@@ -263,7 +266,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | Phase | 子技能 | 主会话模型 | 原因 |
 |-------|--------|-----------|------|
 | 1 | novel-setup | **sonnet（强制）** | 设定讨论——需要深度思考 |
-| 2 | novel-volume | **sonnet（强制）** | 卷纲规划——需要结构推理 |
+| 2 | novel-volume | **sonnet（强制）** | 主线拆纲+卷纲规划——需要结构推理 |
 | 3 | novel-chapter-loop | **sonnet（强制）** | 情节提案、章纲、视角转换——核心推理 |
 | 3 | novel-chapter-loop（subagent 写作） | 从 `writing_model` 读取 | 正文生成，默认 haiku |
 | — | novel-review | haiku 可 | 主 Agent 已持有全部上下文 |
