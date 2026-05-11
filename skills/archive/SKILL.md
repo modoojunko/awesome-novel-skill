@@ -7,7 +7,7 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
 
 # Novel Archive — 归档
 
-> 摘要：完整性检查 → 去 draft 标记 → 更新角色 state_history + hooks → 卷完成检测 → 滑动审视。
+> 摘要：完整性检查 → 去 draft 标记 → 更新角色状态历史 + hooks → 卷完成检测 → 滑动审视。
 
 ## Overview
 

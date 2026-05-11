@@ -207,7 +207,7 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 
 - 本段场景（已双轮净化，≤200字）：{sanitized_what_to_write}
 - 情绪基调：{emotional_tone}。写成可感知的描述——例如不写"紧张"，写"动作快，句子短，呼吸压在喉咙下面"
-- 出场角色：{characters} — {从角色 yaml 提取当前段落相关的动机/状态，大白话一两句}
+- 出场角色：{characters} — {从角色文件提取当前段落相关的动机/状态，大白话一两句}
 - 本段结束画面：{ends_with}
 - 字数：{word_target}
 

@@ -78,8 +78,8 @@ def init_project(project_name: str, author: str = "") -> None:
     copy_template("anti-ai", project_path / "settings" / "anti-ai.yaml")
     copy_template("hooks", project_path / "settings" / "hooks.yaml")
 
-    # 复制控制文档（markdown 格式）
-    # 创建空的character-setting目录（角色文件后续讨论时创建）
+    # 复制角色设定模板（markdown 格式，角色文件后续讨论时创建）
+    copy_md_template("character", project_path / "settings" / "character-setting" / "template.md")
 
     print(f"项目已创建: {project_path}")
     print(f"请进入项目目录: cd {project_path}")
