@@ -45,7 +45,7 @@
 
 **写什么：** 选一个结构模板，把各阶段的功能和章节数分配清楚。
 
-**怎么聊：** 读 `settings/writing-style.yaml` 的 `genre_profile` 字段。有值就去 `references/genre-example/` 找对应类型的 `story_arc_templates`；无值用下面通用模板。Agent 直接输出提案（**不问"你想要哪种"**）：
+**怎么聊：** 读项目的 `genre_profile` 配置。有值就去 `references/genre-example/` 找对应类型的 `story_arc_templates`；无值用下面通用模板。Agent 直接输出提案（**不问"你想要哪种"**）：
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
