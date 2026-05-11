@@ -127,7 +127,7 @@ AI 直接说：
 | 避免套路 | 至少 3 条该类型常见桥段，正文遇到时绕道 | genre_config.anti_cliches |
 
 **选填（暂不选择时没有）：**
-- 类型禁忌（genre_taboos）— 写入时保留在 corpus 文件，正文阶段读取
+- 类型禁忌（genre_taboos）— 写入 genre-setting.md，正文阶段 agent 读取约束
 - 文风参考（style_blueprint）— 不写入 genre-setting，留给写作风格讨论用
 
 ---
