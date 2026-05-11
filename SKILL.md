@@ -140,7 +140,8 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 | 产出 | 生命周期 | 自检清单出处 |
 |------|---------|-------------|
-| 世界观 + 写作风格 + 题材设定 | 一次性（基本不改） | `references/world-setup-style.md` + `references/writing-style.md` + `references/genre-style.md` |
+| 世界观 | 基础一次性，后续可追加 | `references/world-setup-style.md` |
+| 写作风格 + 题材设定 | 一次性（基本不改） | `references/writing-style.md` + `references/genre-style.md` |
 | 角色设定 | 基础一次性，后续可追加 | `references/character-setting-style.md` |
 | 主线拆纲（story.md 故事主线 + 分卷规划） | 一次性（Phase 2 入口处） | `references/story-arc-style.md` |
 | 卷纲（volume yaml） | 每卷一次 | `references/volume-checklist.md` |
