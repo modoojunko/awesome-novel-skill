@@ -3,21 +3,21 @@
 
 # 基本信息
 id: ""
-name: ""
-story_role: ""
-appearance: ""
-background: ""
+名称: ""
+故事角色: ""
+外貌: ""
+背景: ""
 
 # 认知6层模型（1-3务虚→为什么做，4-6务实→怎么做）
-worldview: ""
-self_identity: ""
-values: ""
-abilities: ""
-skills: ""
-environment: ""
+世界观: ""
+自我定位: ""
+价值观: ""
+能力: ""
+技能: ""
+环境: ""
 
 # 关系
-relationships: []
+关系: []
 
 # 状态历史（归档时由Agent更新）
-state_history: []
+状态历史: []

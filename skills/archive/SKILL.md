@@ -35,9 +35,9 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
 1. 将草稿文件重命名，去掉 `-draft` 标记：
    `archives/vol-{N}-ch-{M}-{slug}.draft.md` → `archives/vol-{N}-ch-{M}-{slug}.md`
 2. 复核 archives/ 中归档文件内容无误
-3. 分析角色变化，追加 state_history
-4. 更新角色 yaml 当前状态字段（location、abilities、relationships、worldview、summary）
-5. 追记 emotional_arc（情绪状态、触发事件、强度、弧线方向、表达方式）
+3. 分析角色变化，追加 `状态历史`
+4. 更新角色 yaml 当前状态字段（位置、能力、关系、世界观、概要）
+5. 追记 `情绪弧线`（情绪状态、触发事件、强度、弧线方向、表达方式）
 6. 更新角色 yaml 中的 hooks 引用（全局 hooks.yaml 不再维护——真相源在各 chapter.yaml 的 hooks 字段），运行钩子健康检查
 7. 运行情节推进停滞检测（最近 3 章是否有实质性推进）
 8. 将 chapter.yaml status 更新为 `archived`
@@ -71,19 +71,19 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ```
 
-## state_history 格式
+## 状态历史格式
 
 ```yaml
-state_history:
-  - after_volume: 1
-    after_chapter: 1
-    location: "角色当前位置"
-    status: "角色当前状态简述"
-    changes:
+状态历史:
+  - 所在卷: 1
+    所在章: 1
+    位置: "角色当前位置"
+    状态: "角色当前状态简述"
+    变化:
       - "具体变化1"
 ```
 
-## emotional_arc 格式
+## 情绪弧线格式
 
 ```yaml
 emotional_arc:

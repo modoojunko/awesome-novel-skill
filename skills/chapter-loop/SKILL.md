@@ -221,8 +221,8 @@ Read `agents/pipeline/exec-prose.md`，注入写作参数后调用写作 subagen
 2. chapter.yaml status → `archived`
 
 ### 状态更新
-3. 分析角色变化，追加 `state_history` 到角色 yaml
-4. 追记 `emotional_arc`
+3. 分析角色变化，追加 `状态历史` 到角色 yaml
+4. 追记 `情绪弧线`
 5. **更新 hooks**：从当前 chapter.yaml 读取 hooks 操作，追加到各角色 yaml。**不维护全局 hooks.yaml。**
 
 ### 动态报告（不落盘）
