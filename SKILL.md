@@ -154,14 +154,25 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 **铁律：** 拿到结论后先按 fail 项把产出改完，再向用户汇报"做完了" + 自检结论 + 改了什么。直接拿原始结论汇报但不修复 = 违规。
 
-## Anti-Patterns
+## 各阶段文件读取指南
 
-| 借口 | 现实 |
-|------|------|
-| "作者说写第一章，我直接生成所有文件" | 必须按 Phase 顺序推进 |
-| "差不多就行，不用那么详细" | 缺 memo，subagent 不知道读者在等什么 |
-| "视角转换跳过自动质量防护" | Agent 自动执行时仍需跑完整双轮净化和 AI 味自检 |
-| "模板我看懂了，直接帮作者填好" | Agent 引导讨论，不代笔填 YAML |
+不同阶段必须读的文件不同。长会话中逐章循环重复 N 次，agent 容易遗忘约束——每次进入阶段必须先读"必读"文件再开始执行。
+
+| 阶段 / 路由 | 必读（每次都看） | 一次性看完 / 按需查 |
+|------------|-----------------|-------------------|
+| **Phase 1 设定**（novel-setup） | `story.yaml`（项目索引，检查是否已初始化）+ `world-setting.yaml`（8 字段填写进度，引导逐项讨论）+ `scripts/templates/*` 全部 yaml 模板（字段结构参考） | `genre-corpus/index.yaml`（选类型时浏览 24 种 + 推荐）+ 自检：完成后逐项过 `references/setup-checklist.md` |
+| **Phase 2 卷纲**（novel-volume） | `world-setting.yaml` core（geography / politics / rules——冲突空间来源）+ `writing-style.yaml`（role + genre.pacing_rules——节奏基准）+ `story.yaml`（卷映射） | `genre-corpus/` 对应类型的 `story_arc_templates`（卷结构参考）+ 角色 yaml（按需看动机）+ 自检：完成后逐项过 `references/volume-checklist.md` |
+| **Phase 3.1 方向提案**（×N 次，每章一次） | 最新 `chapter.yaml#hooks`（pending / partial_advance 状态的钩子——读者期待来源）+ `volume-N.yaml#chapters_summary`（本章在卷内的定位）+ `writing-style.yaml`（genre.pacing_rules + genre_config——节奏和爽点约束）+ 最近 1 章 `archives/` 结尾段（上一章结尾的情绪状态） | 所有角色 yaml（活跃角色的当前动机和冲突）+ `world-setting.yaml`（环境约束）+ 最近 3 章 `chapter.yaml#emotional_design`（情绪类型，避免连续同类型） |
+| **Phase 3.2 章纲** | 方向提案确认结果 + `volume-N.yaml#chapters_summary`（本章占位章纲）+ 所有角色 yaml（性格 / 动机 / 关系——决策合理性来源） | hooks 相关的其他 `chapter.yaml`（跨章钩子追溯）+ 自检：完成后逐项过 `references/chapter-outline-checklist.md` |
+| **Phase 3.3 自动提示词**（自动执行，×N 次） | **`writing-style.yaml` 四字段**（role / core_principles / possible_mistakes / depiction_techniques——缺一不可，缺失则 subagent 放飞）+ `genre-corpus/` 对应类型的 `prompt_segment`（题材特有叙事约束）+ 前文 `archives/` 最近 3 章（文风一致性）+ `world-setting.yaml`（场景 / 环境描述来源） | 角色 yaml（性格细节注入提示词 `character_voice`）+ `author-intent.md`（终局方向校准）+ 自检：组装后逐项过 `references/prompt-checklist.md` |
+| **Phase 3.4 正文生成**（×N 次，被 3.3 调用） | `prompts/vol-N-ch-M-prompt.md` 单一入口——segment 拆分 + 逐段叙事指引 + 视角约束 + writing-style 注入 + genre prompt_segment / `agents/pipeline/exec-prose.md`（subagent 写作契约：输出格式 + 质量门禁 15 项 + 完工自检） | `archives/` 前文（文风参考，卡壳才翻——先按提示词自由写，不要抄袭前文句式） |
+| **Phase 3.6 归档** | 当前 `chapter.yaml`（status→archived，hooks 操作写入）+ 各角色 yaml（追加 `state_history` + `emotional_arc`——每归档一章 state_history 条目数 +1） | 最近 3 章 `chapter.yaml`（滑动窗口审视参考）+ `prompts/volume-N-prompt.md`（追加本章一句话摘要） |
+| **novel-review** | 目标正文 `archives/` + `writing-style.yaml`（评分基准：role / core_principles / possible_mistakes / depiction_techniques） | 角色 yaml（角色一致性校验）+ `world-setting.yaml`（设定一致性校验） |
+
+**要点：**
+- Phase 3.3 的 writing-style 四字段必须全部注入——role 定叙事身份，core_principles 定不可违背的写作信条，possible_mistakes 定 AI 易犯错误列表，depiction_techniques 定描写层次和手法。缺任何一个，subagent 都会在最关键的地方放飞。
+- Phase 3.1 每个循环重读上一章的 hooks 和卷纲定位——方向提案的推理链来源不在子技能文件中，在当前项目的 chapter.yaml 和 archives/ 里。
+- 正文字数目标、写作模型（writing_model）、情绪目标等执行参数从 `writing-style.yaml` 和 `chapter.yaml` 读取，不在 prompts/ 中重复定义——一处修改全局生效。
 
 ## The Process
 
@@ -234,6 +245,15 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | novel-review | 深度评审 | `skills/review/SKILL.md` |
 
 子技能文件位于主技能安装目录的 `skills/` 下，即 `~/.claude/skills/awesome-novel/skills/{name}/SKILL.md`。
+
+## Anti-Patterns
+
+| 借口 | 现实 |
+|------|------|
+| "作者说写第一章，我直接生成所有文件" | 必须按 Phase 顺序推进 |
+| "差不多就行，不用那么详细" | 缺 memo，subagent 不知道读者在等什么 |
+| "视角转换跳过自动质量防护" | Agent 自动执行时仍需跑完整双轮净化和 AI 味自检 |
+| "模板我看懂了，直接帮作者填好" | Agent 引导讨论，不代笔填 YAML |
 
 ## 模型门禁（MODEL-GATE）
 
