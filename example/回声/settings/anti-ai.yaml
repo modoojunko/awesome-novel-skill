@@ -1,0 +1,283 @@
+# anti-ai.yaml - AI味检测配置
+# 基于 InkOS 的 11 条确定性规则 + webnovel-writer 的 7 层审查体系
+# 用于 Phase 5 正文质量检查
+
+# 中文高危疲劳词（blocklist — 出现即标记）
+fatigue_words_zh:
+  summary_narrative:
+    - "本章讲述了"
+    - "接下来"
+    - "在这一章中"
+    - "故事还在继续"
+    - "与此同时"
+    - "另一方面"
+  abstract_emotion:
+    - "他感到"
+    - "他觉得"
+    - "他意识到"
+    - "他注意到"
+    - "他明白"
+    - "他知道"
+  academic_tone:
+    - "综上所述"
+    - "总而言之"
+    - "从某种意义上说"
+    - "不可否认"
+    - "显而易见"
+  cliche_action:
+    - "深吸一口气"
+    - "咬了咬牙"
+    - "握紧拳头"
+    - "眼中闪过一丝"
+    - "嘴角勾起一抹"
+    - "心中暗道"
+  cliche_environment:
+    - "阳光透过树叶"
+    - "月光洒在大地"
+    - "微风拂过"
+    - "夜幕降临"
+    - "天刚蒙蒙亮"
+  logical_connectors:
+    - "由此可见"
+    - "正因如此"
+    - "不仅如此"
+    - "首先...其次...最后"
+  narrative_filler:
+    - "似乎"
+    - "也许"
+    - "大概"
+    - "仿佛"
+    - "宛如"
+
+# 英文高危疲劳词（LitRPG / Progression Fantasy 等题材）
+fatigue_words_en:
+  - "delve"
+  - "tapestry"
+  - "testament"
+  - "embodiment"
+  - "harbinger"
+  - "veritable"
+  - "inexorable"
+  - "nonetheless"
+  - "furthermore"
+  - "however"
+  - "seemed to"
+  - "as if"
+
+# 句式规则
+sentence_rules:
+  # 禁止连续 3 段以上以相同句式开头
+  no_consecutive_same_openings: true
+  max_consecutive_same_openings: 3
+
+  # 禁止列表式叙述（"首先...其次...最后"）
+  no_list_narrative: true
+
+  # 每 300 字最多 4 个程度副词（很/非常/极/特别/太/十分）
+  max_intensity_adverbs_per_300: 4
+
+  # 每个名词前最多 2 个形容词
+  max_adjectives_per_noun: 2
+
+  # 每 500 字最多 3 个四字成语
+  max_idioms_per_500: 3
+
+  # 句式开头多样性：每 500 字内，禁止连续 4 句以上以相同主语或连词开头
+  # 重点检查: 他/她/这时/接着/然后/于是/便/就/却/但
+  no_consecutive_same_subject_openings: true
+  max_consecutive_same_subject: 4
+
+  # 句子长度节奏：每 500 字至少检测短句(<10字)和长句(>50字)各存在
+  require_sentence_length_variety: true
+  min_short_sentences_per_500: 2    # 短句用于节奏打断
+  min_long_sentences_per_500: 1     # 长句用于沉浸描写
+
+  # 身体部位情绪表达密度：每 500 字不超过 3 次同一类身体反应
+  max_body_emotion_per_500: 5       # "眼神/手/心/喉咙/身体"等身体部位情绪表达总上限
+
+# 结构性句式癖好检测（正则匹配，超过阈值触发警告）
+# 这些是 LLM 生成中文文本时的高频统计癖好，不是写作风格问题，是模型惯性
+structural_tic_patterns:
+  - pattern: '不是[^，。,\.]{1,20}(而是|是)'
+    name: "不是而是句式"
+    threshold: 3           # 单章最多允许出现次数
+    severity: "high"
+    description: "过度使用'不是X，而是Y'对比句式——这是 LLM 生成中文时最顽固的统计癖好之一。单章超过 3 次即触发警告。修复方式：直接删除'不是'分句，只保留'而是'后的内容；或改为两个独立句子"
+  - pattern: "没有.{1,20}(只不过|只是|而是)"
+    name: "没有X只是Y句式"
+    threshold: 3
+    severity: "medium"
+    description: "'没有X，只是Y'——'不是而是'的变体，同样的问题"
+  - pattern: '(不[,，]?\s*不是这样|其实并非如此|更准确[地性]说|不[,，]?\s*[他她它那这])'
+    name: "否定-纠正句式"
+    threshold: 2           # 单章最多允许出现次数
+    severity: "high"
+    description: "'不，不是这样'、'其实并非如此'、'更准确地说'——LLM 先否定再纠正的统计癖好。直接陈述事实即可，不需要先声明'刚才说的不对'。修复方式：删除否定-纠正前缀，只保留纠正后的陈述"
+  - pattern: "——(他|她|它|这|那)"
+    name: "破折号解释句式"
+    threshold: 5           # 宽松一些，因为是常见的中文写作手法
+    severity: "medium"
+    description: "破折号后接代词展开解释——'……——他……'。适度使用是风格，过度使用是癖好"
+  - pattern: "(不由得|不禁|忍不住|不由自主地|下意识地|鬼使神差地)"
+    name: "公式化副词"
+    threshold: 4           # 单章最多允许出现次数
+    severity: "high"
+    description: "'不由得''不禁''忍不住''不由自主地'——LLM 用这些副词替代真正的情绪描写。修复方式：删掉副词，用具体的身体反应或动作替代。如'他不由得后退一步'→'他后退了一步'或直接写'鞋底擦过地面的声音'"
+  - pattern: "一边.{1,20}一边"
+    name: "一边一边句式"
+    threshold: 2
+    severity: "medium"
+    description: "'一边A一边B'——LLM 偏爱的并列动作结构。适度使用可以，但容易让动作描写扁平化。修复方式：拆成两个独立动作或用一个主动作带一个细节"
+  - pattern: "(就在这时|正在这时|突然[，,])"
+    name: "就在这时句式"
+    threshold: 5           # 常见转场手法，阈值较高
+    severity: "medium"
+    description: "'就在这时''正在这时''突然，'——LLM 习惯用这个句式做转折。适度使用是自然的，但每 500 字出现两三次就暴露了模板感。修复方式：删掉过渡词直接写事件，或换一种转场方式"
+  - pattern: "({他眼神|她眼神|目光|瞳孔|眼神|心头|心里|心中|心底|手心|指尖|喉咙}).{0,10}(一|微|暗|沉|紧|颤|抖|缩|松|暖|寒|凉|热|酸)"
+    name: "身体部位情绪模板"
+    threshold: 6           # 单章上限——每 500 字约 2 次是自然的，超过就显得机械
+    severity: "high"
+    description: "'眼神一暗''心里一沉''喉咙发紧'——LLM 把所有情绪都诉诸固定的身体部位反应模板。写恐惧就是'喉咙发紧'，写感动就是'心里一暖'，写了三章读者已经能预测你的身体反应了。修复方式：用具体动作替代模板反应——恐惧可以是'他把打火机按了三次才点着'，感动可以是'她把那碗粥推回来，又加了一勺糖'"
+
+# 段落结构规则
+paragraph_rules:
+  # 单句段占比建议 25%-45%
+  single_sentence_paragraph_ratio:
+    min: 0.25
+    max: 0.45
+
+  # 段落长度范围（字）
+  paragraph_length_range:
+    min: 20
+    max: 200
+
+  # 场景转换必须用动作/对话，禁止用纯环境描写过渡
+  scene_transition_via_action: true
+
+# 对话规则
+dialogue_rules:
+  # 禁止说明书式对话（角色互相告知已知信息）
+  no_info_dump_dialogue: true
+
+  # 对话必须有意图（说服/隐藏/试探/拒绝/转移话题等）
+  dialogue_must_have_intent: true
+
+  # 允许犹豫、打断、反问——对话不等于轮流发言
+  allow_interruption_and_hesitation: true
+
+  # 禁止副词修饰对话标签（"她愤怒地说"→对话本身传达情绪）
+  no_adverb_dialogue_tags: true
+
+# 标点节奏规则
+punctuation_rules:
+  # 不连续使用省略号或感叹号
+  no_consecutive_ellipsis_or_exclamation: true
+
+  # 每段最多 1 个感叹号
+  max_exclamation_per_paragraph: 1
+
+  # 4 个逗号以上必须拆段（中文）
+  max_commas_before_split: 4
+
+# AI味改写算法（用于 Phase 5 质量修正）
+rewrite_rules:
+  abstract_to_physical:
+    description: "将抽象情绪描述转换为生理反应+意图+动作"
+    example_before: "他感到很愤怒，决定要报复。"
+    example_after: "他手背上的青筋跳了一下。放下杯子，盯着桌面看了三秒，然后起身。"
+  conclusion_to_scene:
+    description: "将总结句转换为事实+代价+决定"
+    example_before: "这一战后，两人的关系彻底破裂了。"
+    example_after: "从那以后，她再也没踏进他的营帐。偶尔在练兵场遇见，她的目光从他身上划过去，像看一块石头。"
+  explanation_to_dialogue:
+    description: "将 3 句以上的纯解释转换为对话+动作+反问"
+    example_before: "他向她说明了整个计划：先去港口找到老李，拿到通行证，然后从南门出城。"
+    example_after: "她截住他：'港口那边谁去？' '我去。'他系好袖扣，'老李的通行证明天到期——过了明天，南门就是最远的距离。'"
+
+# ============================================================
+# 情绪节奏检测（借鉴 InkOS Long-Span Fatigue / Cadence Analysis）
+# 跨章节追踪情绪单调性，防止读者疲劳
+# ============================================================
+emotional_cadence:
+  # 情绪单调检测：连续高压无释放 → 读者疲劳
+  mood_monotony:
+    max_consecutive_high_tension: 3  # 连续高压章数上限，超过需插入释放章
+    high_tension_moods:              # 高压情绪关键词（匹配章纲 emotional_design.primary_mood）
+      - "紧张"
+      - "压抑"
+      - "愤怒"
+      - "悲伤"
+      - "恐惧"
+      - "绝望"
+    release_moods:                   # 释放型情绪（应在高压后轮换出现）
+      - "温情"
+      - "爽快"
+      - "释然"
+      - "幽默"
+      - "平静"
+      - "满足"
+
+  # 章节类型单调检测：同一章型连续出现 → 节奏固化
+  chapter_type_rotation:
+    max_consecutive_same_type: 2     # 同一章型连续上限
+    type_categories:                 # 章型分类
+      - "冲突升级"
+      - "能力展示/爽点释放"
+      - "信息揭露/真相"
+      - "关系转折"
+      - "日常过渡/蓄势"
+      - "高潮收束/后效"
+
+  # 情绪强度节奏：应有高低起伏，不能全程拉满
+  intensity_rhythm:
+    max_consecutive_high_intensity: 2  # 连续高强度章数上限（intensity_level >= 8）
+    recommended_after_climax: "高潮章后的 1-2 章必须降强度（intensity_level <= 5），写代价、后效、关系变化"
+
+  # 章尾钩子类型轮换：避免同一种钩子类型连续使用
+  hook_type_rotation:
+    min_variety_in_3_chapters: 2    # 最近 3 章至少包含 2 种不同的章尾钩子类型
+    hook_types:
+      - "悬念（想知道答案）"
+      - "共情（担心角色的处境）"
+      - "期待（想看爽点兑现）"
+      - "愤怒（对反派/不公的情绪）"
+      - "好奇（新信息引发的探索欲）"
+
+  # 开头/结尾句式多样性：检测邻章开头/结尾是否高度相似
+  boundary_variation:
+    check_window: 3                  # 检查最近 3 章
+    warn_if_opening_too_similar: true  # 开头句式相似 → 警告
+    warn_if_ending_too_similar: true   # 结尾句式相似 → 警告
+
+  # 情绪强度分布检查（最近 5 章应呈波浪形，而非直线）
+  intensity_wave:
+    check_window: 5
+    warn_if_flat: true               # 连续 3 章 intensity_level 差值 < 2 → 情绪走平
+    warn_if_all_high: true           # 连续 3 章 intensity_level >= 8 → 情绪透支
+
+  # ============================================================
+  # 情节推进停滞检测（借鉴 webnovel-writer HARD-003/004）
+  # ============================================================
+  stagnation:
+    check_window: 3                  # 检查最近 N 章
+    # 以下任一变化都没有 = 触发停滞警告
+    require_at_least_one:
+      - "新信息揭示"                 # 读者知道了之前不知道的事
+      - "角色关系变化"               # 关系状态发生变化（亲近/疏远/决裂/新关系）
+      - "角色能力或状态变化"         # 能力提升/削弱/获得新资源/状态改变
+      - "伏笔推进或回收"             # 已有伏笔被提及、推进或收束
+      - "冲突升级或新冲突引入"       # 原有冲突加剧或出现新冲突
+
+  # ============================================================
+  # 章末安全着陆检测（借鉴 webnovel-writer AI-flavor 叙事层检查）
+  # ============================================================
+  safe_landing:
+    warn_if_detected: true           # 章尾所有冲突被完美解决 → 警告
+    description: "章尾不应'安全着陆'——至少保留一个未闭合的问题、未解决的冲突或未兑现的期待。如果所有冲突都在本章被完美解决，读者没有点下一章的理由。"
+
+# 违规严重度
+severity:
+  critical: "元叙事、上帝视角概述、非正文内容、情绪透支（连续 4+ 章高压无释放）、情节停滞（连续 3+ 章无任何推进）、安全着陆（章尾所有冲突被完美解决→读者无继续阅读理由）"
+  high: "高频疲劳词、说明书式对话、情绪单调（连续 3 章同类型钩子/同情绪基调）、微兑现缺失（本章无任何让读者感到'有收获'的段落）、结构性句式癖好超过阈值（'不是而是'等句式单章 > 3 次）"
+  medium: "形容词堆砌、列表式叙事、开头/结尾句式相似、结构性句式癖好轻度触发"
+  low: "偶发性成语堆砌、轻度副词多用、情绪强度轻微走平"

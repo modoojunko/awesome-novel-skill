@@ -1,0 +1,545 @@
+# hooks.yaml - 伏笔/钩子追踪
+# 基于 InkOS Hook Lifecycle + webnovel-writer Reading Power Taxonomy
+# 追踪跨章节伏笔的全生命周期：pending → mentioned → resolved → abandoned
+#
+# 《回声》钩子库
+# 由 exec-hook 从设定圆桌 6 份问答记录中提取
+# 来源：character-designer / conflicts / culturist / geographer / politician / power-system
+
+hooks:
+  # ============================================================
+  # Priority 1: 核心主线钩子（9条）
+  # ============================================================
+
+  - id: "H-001"
+    description: "白岛1994年疗养院失踪案——苏榕（护士）夜班后离奇失踪，个人物品均在宿舍，院方结论'自行离岗→走失'，陈远征带队勘查发现现场脚印只去不回、拖鞋整齐放岸边"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "endgame"
+    priority: 1
+    hook_type: "mystery"
+    hook_strength: "strong"
+    hook_position: "chapter_end"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：geographer / politician / culturist / character-designer / power-system | 中文类型：悬念 | 核心主线，贯穿全书"
+
+  - id: "H-002"
+    description: "苏榕失踪前对同事说过'有些事知道了不好'——她究竟知道了什么"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 1
+    hook_type: "mystery"
+    hook_strength: "strong"
+    hook_position: "chapter_end"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：character-designer | 中文类型：悬念 | 苏榕最后的话，揭开白岛真相的关键钥匙"
+
+  - id: "H-003"
+    description: "曹斌案核心谜团：文创园B区废弃仓库无攀爬痕迹跌落死亡、死前与未注册号码通话47秒、匿名公用电话报警"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "near_term"
+    priority: 1
+    hook_type: "mystery"
+    hook_strength: "strong"
+    hook_position: "chapter_end"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：character-designer | 中文类型：悬念 | 当前案件核心，第一推动力"
+
+  - id: "H-004"
+    description: "曹斌左手腕旧疤痕——江成认出与母亲遗物笔记中描述的'白岛疗养院约束带疤痕'相似，直接将新案件与旧案关联"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "mid_arc"
+    priority: 1
+    hook_type: "clue"
+    hook_strength: "strong"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：character-designer | 中文类型：物品伏笔 | 白岛约束带为何出现在20余年后的死者身上"
+
+  - id: "H-005"
+    description: "凶手掌握暗河'老路'——当年勘探队留下、从老城区某处通往北郊暗河系统的隐秘通道，从未出现在官方地图上"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "mid_arc"
+    priority: 1
+    hook_type: "clue"
+    hook_strength: "strong"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：power-system / geographer / culturist | 中文类型：伏笔 | 凶手核心优势，直接解释无攀爬痕迹等疑点"
+
+  - id: "H-006"
+    description: "凶手可能掌握1994年白岛案的内部信息——此人为何能获取已被掩盖的旧案情报"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 1
+    hook_type: "mystery"
+    hook_strength: "strong"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：power-system | 中文类型：悬念 | 暗示凶手与利益联盟存在信息关联"
+
+  - id: "H-007"
+    description: "1994年现场勘查异常：脚印只去不回、拖鞋整齐放岸边——失踪者是否还活着、是如何消失的"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 1
+    hook_type: "mystery"
+    hook_strength: "strong"
+    hook_position: "chapter_end"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：politician | 中文类型：悬念 | 物理上无法解释的消失方式，陈远征亲眼所见"
+
+  - id: "H-008"
+    description: "阿珍婆1994年在码头见过苏榕等船——穿便服拎小包，不像要出远门，但从未对人说过此事"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "mid_arc"
+    priority: 1
+    hook_type: "clue"
+    hook_strength: "strong"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：culturist | 中文类型：伏笔 | 唯一目击者，关键时间线证据；沉默的原因本身也是谜"
+
+  - id: "H-009"
+    description: "1994年施压链：刑侦支队长马国良联合铁路系统领导迫使陈远征停止调查，随后陈被'上调'省厅。施压方的动机和背后保护的是谁"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 1
+    hook_type: "mystery"
+    hook_strength: "strong"
+    hook_position: "chapter_end"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：politician | 中文类型：悬念 | 谁是利益联盟的核心、当年掩盖了什么"
+
+  # ============================================================
+  # Priority 2: 重要支线钩子（11条）
+  # ============================================================
+
+  - id: "H-010"
+    description: "鬼喊洞支洞人工封堵——水泥砂浆掺海沙，封堵体不厚，似仓促施工。解放前是'躲兵洞'，1958年勘探队扩挖，后不知何时被封，无人承认"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "mid_arc"
+    priority: 2
+    hook_type: "mystery"
+    hook_strength: "medium"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：geographer / culturist | 中文类型：世界谜团 | 谁封的、何时封的、封堵背后隐藏了什么；是否与暗河老路连通"
+
+  - id: "H-011"
+    description: "1994年案物证被系统性销毁：现场照片底片'丢失'、DNA降解严重、原始卷宗不完整、马国良声称'记不清了'"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "mid_arc"
+    priority: 2
+    hook_type: "clue"
+    hook_strength: "medium"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：power-system / politician | 中文类型：物品伏笔 | 谁销毁了底片、马国良是真记不清还是不愿说"
+
+  - id: "H-012"
+    description: "陈远征与周铭之间存在绕过赵海涛的秘密暗线——周铭下派时，陈对他说'临港水很深，白岛案子有线索跟我说一声'"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "near_term"
+    priority: 2
+    hook_type: "relationship"
+    hook_strength: "medium"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：politician | 中文类型：角色秘密 | 暗线何时激活、赵海涛是否察觉、信息将如何传递"
+
+  - id: "H-013"
+    description: "陈远征1994年被'上调'至省厅实为排挤——当年他是勘查现场的负责人，被强停后遭明升暗调"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 2
+    hook_type: "clue"
+    hook_strength: "medium"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：politician | 中文类型：角色秘密 | 陈远征在省厅多年隐忍，掌握多少未公开信息"
+
+  - id: "H-014"
+    description: "赵海涛对白岛案态度暧昧——本地派局长，对江成有知遇之恩，但白岛案态度为'过去的事了，没必要翻'，究竟是保守回避还是知情涉案"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 2
+    hook_type: "mystery"
+    hook_strength: "medium"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：politician / character-designer / conflicts(张力2) | 中文类型：角色秘密 | 建议前期走'纯保守派'路线（政治师方向），避免权力格局过于拥挤"
+
+  - id: "H-015"
+    description: "曹斌经营回声酒吧前曾在私人调查公司工作——他是否受人委托调查过白岛旧案"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "near_term"
+    priority: 2
+    hook_type: "clue"
+    hook_strength: "medium"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：character-designer | 中文类型：伏笔 | 曹斌为何从调查者变成酒吧歌手、他在查什么、谁委托的"
+
+  - id: "H-016"
+    description: "地下暗河传闻连通老城区 + 青石街古井水位与潮汐联动 + 老房子井口暴雨天异常水声"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "mid_arc"
+    priority: 2
+    hook_type: "mystery"
+    hook_strength: "medium"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：geographer / culturist | 中文类型：世界谜团 | 地下通道是否真实存在、是否会成为破案关键路径"
+
+  - id: "H-017"
+    description: "苏榕失踪时间线矛盾：个人物品（大件行李）留在疗养院宿舍≡从岛上消失 vs 阿珍婆目击她在码头等船≡回到了大陆。是同一日还是不同日"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "mid_arc"
+    priority: 2
+    hook_type: "mystery"
+    hook_strength: "medium"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：conflicts(张力3) / character-designer / culturist | 中文类型：悬念 | 直接影响失踪案的地理逻辑，需在章纲阶段明确时间线"
+
+  - id: "H-018"
+    description: "林筱的父亲当年是白岛疗养院医生——与苏榕为同事关系，是否知道内情"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 2
+    hook_type: "clue"
+    hook_strength: "medium"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：character-designer | 中文类型：角色秘密 | 林筱的私人动机、父亲是否对她说过什么；可能与江成形成双向隐瞒的戏剧张力"
+
+  - id: "H-019"
+    description: "只有周铭知道江成的母亲是苏榕——这一信息在临港市局是孤立状态。周铭何时会使用这一信息、是否影响江成的调查走向"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "near_term"
+    priority: 2
+    hook_type: "relationship"
+    hook_strength: "medium"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：character-designer | 中文类型：角色秘密 | 周铭如何得知此信息、会否利用江成的私人动机"
+
+  - id: "H-020"
+    description: "江成的判断盲区——过度投入导致容易相信'母亲是被害'的线索。陈远征评价：'他太想破这个案子了。'这种执念是否会被人利用"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "mid_arc"
+    priority: 2
+    hook_type: "choice"
+    hook_strength: "medium"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：character-designer | 中文类型：角色秘密 | 主角致命弱点，可能在关键节点导致误判或被设局"
+
+  # ============================================================
+  # Priority 3: 可选伏笔/氛围钩子（8条）
+  # ============================================================
+
+  - id: "H-021"
+    description: "白岛'十二年收一人'都市传说——1994年（苏榕失踪）、2006年（男游客迷路找回，'收人未遂'）、2018年（偷猎者称见火光）"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 3
+    hook_type: "mystery"
+    hook_strength: "weak"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：culturist | 中文类型：世界谜团 | 民间自行串联的规律；2006和2018年事件是否启用为支线，由作者决定"
+
+  - id: "H-022"
+    description: "白岛三色光——白衣（1994）、蓝衣（2006）、鬼火（2018），民间对三次事件的超自然解释"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 3
+    hook_type: "mystery"
+    hook_strength: "weak"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：culturist | 中文类型：世界谜团 | 氛围向传说，三次事件无明确共同点，可能仅为民间叙事层"
+
+  - id: "H-023"
+    description: "江成12岁时曾偷上白岛被送回来——他当时看到了什么、为何被送回来"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 3
+    hook_type: "desire"
+    hook_strength: "weak"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：character-designer | 中文类型：角色秘密 | 江成童年经历的缺口，可能成为后期情感爆发点"
+
+  - id: "H-024"
+    description: "回声酒吧老板是前记者——他为何放弃记者职业开酒吧、知道多少文创园和码头的隐秘"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "near_term"
+    priority: 3
+    hook_type: "clue"
+    hook_strength: "weak"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：culturist / power-system | 中文类型：伏笔 | 可能的信息源；# 疑似钩子——取决于老板是否启用为情报提供者"
+
+  - id: "H-025"
+    description: "文创园管辖权模糊地带——开发区港口公安处 vs 市局港口派出所，'先到先管，24小时移交'规则。案件发生时管辖权博弈是否影响调查"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "near_term"
+    priority: 3
+    hook_type: "clue"
+    hook_strength: "weak"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：politician / conflicts(张力1) | 中文类型：伏笔 | 叙事机制钩子，需在章纲/正文中给开发区公安处存在感"
+
+  - id: "H-026"
+    description: "疗养院档案存放在铁路分局档案室，调取需正式手续——江成能否绕过手续获取档案、档案中是否有被篡改的痕迹"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "near_term"
+    priority: 3
+    hook_type: "clue"
+    hook_strength: "weak"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：power-system | 中文类型：伏笔 | 制度障碍型钩子，增加调查难度"
+
+  - id: "H-027"
+    description: "白岛疗养院废弃码头已腐朽、灯塔仍自动运行——谁在维护灯塔、是否有人在暗中监控白岛"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 3
+    hook_type: "mystery"
+    hook_strength: "weak"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：geographer | 中文类型：悬疑 | # 疑似钩子——灯塔可能仅为氛围元素，但如果启用可成为白岛秘密监控的伏笔"
+
+  - id: "H-028"
+    description: "'不该问的别问'是临港社会默契——老城居民对白岛案集体沉默，天后宫茶摊虽有情报网但关键时刻集体闭嘴"
+    introduced_in: "1-0"
+    status: "pending"
+    payoff_timing: "slow_burn"
+    priority: 3
+    hook_type: "mystery"
+    hook_strength: "weak"
+    hook_position: "in_chapter"
+    seed_text: ""
+    seed_location: ""
+    last_mentioned_chapter: ""
+    resolution_chapter: ""
+    notes: "来源：culturist | 中文类型：世界谜团 | 氛围向，城市的集体恐惧如何形成、谁是沉默的执法者"
+
+# ============================================================
+# 钩子类型说明（扩展自 webnovel-writer Reading Power Taxonomy）
+# ============================================================
+hook_type_guide:
+  mystery:     "悬念钩：信息缺口/未解之谜 → 读者想知道答案"
+  threat:      "危机钩：敌人出现/危险逼近 → 读者担心角色安全"
+  promise:     "承诺钩：明确预告未来事件 → 读者期待兑现"
+  clue:        "线索钩：碎片信息/暗示 → 读者想拼出全貌"
+  relationship: "关系钩：角色关系张力/变化 → 读者想看关系走向"
+  power:       "能力钩：能力突破/新技能预告 → 读者期待变强"
+  emotion:     "情绪钩：触发愤怒/心疼/共情/不公 → 读者想替主角出头或看到正义"
+  choice:      "选择钩：两难抉择/高风险决策 → 读者想知道角色怎么选"
+  desire:      "渴望钩：奖励/突破/复仇/真相在即 → 读者想看到愿望实现的过程"
+
+# ============================================================
+# 中文类型映射（本项目自定义，用于 notes 字段标注）
+# ============================================================
+chinese_type_guide:
+  悬念:   "未解之谜/信息缺口/反常现象 — 对应 mystery"
+  伏笔:   "提前埋设的线索/信息/人物背景 — 对应 clue/relationship"
+  角色秘密: "角色之间的隐藏关系/背景/动机 — 对应 relationship/mystery"
+  世界谜团: "世界观层面的未解现象/传说/地理谜题 — 对应 mystery"
+  物品伏笔: "关键物证的隐藏信息/被毁/被篡改 — 对应 clue"
+
+# ============================================================
+# 钩子强度说明
+# ============================================================
+hook_strength_guide:
+  strong:  "卷末/关键转折/大冲突前——读者必须立刻知道后续"
+  medium:  "普通剧情章——读者想知道，但可以等到下一章"
+  weak:    "过渡章/铺垫章——维持阅读惯性即可"
+
+# ============================================================
+# 钩子健康检查规则（借鉴 InkOS Auditor 的 hook health analysis）
+# ============================================================
+hook_health_rules:
+  # 同类型钩子在不同 payoff 区间的合理分布
+  payoff_distribution:
+    immediate_max: 3     # immediate 区间最多同时存在 3 个未收束钩子
+    near_term_max: 5     # near_term 区间最多 5 个
+    mid_arc_max: 8       # mid_arc 区间最多 8 个
+    slow_burn_max: 5     # slow_burn 区间最多 5 个
+
+  # 钩子陈旧度检测：超过 N 章未被提及的钩子标记为 stale
+  stale_threshold:
+    high_priority: 5     # 高优先级钩子超过 5 章未提及 → 警告
+    normal_priority: 3   # 普通钩子超过 3 章未提及 → 警告
+
+  # 不允许的钩子状态
+  no_burst_settlement: true   # 不允许同一章内集中收束 3 个以上钩子
+  no_orphan_hooks: true       # 不允许 abandoned 钩子关联到活跃角色/主线
+
+  # 钩子强度分布检查
+  strength_distribution:
+    max_consecutive_weak: 3    # 连续 weak 钩子不超过 3 章
+    require_strong_every: 5    # 每 5 章至少一个 strong 钩子（通常在卷末或关键转折）
+
+# ============================================================
+# 钩子操作语义（借鉴 InkOS 的 upsert/mention/resolve/defer）
+# ============================================================
+hook_operations:
+  upsert: "新增或更新钩子（同一钩子跨章演进时更新描述和 last_mentioned）。新钩子必须在归档时从正文提取 1-3 句原文填入 seed_text"
+  mention: "本章提及已有钩子，更新 last_mentioned_chapter"
+  resolve: "钩子在当前章收束，填入 resolution_chapter。兑现时必须引用 seed_text 中的原文画面，使兑现段落与种下时的画面形成呼应"
+  defer: "钩子收束推迟（需说明理由和新的 payoff 预期）"
+  abandon: "废弃钩子（仅当主线方向改变时，需注明原因）"
+  extract_seed: "归档时从正文中提取新埋钩子的原文片段（1-3句），填入该钩子的 seed_text 字段"
+
+# ============================================================
+# 钩子来源分布统计
+# ============================================================
+source_stats:
+  character-designer: 10  # H-001, H-002, H-003, H-004, H-009, H-014, H-015, H-018, H-019, H-020, H-023
+  culturist: 8            # H-001, H-005, H-008, H-010, H-016, H-021, H-022, H-024, H-028
+  geographer: 5           # H-001, H-005, H-010, H-016, H-027
+  politician: 6           # H-001, H-007, H-009, H-011, H-012, H-013, H-014, H-025
+  power-system: 5         # H-001, H-005, H-006, H-011, H-015, H-024, H-026
+  conflicts: 3            # H-014(张力2), H-017(张力3), H-025(张力1)
+  note: "以上统计含交叉重复，同一条钩子可能出现在多份记录中"
+
+# ============================================================
+# 分布合理性自检
+# ============================================================
+distribution_check:
+  total_hooks: 28
+  by_priority:
+    p1: 9
+    p2: 11
+    p3: 8
+  by_payoff_timing:
+    near_term: 6
+    mid_arc: 8
+    slow_burn: 13
+    endgame: 1
+  by_hook_type:
+    mystery: 13
+    clue: 11
+    relationship: 2
+    choice: 1
+    desire: 1
+  note: >
+    slow_burn 偏多（13条），因为本书核心事件（白岛1994年案）需要跨卷逐步揭示。
+    建议前期（卷1-2）通过 near_term 钩子（曹斌案相关）维持阅读驱动，
+    中期逐步激活 mid_arc 钩子，跨卷时保持 slow_burn 钩子的周期性提及（每3-5章至少一次）。
