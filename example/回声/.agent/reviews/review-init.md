@@ -90,7 +90,7 @@
 
 3. **author-intent.md 和 current-focus.md 缺失**: 两个可选模板文件未创建。SKILL.md 模板表显示 init.py 会在初始化时从模板生成这两个文件，但当前项目未包含。如果是手动初始化而非通过 `init.py` 创建则属正常；如果是通过 `init.py` 创建则可能需要排查生成逻辑。
 
-4. **genre_profile 为空**: genre.type 已设为 "mystery"，但 genre_profile（对应 genre-corpus/ 类型档案引用）仍为空。Phase 2 选择类型档案后应同步填写此字段。
+4. **genre_profile 为空**: genre.type 已设为 "mystery"，但 genre_profile（对应 references/genre-example/ 类型档案引用）仍为空。Phase 2 选择类型档案后应同步填写此字段。
 
 ---
 

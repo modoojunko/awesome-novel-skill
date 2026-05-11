@@ -37,7 +37,7 @@ description: 提示词手动调整参考。Phase 3（已自动执行）。章纲
 | 模板版本检查 | 读取 `~/.claude/skills/novel/scripts/templates/writing-style.yaml.template` 头部 `# version: N`，对比项目 `settings/writing-style.yaml` 头部版本号。模板版本更高 → 向作者报告"写作风格模板有更新"，列出新增的 global_rules 和 possible_mistakes 条目，问作者"合并新规则 / 暂不合并"。合并后自动重新生成 `prompts/global-prompt.md` |
 | 章纲完整性 | memo（7段）+ emotional_design 全部有值？任一为空 → **STOP**，Read `skills/chapter-loop/SKILL.md` Step 2 补全章纲 |
 | segments 已存在？ | segments 不持久化到 YAML，每次从 outline + memo + emotional_design 在内存中重新拆分 |
-| genre_profile 是否已选择？ | 读取 `settings/writing-style.yaml` 的 `genre_profile` 字段。为空 → **STOP**，列出 `~/.claude/skills/awesome-novel/genre-corpus/index.yaml` 下可用类型档案，AskUserQuestion 让作者选择。选择后写入 `genre_profile` 并合并 genre_config 到 writing-style.yaml，然后继续 |
+| genre_profile 是否已选择？ | 读取 `settings/writing-style.yaml` 的 `genre_profile` 字段。为空 → **STOP**，列出 `~/.claude/skills/awesome-novel/references/genre-example/index.md` 下可用类型档案，AskUserQuestion 让作者选择。选择后写入 `genre_profile` 并合并 genre_config 到 writing-style.yaml，然后继续 |
 
 ## Step 0: 叙事功能段落拆分
 
@@ -164,8 +164,8 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 
 ## 角色定位
 
-[在 index.yaml 的 genres 列表中查找 genre_profile 的 corpus 字段 → 读 genre-corpus/{corpus} 的 role_override.role + role_override.personality]
-[再读 genre-corpus/{genre_profile}.yaml（若存在），合并覆盖（variant 文件已扁平化到 genre-corpus/ 根目录）]
+[在 index.md 的题材列表中查找 genre_profile 的 corpus 字段 → 读 references/genre-example/{corpus} 的 role_override.role + role_override.personality]
+[再读 references/genre-example/{genre_profile}.md（若存在），合并覆盖（variant 文件已扁平化到 references/genre-example/ 根目录）]
 [若 genre_profile 为空或无 role_override → 回退到 prompts/global-prompt.md 的对应段落]
 
 ## 写作原则与禁忌
@@ -174,8 +174,8 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 
 ## 类型专属指引
 
-[在 index.yaml 中查找 genre_profile 的 corpus → 读 genre-corpus/{corpus} 的 prompt_segment]
-[再读 genre-corpus/{genre_profile}.yaml（若存在），合并差异]
+[在 index.md 中查找 genre_profile 的 corpus → 读 references/genre-example/{corpus} 的 prompt_segment]
+[再读 references/genre-example/{genre_profile}.md（若存在），合并差异]
 [若 genres_profile 为空 → 跳过此段]
 
 ## 故事背景
@@ -356,9 +356,9 @@ subagent 需要的是场景骨架，不是缩写版正文。what_to_write 超过
 #### 2. 提取类型档案内容（若已选择 genre_profile）
 
 读取 `settings/writing-style.yaml` 的 `genre_profile` 字段。若非空：
-- 读 `~/.claude/skills/awesome-novel/genre-corpus/index.yaml` 的 genres 列表，查找 genre_profile 对应的 `corpus` 字段
-- 读 `~/.claude/skills/awesome-novel/genre-corpus/{corpus}` 取 `role_override` 和 `prompt_segment`
-- 检查 `~/.claude/skills/awesome-novel/genre-corpus/{genre_profile}.yaml` 是否存在：存在则读取，覆盖/追加差异字段（variant 文件已扁平化到根目录）。若有 `power_system_ref`，读对应 corpus 的境界/等级体系描述追加到 prompt_segment 末尾
+- 读 `~/.claude/skills/awesome-novel/references/genre-example/index.md` 的题材列表，查找 genre_profile 对应的 `corpus` 字段
+- 读 `~/.claude/skills/awesome-novel/references/genre-example/{corpus}` 取 `role_override` 和 `prompt_segment`
+- 检查 `~/.claude/skills/awesome-novel/references/genre-example/{genre_profile}.md` 是否存在：存在则读取，覆盖/追加差异字段（variant 文件已扁平化到根目录）。若有 `power_system_ref`，读对应 corpus 的境界/等级体系描述追加到 prompt_segment 末尾
 - `role_override.role` + `role_override.personality` → 作为"角色定位"段
 - `prompt_segment` → 作为"类型专属指引"段（原样注入，保持其结构）
 

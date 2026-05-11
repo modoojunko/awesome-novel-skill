@@ -133,7 +133,7 @@ primary_mood、mood_progression、intensity_peak、emotional_hook、intensity_le
 
 1. 拆 segment（不持久化到 YAML）
 2. 视角转换 → 双轮净化（结构层 + 词句层）
-3. 读 writing-style.yaml / genre-corpus / world-setting / archives
+3. 读 writing-style.yaml / references/genre-example / world-setting / archives
 4. 组装 `prompts/vol-{N}-ch-{M}-prompt.md`
 5. 文件头部写入标记：`# 自动生成 — 修改章纲后重新生成覆盖。手动编辑不持久。`
 6. AI 味自检 → 命中自动修复 → 二次扫描确认

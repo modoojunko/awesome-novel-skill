@@ -69,7 +69,6 @@ mkdir -p "$DEST"
 cp "$SCRIPT_DIR/SKILL.md" "$DEST/"
 cp -r "$SCRIPT_DIR/scripts" "$DEST/"
 cp -r "$SCRIPT_DIR/skills" "$DEST/"
-cp -r "$SCRIPT_DIR/genre-corpus" "$DEST/"
 cp -r "$SCRIPT_DIR/agents" "$DEST/"
 cp -r "$SCRIPT_DIR/references" "$DEST/"
 

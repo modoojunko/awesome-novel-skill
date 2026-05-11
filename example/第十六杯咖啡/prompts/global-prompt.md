@@ -1,6 +1,6 @@
 # 全局写作提示词 — 第十六杯咖啡
 
-> 此文件从 writing-style.yaml 和 urban-romance genre-corpus 提取组装。
+> 此文件从 writing-style.yaml 和 urban-romance references/genre-example 提取组装。
 > 所有 subagent 在写任何段落前都必须读取此文件。
 > version: 6 | genre_profile: urban-romance
 

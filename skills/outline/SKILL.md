@@ -62,7 +62,7 @@ description: 卷纲规划。Phase 2。当设定完成后需要规划故事结构
 
 读 `settings/writing-style.yaml` 的 `genre_profile` 字段：
 
-- **有值** → 在 `genre-corpus/` 中查找匹配的 `story_arc_templates`
+- **有值** → 在 `references/genre-example/` 中查找匹配的 `story_arc_templates`
 - **无值** → 使用下方通用故事结构模板
 
 Agent 直接输出提案（**不问"你想要哪种结构"**——默认选第一个 variant，或根据 story.yaml 的题材描述推测最匹配的 variant），展示格式：

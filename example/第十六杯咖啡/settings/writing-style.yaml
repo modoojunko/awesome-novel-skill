@@ -4,7 +4,7 @@
 # ============================================================
 # 类型档案引用
 # Phase 2 选择类型档案后写入。Agent 在 Phase 4 组装提示词时读取对应的
-# genre-corpus/{id}.yaml，将其 prompt_segment 注入 per-segment 提示词。
+# references/genre-example/{id}.md，将其 prompt_segment 注入 per-segment 提示词。
 # 可选值: suspense-crime | urban-romance | ancient-politics | scifi-apocalypse
 # 留空表示未选择类型档案，Phase 4 不注入类型专属指引。
 # ============================================================
