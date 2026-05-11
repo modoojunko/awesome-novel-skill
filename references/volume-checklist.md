@@ -232,7 +232,7 @@ chapters_summary 是卷纲最核心的产出——它直接决定了每章的章
 |--------|------|
 | 角色 yaml 已创建 | `settings/character-setting/{id}.yaml` 存在，字段填写完整度不低于设定阶段标准 |
 | story_role 已分配 | 不能留空或写"待定" |
-| 必填字段有值 | cognition / worldview / self_identity / values / abilities / skills / environment 至少填写了其中与角色功能相关的字段 |
+| 必填字段有值 | worldview / self_identity / values / abilities / skills / environment 至少填写了其中与角色功能相关的字段 |
 | 角色诊断（如果本卷戏份 > 1 章） | 生气表现 + 缺点 + 自己目的（参照设定阶段角色诊断标准） |
 | 配角目的明确 | 如果配角只服务于一场戏（送信息/引路/被救），必须标注"一次性角色"或展开为多场景角色 |
 

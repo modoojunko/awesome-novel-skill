@@ -1,11 +1,14 @@
 # character.yaml - 角色设定模板
 # 每个角色一个yaml文件
 
+# 基本信息
+id: ""
 name: ""
-summary: ""
+story_role: ""
+appearance: ""
+background: ""
 
-# 基础设定
-cognition: ""
+# 认知6层模型（1-3务虚→为什么做，4-6务实→怎么做）
 worldview: ""
 self_identity: ""
 values: ""
@@ -15,11 +18,6 @@ environment: ""
 
 # 关系
 relationships: []
-
-# 外观和背景
-appearance: ""
-background: ""
-story_role: ""
 
 # 状态历史（归档时由Agent更新）
 state_history: []
