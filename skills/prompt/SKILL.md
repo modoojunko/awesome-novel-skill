@@ -5,11 +5,11 @@ description: 章提示词生成——从章纲生产 prompt.md。触发：章纲
 
 # Novel Prompt — 章提示词生成
 
-> 读输入源 → 读 `references/prompt-setting-style.md` → 按指南 6 模块骨架填充 → 验收。每步确认。
+> 读输入源 → 读 `references/prompt-setting-style.md` → 按指南 6 模块骨架填充。每步确认。验收由主流程独立执行。
 
 ## Overview
 
-将章纲 + writing-style + genre-profile 生产为 subagent 可执行的 prompt.md。按指南的 6 模块骨架填充，指南定义了每个字段的输入源和填充原则。填充完成后按指南的验收标准检验，通过后保存。
+将章纲 + writing-style + genre-profile 生产为 subagent 可执行的 prompt.md。按指南的 6 模块骨架填充，指南定义了每个字段的输入源和填充原则。填充完成后保存，验收由主流程执行。
 
 **When NOT to use:** 章纲不完整（memo 或 emotional_design 缺失）、本章提示词已存在且未修改章纲、章状态尚未到 outline。
 
@@ -45,19 +45,11 @@ Read `references/prompt-setting-style.md`，按以下顺序执行：
 
 全部填完后全局通读一次——掩住字段名，看每个种子读起来是叙事画面还是写作指令。
 
-**STOP：展示完整提示词，作者确认后进入验收。**
-
-## Step 3：验收
-
-Read `references/prompt-setting-style.md` Section 三（验收），执行：
-
-1. **快速嗅探** — 读模块 4 场景 1 的核心事件，遮住字段名判断是"发生了什么事"还是"去写什么"
-2. **六条硬校验** — 逐条检查结构完整/三字段完整/核心事件可执行/约束双侧闭合/推演忠实/题材匹配。6 项 ✅ 合格，1-2 项 ❌ 修改，3+ 项 ❌ 重填
-3. **逐模块检查** — 按指南 8 项模块检查表逐一核对。全部通过 → 保存。任一不合格 → 先修再保存
+**STOP：展示完整提示词给作者确认，确认后保存。**
 
 ## 保存
 
-写入 `prompts/vol-{N}-ch-{M}-prompt.md`。更新 chapter.md status 为 `draft`。
+写入 `prompts/vol-{N}-ch-{M}-prompt.md`。**不更新 chapter.md status**——由主流程验收通过后统一更新。
 
 ## 下一步
 
