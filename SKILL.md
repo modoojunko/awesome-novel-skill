@@ -221,11 +221,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 - core（必填——填完即可进入写作循环）：geography, politics, rules
 - extended（可选——按需在写作中追加）：culture, history, physics, biology, sociology
 
-### Step 4: 模型门禁
-
-Phase 1-3 主会话必须使用 sonnet；正文写作 subagent 从 `writing_model` 读取（默认 haiku）。不满足 → **STOP**，告知用户切换模型后再继续。满足要求 → 进入 Step 5。
-
-### Step 5: 分发
+### Step 4: 分发
 
 匹配用户意图后，根据目标路由选择对应子技能，**Read 子技能文件并按其中流程执行**：
 
