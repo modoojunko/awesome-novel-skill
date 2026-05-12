@@ -39,7 +39,7 @@
 |------|------|------|
 | 读者缺口 | 上章 `emotional_design.emotional_hook` + `reader_expectation` | 读者在等什么——这章要给回应还是继续吊 |
 | 角色状态 | 上章归档时追加的状态历史 + 活跃角色当前动机 | 角色现在想做什么、知道什么、被什么驱动 |
-| 钩子盘点 | 各角色 yaml 中 hooks 字段——pending / partial_advance | 哪些钩子该收了，哪些还得压着，哪些可以推一把 |
+| 钩子盘点 | 各角色设定文件中 hooks 字段——pending / partial_advance | 哪些钩子该收了，哪些还得压着，哪些可以推一把 |
 | 卷纲定位 | `volumes/volume-{N}.md#chapters_summary` 本章 summary | 这章在卷里的定位——推进冲突的哪一步 |
 
 #### 2. 合成方向
@@ -662,7 +662,7 @@ must_hold: ["揭示真相"]
 
 ### 第 1 步：给作者看
 
-按以下格式整理章纲要点，给作者过目。不要丢 YAML 原文，要 readable 摘要：
+按以下格式整理章纲要点，给作者过目。不要丢原文，要 readable 摘要：
 
 > 📋 **第 N 章 章纲反馈**
 >
