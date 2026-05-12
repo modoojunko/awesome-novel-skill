@@ -184,6 +184,6 @@ Agent 会在设定阶段问你要不要选。
 
 ## 致谢
 
-感谢 [DeepSeek TUI](https://github.com/hust-open-atom-club/DeepSeek-TUI) 项目为 DeepSeek V4 用户提供免费、流畅的终端体验，让本 Skill 对个人用户完全免费可用。
+感谢 [@hust-open-atom-club](https://github.com/hust-open-atom-club) 的 [DeepSeek TUI](https://github.com/hust-open-atom-club/DeepSeek-TUI) 项目为 DeepSeek V4 用户提供免费、流畅的终端体验，让本 Skill 对个人用户完全免费可用。
 
 本项目部分设计受到 [InkOS](https://github.com/Narcooo/inkos) 的启发——包括 AI 味检测体系、伏笔/钩子追踪、题材配置和分层技法模型。感谢 [@Narcooo](https://github.com/Narcooo) 的优秀工作。
