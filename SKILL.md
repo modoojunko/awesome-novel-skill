@@ -163,7 +163,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | **2.1 卷纲** | `volumes/volume-{N}.md`（章节列表） | `references/volume-setting-style.md`（指南+自检） | 角色文件（动机参考） |
 | **3.1 章纲** | `chapters/vol-{N}-ch-{M}.md` | `volumes/volume-{N}.md#chapters_summary`（卷纲给的本章方向）<br>`references/chapter-setting-style.md`（指南+自检） | — |
 | **3.2 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `references/prompt-setting-style.md`（提示词指南+模板） | — |
-| **3.3 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口）<br>`agents/pipeline/exec-prose.md`（subagent 写作契约） | `archives/` 前文（卡壳才翻文风参考） |
+| **3.3 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口） | — |
 | **3.4 验收** | 质量检查报告（内存） | `archives/vol-{N}-ch-{M}-*.md`（正文）<br>`references/chapter-quality-checklist.md`（15 项检查） | `settings/writing-style.md`（评分基准）<br>角色文件/`world-setting.md`（一致性校验） |
 | **3.5 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（滑动窗口审视） |
 | **review** | 诊断报告（内存） | 目标正文 `archives/vol-{N}-ch-{M}-*.md`<br>`settings/writing-style.md`（评分基准） | 角色文件（角色一致性）<br>`settings/world-setting.md`（设定一致性） |
