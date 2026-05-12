@@ -1,6 +1,6 @@
-# Prompt 构造原则 + Prompt 合格判定标准
+# Prompt 生产 SOP + Prompt 质检标准
 
-**定位：** 定义从章纲合规推演、构造 prompt 的原则，以及判断 prompt 合格与否的判定准则。只对 prompt 负责，不涉及正文写作。
+**定位：** 将章纲 + writing-style + genre-profile 生产为 subagent 可执行的 prompt.md（`prompts/vol-{N}-ch-{M}-prompt.md`），并对产物做合格判定。只对 prompt 负责，不涉及正文写作。
 
 ---
 
