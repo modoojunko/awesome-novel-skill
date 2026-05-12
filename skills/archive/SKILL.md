@@ -26,7 +26,7 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
 | 检查项 | 操作 |
 |--------|------|
 | chapter.md 完整性 | memo（7段）+ emotional_design 全部有值？缺失 → Read `skills/chapter-loop/SKILL.md` Step 1 补全章纲 |
-| 章提示词文件存在？ | `prompts/vol-{N}-ch-{M}-prompt.md` 存在？缺失 → Read `skills/prompt/SKILL.md` 生成 |
+| 章提示词文件存在？ | `prompts/vol-{N}-ch-{M}-prompt.md` 存在？缺失 → 回 `skills/chapter-loop/SKILL.md` Step 2 自动生成 |
 | 正文通过全部质量检查？ | 未通过 → 返回到 `skills/chapter-loop/SKILL.md` Step 3 修复 |
 | 深度评审已完成？ | 建议归档前先触发 `novel-review`（10 维诊断），未评审 → 提醒作者可选评审 |
 
