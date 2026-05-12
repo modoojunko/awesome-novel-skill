@@ -40,6 +40,26 @@ description: 旧版项目迁移。Step 1 检测到 story.yaml 或 skill_version 
 | Write/Edit | 写新 Markdown 文件 | 不写 old/ 目录内的文件 |
 | Agent | 启动并行 subagent 做设定迁移 | 仅 Step 4 使用，subagent 只能用 Read/Write/Edit |
 
+## 错误恢复
+
+### Step 执行失败
+
+| 步骤 | 失败场景 | 恢复策略 |
+|------|---------|---------|
+| Step 0（检测） | story.yaml 格式异常/不可解析 | 手动确认目录状态后问作者"检测到疑似旧版项目，但 story.yaml 无法解析。是否继续迁移？" |
+| Step 2（挪入 old/） | 文件移动中断（权限/磁盘） | 已移的保留，未移的报具体文件名，提示用 `sudo` 或手动 mv |
+| Step 3（init.py） | Python 不可用或脚本报错 | 回退：手动创建目录结构 + `scripts/templates/*.template` → 对应路径去掉 .template |
+| Step 4（subagent） | subagent 超时或结果不完整 | 标记失败文件为"待迁移"，继续其他 subagent。最终汇报列出失败清单 |
+| Step 4（subagent） | subagent 数量受限 | 按优先级降序：4e > 4g > 4b > 4d > 4a > 4c > 4f。不够并行时串行 |
+| Step 5（拷贝正文） | 无 archives/ 目录 | 跳过，标记"无正文" |
+| Step 6（验收） | 部分字段为空（旧版无此数据） | 在汇报"待补充字段"中列出，不影响 migrated=true |
+
+### 通用原则
+
+1. **非关键失败**（设定字段遗漏、subagent 超时）→ 标记后继续，最终汇报中列出
+2. **关键失败**（骨架创建失败、状态文件写入失败）→ 立即上报作者
+3. **数据安全**— 迁移全程不删除旧文件（old/ 保留完整备份），任何失败都不会丢失原始数据
+
 ## 生命周期 Lifecycle
 
 ### Start
@@ -75,6 +95,26 @@ test -f story.yaml && test ! -f story.md && echo "v2.x"
 # 版本检测
 grep -q "skill_version" story.md && echo "has_version" || echo "needs_update"
 ```
+
+## 子步骤读取指南
+
+每个迁移步骤要读什么、写什么：
+
+| 步骤 | 读取目标 | 写出目标 |
+|------|---------|---------|
+| Step 0 检测 | `story.yaml`, `story.md` | 版本判断结论 |
+| Step 1 展示计划 | 项目目录（yaml/md 文件分布） | 迁移清单 |
+| Step 2 挪入 old/ | 无（纯命令操作） | — |
+| Step 3 初始化 | `old/story.yaml`（提取 title/author） | 新项目骨架 |
+| Step 4a story→md | `old/story.yaml`, `old/volumes/*.yaml`, `scripts/templates/story.md.template` | `story.md` |
+| Step 4b world-setting | `old/settings/world-setting.yaml`, `scripts/templates/world-setting.md.template` | `settings/world-setting.md` |
+| Step 4c writing+genre | `old/settings/writing-style.yaml`, `scripts/templates/writing-style.md.template`, `scripts/templates/genre-setting.md.template` | `settings/writing-style.md` + `settings/genre-setting.md` |
+| Step 4d anti-ai+hooks | `old/settings/anti-ai.yaml`, `old/settings/hooks.yaml`, `scripts/templates/anti-ai.md.template`, `scripts/templates/foreshadowing.md.template` | `settings/anti-ai.md` + `settings/foreshadowing.md` |
+| Step 4e characters | `old/settings/character-setting/*.yaml`, `scripts/templates/character.md.template` | `settings/character-setting/*.md` |
+| Step 4f volumes | `old/volumes/*.yaml`, `scripts/templates/volume.md.template` | `volumes/volume-{N}.md` |
+| Step 4g chapters | `old/chapters/*.yaml`（仅 status=archived）, `scripts/templates/chapter.md.template` | `chapters/vol-{N}-ch-{M}.md` |
+| Step 5 拷贝 | `old/archives/*.md`, `old/prompts/*` | `archives/`, `prompts/` |
+| Step 6 验收 | 所有新产出文件 | 验收报告 |
 
 ## SOP 总览
 

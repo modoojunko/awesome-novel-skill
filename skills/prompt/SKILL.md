@@ -15,6 +15,13 @@ description: 章提示词生成——从章纲生产 prompt.md。触发：章纲
 
 **Announce at start:** "我来生成本章提示词。先读输入源..."
 
+## 工具契约
+
+| 工具 | 用途 | 限制 |
+|------|------|------|
+| Read | 读 chapter.md、writing-style.md、anti-ai.md、world-setting.md、角色文件、genre-example corpus | — |
+| Write/Edit | 写 prompts/vol-{N}-ch-{M}-prompt.md | 不改 chapter.md status（由验收统一更新） |
+
 ## 执行前提
 
 | 检查项 | 操作 |
@@ -45,11 +52,15 @@ Read `references/prompt-setting-style.md`，按以下顺序执行：
 
 全部填完后全局通读一次——掩住字段名，看每个种子读起来是叙事画面还是写作指令。
 
-**STOP：展示完整提示词给作者确认，确认后保存。**
+**[Checkpoint]** 展示完整提示词给作者确认，确认后保存。
 
 ## 保存
 
 写入 `prompts/vol-{N}-ch-{M}-prompt.md`。**不更新 chapter.md status**——由主流程验收通过后统一更新。
+
+## 验收
+
+本 skill 不自己做验收。验收由 `skills/prompt-verify/SKILL.md` 独立执行——读 `references/prompt-setting-style.md` Section 三逐条检查 6 模块完整性、writing-style 注入、字数目标和视角锁定。
 
 ## 下一步
 

@@ -7,6 +7,34 @@ description: 和 AI 协作写小说的工作流系统。流程：一次设定→
 
 和 AI 一起写小说。**一次设定**世界观/角色/写作风格 → **主线拆纲+卷纲展开** → **逐章写作循环**（章纲→提示词→提示词验收→正文→正文验收→评审→归档→下一章）
 
+## 范围 Scope
+
+### 做什么
+- 引导作者完成从设定到归档的完整写作流程
+- 检测当前项目进度并自动路由到对应子技能
+- 创建和维护项目文件结构（settings/、volumes/、chapters/、prompts/、archives/）
+- 管理章生命周期（outline → draft → archived）
+- 追踪角色状态和历史
+- 管理伏笔/钩子的生命周期
+- 检测 AI 味（疲劳词、句式违规）
+- 旧版 2.x 项目的自动迁移
+
+### 不做什么
+- ❌ 不生成 git 操作（提交、推送、创建分支）
+- ❌ 不执行非小说领域的代码（不建网站、不写 API、不做数据分析）
+- ❌ 不修改项目目录外的文件
+- ❌ 不安装新包或修改系统配置
+- ❌ 不恢复已删除的文件
+- ❌ 不处理版本冲突（假设工作目录干净）
+
+### 边界条件
+- 如果 `story.md` 不存在但 `story.yaml` 存在 → 分发到迁移子技能（非正常流程）
+- 如果 `init.py` 不可用 → 手动创建目录结构 + 复制模板（等幂操作）
+- 如果模型被降级（haiku 而非 sonnet）→ Phase 1-3 拒绝执行，提示作者切换
+- 如果检测到未提交的 git 变更 → 提示作者先提交/stash，不自动操作
+- 如果 `.agent/status.md` 与文件系统状态不一致 → 以文件系统为准重新检测，更新 status.md
+- 如果是全新项目（无任何文件）→ 分发到 novel-setup
+
 ## 项目目录结构
 
 Agent 在用户当前目录下创建/编辑以下文件：
@@ -87,6 +115,50 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | **3.3a 正文验收**（主流程独立执行） | `archives/vol-{N}-ch-{M}-*.draft.md`（检查对象） | `references/chapter-quality-checklist.md`（验收标准） | — |
 | **3.4 深度评审**（可选） | 诊断报告（内存） | `skills/review/SKILL.md` | — |
 | **3.5 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（回顾最近章节） |
+
+### 条件分支指引（当 X 发生时读 Y）
+
+正常流程走上面那张表。以下异常或边界场景需要额外读取：
+
+| 场景 | 读取目标 | 目的 |
+|------|---------|------|
+| 章节状态不连续（archived 跳至 outline） | 前 3 章 chapters/ 章纲 + archives/ 正文 | 确认是否遗漏归档，判断是否需要补写 |
+| 角色情绪弧线断层或状态异常 | 该角色完整状态历史（`settings/character-setting/<id>.md#state_history`） | 定位断层原因，恢复一致性 |
+| 本卷完成时规划下一卷 | 下一卷 volume.md + story.md#story_arc | 确认下一卷方向和主线位置 |
+| 新会话恢复（/new 后） | `.agent/status.md` + 最新 volume.md + 角色文件 | 重建上下文，确定当前进度 |
+| 正文验收失败 | chapter.md（章纲设定）+ prompt.md（提示词意图） | 判断是执行偏差还是设定偏差 |
+| 提示词验收不通过 | chapter.md emotional_design + memo | 判断提示词是否偏离章纲意图 |
+| 作者说"看看进度" | `.agent/status.md` + chapters/ 所有章状态 | 汇总今进度汇报 |
+| 深度评审发现角色行为不一致 | 该角色所有已归档章的状态历史 + 情绪弧线 | 定位行为断层的起始点 |
+
+## 错误恢复
+
+本技能执行过程中如果某一步失败：
+
+1. **自动重试（最多 3 次）** — 每次换一种方式重试。例如 subagent 超时 → 减少并发数重试；文件写入冲突 → 换文件名重试
+2. **重试耗尽 → 降级** — 跳过失败步骤，继续后续步骤，在最终汇报中标记失败项
+3. **关键步骤失败（骨架创建、状态文件写入）→ 立即上报作者**，描述失败现象 + 已尝试的方法 + 建议的手动修复方案
+
+### 常见失败场景与恢复策略
+
+| 失败场景 | 恢复策略 |
+|---------|---------|
+| `init.py` 不可用或报错 | 手动创建目录结构 + 复制模板文件（`scripts/templates/` 下各 .template → 对应路径去 .template） |
+| subagent 超时（正文写作） | 主 Agent 直接写，降级不退费 |
+| 文件被占用/锁定 | 等 5 秒重试，最多 3 次。仍失败 → 报作者手动关闭 |
+| 网络错误（WebSearch） | 重试 1 次。仍失败 → 跳过，标记"网络不可用" |
+| 检测到未提交的 git 变更 | 提示作者先提交或 stash，不自动操作 |
+| 章节状态不连续（archived 后接 outline 间隔） | 报作者"第 N 章未归档，是否跳过？" |
+
+## 工具契约
+
+| 工具 | 用途 | 限制 |
+|------|------|------|
+| Bash | 执行 shell 命令（init.py 创建骨架、文件操作、git 操作） | 不安装新包，不改系统配置 |
+| Read | 读项目设定文件、章纲、正文 | — |
+| Write/Edit | 写/修改项目文件（settings/、volumes/、chapters/、prompts/、archives/） | 不写 `.agent/` 以外的基础设施文件 |
+| Agent | 启动 subagent 执行正文写作（skills/write/）、深度评审（skills/review/）、设定迁移（skills/migrate/ Step 4） | subagent 只能用 Read/Write/Edit，不可执行 Bash |
+| WebSearch | 作者要求导入/分析参考作品时查风格 | 仅在 Phase 1 风格讨论或独立导入流程中使用 |
 
 ## 工作机制：状态驱动循环
 
@@ -195,9 +267,9 @@ grep -E "技能版本.*3\.0" story.md && echo "version_ok"
 | 最新 chapter.md status = `outline`，无 prompt 文件 | → 分发 `skills/prompt/SKILL.md` 生成提示词 |
 | 最新 chapter.md status = `outline`，prompt 文件已存在 | → 分发 `skills/prompt-verify/SKILL.md` 做提示词验收。通过 → 更新 status = `draft`。不通过 → 返回 `skills/prompt/SKILL.md` 修改 |
 | 最新 chapter.md status = `draft`，`archives/` 无本章草稿 | → 分发 `skills/write/SKILL.md` 写正文 |
-| 最新 chapter.md status = `draft`，`archives/` 有本章草稿 | → 分发 `skills/body-verify/SKILL.md` 做正文验收。通过后，问作者"进入归档还是先做深度评审？" |
-| 最新 chapter.md status = `archived` | 本卷还有未归档章？→ 问"下一章继续？"。全部归档 → 卷完成报告 + 选项 |
-| 无任何 chapter.md | → 卷纲已定但尚未开始写 → 问"开始写第一章？" |
+| 最新 chapter.md status = `draft`，`archives/` 有本章草稿 | → 分发 `skills/body-verify/SKILL.md` 做正文验收。通过后，**[Checkpoint]** 问作者"进入归档还是先做深度评审？" |
+| 最新 chapter.md status = `archived` | 本卷还有未归档章？→ **[Checkpoint]** 问"下一章继续？"。全部归档 → **[Checkpoint]** 卷完成报告 + 选项 |
+| 无任何 chapter.md | → 卷纲已定但尚未开始写 → **[Checkpoint]** 问"开始写第一章？" |
 
 **章状态：** `outline`（章纲已定）→ `draft`（正写作/修改）→ `archived`（已归档）
 
@@ -229,7 +301,7 @@ grep -E "技能版本.*3\.0" story.md && echo "version_ok"
 | novel-review | archives/ 有正文文件 |
 | novel-archive | archives/ 有草稿文件、正文验收已通过 |
 
-缺失 → **STOP**，告知作者先补前置产出。
+缺失 → **[Checkpoint]** **STOP**，告知作者先补前置产出，不可自行创建或跳过。
 
 **3）分配并执行**
 
