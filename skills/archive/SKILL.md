@@ -27,7 +27,7 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
 |--------|------|
 | chapter.md 完整性 | memo（7段）+ emotional_design 全部有值？缺失 → Read `skills/chapter-loop/SKILL.md` Step 1 补全章纲 |
 | 章提示词文件存在？ | `prompts/vol-{N}-ch-{M}-prompt.md` 存在？缺失 → Read `skills/prompt/SKILL.md` 生成 |
-| 正文通过全部质量检查？ | 未通过 → 返回到 Phase 3（`skills/chapter-loop/SKILL.md` Step 3）修复 |
+| 正文通过全部质量检查？ | 未通过 → 返回到 `skills/chapter-loop/SKILL.md` Step 3 修复 |
 | 深度评审已完成？ | 建议归档前先触发 `novel-review`（10 维诊断），未评审 → 提醒作者可选评审 |
 
 ## 归档步骤
@@ -62,7 +62,7 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
       {逐章列出标题和归档状态}
 
       下一步选项：
-      1. 规划卷 {N+1} — 进入 Phase 2（`novel-volume`），AI 推理方向选项
+      1. 规划卷 {N+1} — 进入 `novel-volume`，AI 推理方向选项
       2. 回顾整卷 — 触发 novel-review 做整卷回顾评审
       3. 修改某章 — 指定章节重新生成
 
