@@ -236,20 +236,3 @@ Phase 1-3 主会话必须使用 sonnet；正文写作 subagent 从 `writing_mode
 | novel-volume | 主线拆纲+卷纲规划 | `skills/outline/SKILL.md`（主线拆纲 + 卷纲部分） |
 | novel-chapter-loop | 逐章写作循环 | `skills/chapter-loop/SKILL.md` |
 
-子技能文件位于主技能安装目录的 `skills/` 下，即 `~/.claude/skills/awesome-novel/skills/{name}/SKILL.md`。
-
-## 授权模式
-
-- **步步授权（默认）**：每步需作者确认
-- **全部授权**：Agent 全权决定
-
-作者随时说"你全权决定"或"每步都要我确认"切换。子技能继承此模式。
-
-## Bundled Resources
-
-| 路径 | 用途 | 何时读取 |
-|------|------|---------|
-| `scripts/init.py` | 创建项目骨架 | Phase 1 新建项目时执行 |
-| `scripts/import.py` | 导入已有小说，切分章节 | Phase 1 导入模式时执行 |
-| `scripts/templates/` | 全部 md 模板（world-setting、writing-style、hooks、character、story 等） | 新建项目时 init.py 自动复制；讨论设定时参考字段结构 |
-| `references/genre-example/` | 类型案例（24 种预置类型，自包含文件） | Phase 2 设定阶段参考类型配置；Phase 3 提示词注入 prompt_segment |
