@@ -12,10 +12,8 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-blue?style=flat-square" alt="GPL 3.0"></a>
 </p>
 
-<blockquote>
-  <strong>个人使用免费</strong> — 本 Skill 对个人用户完全免费。<br>
-  <strong>商业使用</strong> — 请联系作者获取授权。
-</blockquote>
+> **个人使用免费** — 本 Skill 对个人用户完全免费。<br>
+> **商业使用** — 请联系作者获取授权。
 
 让 AI 成为你的小说创作搭档——**无需任何订阅**，DeepSeek V4 原生支持，完全免费可用。从世界观搭建到角色塑造，从章节规划到正文写作，一步步陪你完成整部小说。
 
@@ -180,12 +178,8 @@ Agent 会在设定阶段问你要不要选。
 
 ## Star History
 
-<a href="https://www.star-history.com/?type=date&repos=modoojunko%2Fawesome-novel-skill">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=modoojunko/awesome-novel-skill&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=modoojunko/awesome-novel-skill&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=modoojunko/awesome-novel-skill&type=date&legend=top-left" />
- </picture>
+<a href="https://star-history.com/#modoojunko/awesome-novel-skill">
+  <img src="https://api.star-history.com/svg?repos=modoojunko/awesome-novel-skill&type=date" alt="Star History">
 </a>
 
 ## 致谢
