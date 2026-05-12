@@ -83,7 +83,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | **3.1 章纲** | `chapters/vol-{N}-ch-{M}.md` | `volumes/volume-{N}.md#chapters_summary`（卷纲给的本章方向）<br>`references/chapter-setting-style.md`（指南+自检） | — |
 | **3.2 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `references/prompt-setting-style.md`（提示词指南+模板） | — |
 | **3.2a 提示词验收**（主流程独立执行） | `prompts/vol-{N}-ch-{M}-prompt.md`（检查对象） | `references/prompt-setting-style.md` Section 三（验收标准） | — |
-| **3.3 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口） | — |
+| **3.3 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口） | `skills/write/SKILL.md`（SOP） |
 | **3.4 验收+评审** | 质量检查报告（内存）<br>诊断报告（内存、可选） | `archives/vol-{N}-ch-{M}-*.md`（正文）<br>`references/chapter-quality-checklist.md`（15 项检查） | — |
 | **3.5 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（回顾最近章节） |
 
@@ -105,7 +105,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | settings/world-setting.md 字段大量为空 | → `novel-setup`（设定未完成）|
 | 最新 chapter.md status = `outline`，无 prompt 文件 | → 分发 `skills/prompt/SKILL.md` 生成提示词 |
 | 最新 chapter.md status = `outline`，prompt 文件已存在 | → **提示词验收**：读 `prompt-setting-style.md` Section 三，逐条检查后展示报告给作者确认。通过 → 更新 status = `draft`。不通过 → 返回`skills/prompt/SKILL.md` 修改 |
-| 最新 chapter.md status = `draft` | → 走正文生成（`agents/pipeline/exec-prose.md`） |
+| 最新 chapter.md status = `draft` | → 分发 `skills/write/SKILL.md` 写正文 |
 | 最新 chapter.md status = `archived` | 本卷还有未归档章？→ 问"下一章继续？"。全部归档 → 卷完成报告 + 选项 |
 | 无任何 chapter.md | → 卷纲已定但尚未开始写 → 问"开始写第一章？" |
 
@@ -144,4 +144,6 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | novel-setup | `skills/setup/SKILL.md` — 项目初始化 + 设定 |
 | novel-volume | `skills/outline/SKILL.md` — 主线拆纲 + 卷纲 |
 | novel-chapter | `skills/chapter/SKILL.md` — 章纲设定 |
+| novel-prompt | `skills/prompt/SKILL.md` — 提示词生成 |
+| novel-write | `skills/write/SKILL.md` — 正文生成 |
 
