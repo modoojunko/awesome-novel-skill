@@ -21,7 +21,7 @@ description: 小说项目初始化与设定。当项目尚未创建、world-sett
 
 ## 创建项目
 
-1. 执行 `python ~/.claude/skills/novel/scripts/init.py [项目名] [--author 作者名]`
+1. 执行 `python $NOVEL_SKILL_HOME/scripts/init.py [项目名] [--author 作者名]`
 2. 询问作者 title 和 author（若未通过 --author 传入）
 3. 将 title、author、created_at 写入 story.md
 
@@ -45,7 +45,7 @@ Read `references/genre-style.md`「先选题材」部分，用对话引导法从
 
 写作风格确认后，询问是否使用预置类型档案。类型档案是预制的"类型知识库"——包含该类型的文风/氛围/专属要素/禁忌，选类型即注入，无需从零聊题材配置。
 
-1. 读取 `~/.claude/skills/awesome-novel/references/genre-example/index.md` 的 `genres` 列表，提取 `id`、`label`、`description`
+1. 读取 `$NOVEL_SKILL_HOME/references/genre-example/index.md` 的 `genres` 列表，提取 `id`、`label`、`description`
 2. AskUserQuestion 列出可用类型档案（扁平列出所有 24 种）+ "暂不选择，手动配置"选项
 3. 作者选择后，展示档案摘要：文风文笔、核心氛围、专属要素、叙事视角、类型禁忌
 4. **STOP：作者确认或提出调整**

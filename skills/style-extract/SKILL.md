@@ -32,7 +32,7 @@ Step 1 脚本 exit code 必须为 0。Step 2 outputs 必须包含原文引用。
 运行 `scripts/analyze_style.py` 对参考文本做 12 项量化分析。
 
 ```bash
-python3 ~/.claude/skills/awesome-novel/scripts/analyze_style.py <reference.txt> <project>/style-profiles/<name>/style-metrics.md
+python3 $NOVEL_SKILL_HOME/scripts/analyze_style.py <reference.txt> <project>/style-profiles/<name>/style-metrics.md
 ```
 
 **12 项指标：**
