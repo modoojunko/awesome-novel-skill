@@ -1,4 +1,4 @@
-# 提示词组装指令
+# 提示词组装及验收指南
 
 将章纲 + writing-style + genre-profile 组装为 subagent 可执行的提示词。产出写入 `prompts/vol-{N}-ch-{M}-prompt.md`。
 
