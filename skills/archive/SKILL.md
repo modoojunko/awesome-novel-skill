@@ -7,7 +7,7 @@ description: 章节归档与状态更新。正文验收通过后归档——去 
 
 # Novel Archive — 归档
 
-> 摘要：完整性检查 → 去 draft 标记 → 更新角色状态历史 + hooks → 卷完成检测 → 滑动审视。
+> 摘要：去 draft 标记 → 更新角色状态历史 + hooks → 卷完成检测 → 滑动审视。完整性已在正文验收（3.3a）通过。
 
 ## Overview
 
@@ -21,14 +21,13 @@ description: 章节归档与状态更新。正文验收通过后归档——去 
 
 归档前 read_file 执行 Step 0 完整性检查表。任意一项不通过 → 报告作者缺少哪项。
 
-## 归档前完整性检查（Step 0）
+## 归档前检查（Step 0）
 
 | 检查项 | 操作 |
 |--------|------|
-| chapter.md 完整性 | memo（8段）+ emotional_design 全部有值？缺失 → Read `skills/chapter/SKILL.md` 补全章纲 |
-| 章提示词文件存在？ | `prompts/vol-{N}-ch-{M}-prompt.md` 存在？缺失 → 返回主流程走提示词生成 |
-| 正文通过全部质量检查？ | 未通过 → 返回到写作流程修复 |
-| 深度评审已完成？ | 建议归档前先触发 `novel-review`（10 维诊断），未评审 → 提醒作者可选评审 |
+| 正文草稿存在？ | `archives/vol-{N}-ch-{M}-*.draft.md` 存在？缺失 → **STOP**，正文尚未生成 |
+| 正文验收已通过？ | 未通过 → **STOP**，返回主流程走正文验收 |
+| chapter.md 完整？ | memo + emotional_design 有值？缺失 → 返回主流程补章纲 |
 
 ## 归档步骤
 
