@@ -54,6 +54,15 @@ DEST="$SKILLS_DIR/awesome-novel"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "安装到: $DEST"
+export NOVEL_SKILL_HOME="$DEST"
+
+# 将 NOVEL_SKILL_HOME 写入 profile 文件，确保所有 shell 类型可用
+for profile_file in "$HOME/.profile" "$HOME/.bashrc"; do
+    if ! grep -q "export NOVEL_SKILL_HOME" "$profile_file" 2>/dev/null; then
+        echo "export NOVEL_SKILL_HOME=\"$DEST\"" >> "$profile_file"
+        echo "已添加 NOVEL_SKILL_HOME=$DEST 到 $profile_file"
+    fi
+done
 
 # 安全检查：DEST 不能为空、不能是根目录、路径中必须包含 awesome-novel
 if [[ -z "$DEST" || "$DEST" == "/" || "$DEST" != *awesome-novel* ]]; then
@@ -69,7 +78,7 @@ mkdir -p "$DEST"
 cp "$SCRIPT_DIR/SKILL.md" "$DEST/"
 cp -r "$SCRIPT_DIR/scripts" "$DEST/"
 cp -r "$SCRIPT_DIR/skills" "$DEST/"
-cp -r "$SCRIPT_DIR/genre-corpus" "$DEST/"
 cp -r "$SCRIPT_DIR/agents" "$DEST/"
+cp -r "$SCRIPT_DIR/references" "$DEST/"
 
 echo "安装完成!"

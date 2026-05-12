@@ -30,12 +30,13 @@ from pathlib import Path
 
 def get_template_path(template_name: str) -> Path:
     """获取模板文件路径"""
-    return Path(__file__).parent / "templates" / f"{template_name}.yaml.template"
+    return Path(__file__).parent / "templates" / f"{template_name}.md.template"
 
 
 def create_directory_structure(project_path: Path) -> None:
     """创建项目目录结构"""
     dirs = [
+        project_path / ".agent",
         project_path / "settings" / "character-setting",
         project_path / "volumes",
         project_path / "chapters",
@@ -52,12 +53,6 @@ def copy_template(template_name: str, dest: Path) -> None:
     shutil.copy2(src, dest)
 
 
-def copy_md_template(template_name: str, dest: Path) -> None:
-    """复制 markdown 模板文件到目标路径"""
-    src = Path(__file__).parent / "templates" / f"{template_name}.md.template"
-    shutil.copy2(src, dest)
-
-
 def init_project(project_name: str, author: str = "") -> None:
     """
     初始化小说项目
@@ -71,18 +66,31 @@ def init_project(project_name: str, author: str = "") -> None:
     # 创建目录结构
     create_directory_structure(project_path)
 
-    # 复制模板文件
-    copy_template("story", project_path / "story.yaml")
-    copy_template("world-setting", project_path / "settings" / "world-setting.yaml")
-    copy_template("writing-style", project_path / "settings" / "writing-style.yaml")
-    copy_template("anti-ai", project_path / "settings" / "anti-ai.yaml")
-    copy_template("hooks", project_path / "settings" / "hooks.yaml")
+    # 复制模板文件（story.md 含占位符替换）
+    now = datetime.datetime.now().strftime("%Y-%m-%d")
+    story_content = get_template_path("story").read_text(encoding="utf-8")
+    story_content = story_content.replace("{title}", project_name)
+    story_content = story_content.replace("{author}", author)
+    story_content = story_content.replace("{created_at}", now)
+    (project_path / "story.md").write_text(story_content, encoding="utf-8")
 
-    # 复制控制文档（markdown 格式）
-    copy_md_template("author-intent", project_path / "author-intent.md")
-    copy_md_template("current-focus", project_path / "current-focus.md")
+    for tpl in ["world-setting", "writing-style", "anti-ai", "hooks"]:
+        copy_template(tpl, project_path / "settings" / f"{tpl}.md")
 
-    # 创建空的character-setting目录（角色文件后续讨论时创建）
+    # 长篇小说追踪文件
+    copy_template("timeline", project_path / "settings" / "timeline.md")
+    copy_template("foreshadowing", project_path / "settings" / "foreshadowing.md")
+    copy_template("setting-change-log", project_path / "settings" / "setting-change-log.md")
+
+    # 题材设定
+    copy_template("genre-setting", project_path / "settings" / "genre-setting.md")
+
+    # 生成 .agent/status.md（带时间戳）
+    status_src = get_template_path("agent-status")
+    status_dest = project_path / ".agent" / "status.md"
+    now = datetime.datetime.now().strftime("%Y-%m-%d")
+    content = status_src.read_text(encoding="utf-8").replace("{{created_at}}", now)
+    status_dest.write_text(content, encoding="utf-8")
 
     print(f"项目已创建: {project_path}")
     print(f"请进入项目目录: cd {project_path}")

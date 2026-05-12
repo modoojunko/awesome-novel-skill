@@ -1,0 +1,10 @@
+# Agent Status
+
+```yaml
+current_volume:
+current_chapter:
+current_phase: setup       # setup | volume | chapter-loop | review | style-extract
+project_status: initializing  # initializing | planning | writing | paused | complete
+last_volume_completed: false
+updated_at: {{created_at}}
+```

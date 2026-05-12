@@ -1,118 +1,79 @@
 ---
 name: novel-write
-description: 正文生成与质量检查。Phase 5。一个 subagent 读章提示词写全章，15 项质量检查和深度评审通过后展示给作者。触发："写正文""写第X章""继续写""生成正文""质量检查"。
+description: 正文生成——根据提示词写完整章正文。触发：提示词验收通过后自动分发，或手动"写正文""写这章"。完成后回到主流程。
 ---
 
-# Novel Write — 正文生成与质量检查
+# Novel Write — 正文生成
 
-> 摘要：派写作 agent → 15 项质检查 → 10 维评审 → 展示正文+报告 → 作者决定归档/修改/重写。
+> 读 prompt → 调子 agent 写作 → 验证输出。主 Agent 做分发和验证，写作由子 agent 自主执行。
 
 ## Overview
 
-一个 subagent 读章提示词文件和 chapter.yaml 章纲，一次性写完整章正文。写完后执行 15 项硬性质量检查 + 10 维深度评审，正文和评审报告一起展示给作者。
+提示词验收通过后，主 Agent 起一个子 agent 一次写完整章正文。主 Agent 不介入写作过程，只负责前置检查、分发和输出验证。子 agent 的写作指令内嵌在本文件中。
 
-**When NOT to use:** 章提示词不存在、正文已生成且通过质量检查、章状态不是 draft。
+**When NOT to use:** prompt 文件不存在、chapter.md status 非 draft、本章正文已存在且未要求重写。
 
-**Announce at start:** "我来写第{N}卷第{M}章正文。"
+**Announce at start:** "我来调写作 agent 生成本章正文。"
+
+## 工具契约
+
+| 工具 | 用途 | 限制 |
+|------|------|------|
+| Read | 读 prompt.md（6 模块完整确认） | — |
+| Write/Edit | 写 archives/vol-{N}-ch-{M}-{slug}.draft.md | 不改其他文件 |
+| Agent | 起子 agent（flash 模型）执行正文写作 | subagent 只能用 Read/Write，不可读其他文件 |
 
 ## 执行前提
 
-15 项质量检查逐项执行。任意一项触发 → 不展示正文，报告问题及触发项编号。
+| 检查项 | 操作 |
+|--------|------|
+| prompt 文件存在？ | `prompts/vol-{N}-ch-{M}-prompt.md` 不存在 → **STOP**，返回主流程 |
+| chapter.md status = draft？ | 非 draft → **STOP**，提示词尚未验收通过 |
+| 正文已存在？ | `archives/vol-{N}-ch-{M}-*.draft.md` 已存在 → 问作者"覆盖还是继续编辑？" |
 
-## 进入门禁
+## Step 1: 准备
+
+1. 确认卷号 `{N}` 和章号 `{M}`
+2. 读取 `prompts/vol-{N}-ch-{M}-prompt.md`，确认 6 模块完整。字数目标和叙事视角从 prompt 模块 1 和模块 5 获取
+
+## Step 2: 起子 agent 写作
+
+启动子 agent（flash 模型），传入以下指令：
+
+```
+## Role
+全章正文写作。只读提示词文件，一次性写完整章正文。章纲约束已全部注入提示词。
+
+## Scope
+- 做：读提示词，按叙事段落顺序写整章
+- 不做：不读其他文件、不修改提示词、不写其他章、不写 settings/ 下任何文件
+
+## Inputs
+- `prompts/vol-{N}-ch-{M}-prompt.md` — 唯一输入（6 模块，含定位/承接/人物/场景/文字要求/真人感）
+
+## Outputs
+- `archives/vol-{N}-ch-{M}-{slug}.draft.md` — 全章正文草稿
+
+## 写作规则
+- 按提示词叙事段落 1 → N 顺序写，段落间过渡流畅
+- 每个段落的写作指引必须兑现（场景/情绪/角色状态/结束画面）
+- 结尾停在最后一段 ends_with 指定的画面或状态
+- 正文不含解释、说明、引导语（不写"他感到""他意识到"）
+- 字数不低于提示词模块 1 目标字数的 80%
+```
+
+子 agent 执行写完后返回。主 Agent 检查输出文件是否存在。
+
+**[Checkpoint]** 验证通过后告知作者正文已就绪。
+
+## 验证
 
 | 检查项 | 操作 |
 |--------|------|
-| `prompts/vol-{N}-ch-{M}-prompt.md` 存在？ | 不存在 → **STOP**，Read `skills/prompt/SKILL.md` 生成提示词 |
-| chapter.yaml status = draft？ | 不是 → **STOP**，检查前面 Phase 是否完成 |
-
-## Step 1: 派 exec-prose 写全章
-
-读 `agents/pipeline/exec-prose.md` 获取写作 agent 定义。以该定义为基础，注入以下参数后调用写作 agent：
-
-- 使用 `writing_model` 字段中指定的模型（默认 haiku）
-- 上下文参数：卷号、章号、字数
-- prompt 中追加以下写作要求
-
-```
-【写作要求补充】
-- 字数 {total_words} 字左右
-- 按叙事段落的自然顺序依次写作，段落间过渡流畅
-- 每个段落的写作指引必须兑现
-- 结尾停在最后一个段落的指定结束画面
-```
-
-写完后，文件保存在：
-  `archives/vol-{N}-ch-{M}-{slug}.draft.md`
-  作者可随时打开此文件审阅草稿。
-
-## Step 2: 质量检查 + 深度评审
-
-对生成的全文执行以下检查。检测依据：`settings/anti-ai.yaml` 的 8 个规则组。
-
-| # | 检查项 | 不通过处理 |
-|---|--------|-----------|
-| 1 | 字数不达标 | 报告实际字数 vs 要求 |
-| 2 | 上帝视角摘要 | 摘出典型句 |
-| 3 | 违反核心约束 | 指出违规条款和位置 |
-| 4 | 夹带非正文内容 | 指引导语、解释、文末总结 |
-| 5 | AI疲劳词触发 | 扫描 fatigue_words，报告风险等级。严重级必须重写对应位置 |
-| 6 | AI句式违规 | 连续同结构开头、列表式叙述、说明书式对话 |
-| 7 | 结构性句式癖好 | grep 扫描 structural_tic_patterns，超阈值报告（模式名 + 命中次数 + 阈值） |
-| 8 | 章尾情绪缺口 | 章末是否留下了有效钩子？无 → "缺钩子——读者没有继续阅读的理由" |
-| 9 | 情绪兑现检测 | pay_off旧缺口 → 正文有兑现段？make_new缺口 → 结尾有新问题？ |
-| 10 | 跨章情绪单调 | 最近 3-5 章 primary_mood 连续相同？同种钩子类型？ |
-| 11 | 微兑现缺失 | 本章至少一处"有收获"段落？过渡章达标？对照 prompts/vol-{N}-ch-{M}-prompt.md 中的 micro_payoff 注入字段 |
-| 12 | 安全着陆 | 结尾所有冲突完美解决？→ "读者没有点下一章的理由" |
-| 13 | 物品/状态一致性 | 物品消耗后仍出现？突然出现未交代物品？场景切换物品状态合理？ |
-| 14 | 句式单调检测 | 连续 4 句相同主语/连词开头？短句(<10字)和长句(>50字)数量达标？ |
-| 15 | 身体反应模板化 | "眼神/心里/喉咙/手心"密度 > 5次/500字？同一反应被不同角色复用？ |
-
-**句式癖好检测方法（跨平台 Python，不依赖系统 grep -P）：**
-```python
-# 读取本章正文，扫描 structural_tic_patterns 中每个模式的命中数
-import re, sys
-text = open(sys.argv[1]).read()
-patterns = [
-    (r'不是.{1,20}(?:而是|，是|,是)', '不是而是句式', 3),
-    # 实际运行时读取 anti-ai.yaml 的 structural_tic_patterns 列表
-]
-for pattern, name, threshold in patterns:
-    hits = len(re.findall(pattern, text))
-    if hits > threshold:
-        print(f'{name}: {hits} 次，阈值 {threshold} — 触发')
-```
-用法：`python3 detect-tics.py archives/vol-00N-ch-00M-*.md`
-对照 anti-ai.yaml structural_tic_patterns 每个模式的 threshold。
-
-任意一项触发 → **不展示正文**，报告问题，由作者决定：重写全章 / 手动修改。
-
-### 深度评审
-
-全部 15 项质量检查通过后，主 Agent 直接执行 `novel-review`——10 维 60+ 细项诊断。主 Agent 已持有全部上下文（正文、章纲、角色文件、设定文件等），无需额外 subagent 开销。评审报告与正文一起展示给作者。
-
-## Step 3: 作者审阅
-
-将正文全文 + novel-review 评审报告一起展示给作者。
-
-**展示格式：**
-```
-━━━━━━━━━━━━━━━━━━━━━━━━
-  第{N}卷第{M}章正文：《{title}》
-━━━━━━━━━━━━━━━━━━━━━━━━
-[正文全文]
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-  深度评审报告
-━━━━━━━━━━━━━━━━━━━━━━━━
-[novel-review 评审报告全文]
-```
-
-**作者操作：**
-- "满意，归档" → Phase 6（`novel-archive`）
-- "修改第X段" → 指定修改意见，主 Agent 直接编辑正文对应位置
-- "重写全章" → 重新调 subagent 写全章，重新质量检查
+| 输出文件存在？ | `archives/vol-{N}-ch-{M}-*.draft.md` 存在？不存在 → 重试 1 次，仍失败则告知作者 |
+| 字数达标？ | 正文字数 ≥ 章纲字数 80%？不足 → 标注具体缺口，问作者是否接受 |
+| 文件位置正确？ | 写入到 archives/ 目录而非其他地方？ |
 
 ## 下一步
 
-作者满意后说"归档"→ Phase 6（`novel-archive`）。需修改时说"修改第X段"。需重新生成时说"重写全章"。
+回到主流程，由主 SKILL.md 检测进度分发到验收+归档。
