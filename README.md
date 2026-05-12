@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/hust-open-atom-club/DeepSeek-TUI"><img src="https://img.shields.io/badge/DeepSeek%20V4-%E2%9C%93%20%E6%94%AF%E6%8C%81-4FC08D?style=flat-square" alt="DeepSeek V4"></a>
+  <a href="https://github.com/hust-open-atom-club/DeepSeek-TUI"><img src="https://img.shields.io/badge/DeepSeek%20V4-%E2%9C%93%20%E6%94%AF%E6%8C%81-4FC08D?style=flat-square" alt="DeepSeek V4 TUI"></a>
   <a href="https://docs.anthropic.com/en/docs/claude-code/overview"><img src="https://img.shields.io/badge/Claude%20Code-%E2%9C%93%20%E6%94%AF%E6%8C%81-6B46C1?style=flat-square" alt="Claude Code"></a>
   <a href="https://github.com/hermes/hermes"><img src="https://img.shields.io/badge/Hermes-%E2%9C%93%20%E6%94%AF%E6%8C%81-FF6B6B?style=flat-square" alt="Hermes"></a>
   <a href="https://github.com/openclaw/openclaw"><img src="https://img.shields.io/badge/OpenClaw-%E2%9C%93%20%E6%94%AF%E6%8C%81-FFA94D?style=flat-square" alt="OpenClaw"></a>
