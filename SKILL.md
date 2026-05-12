@@ -165,7 +165,8 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 | 子步骤 | 输出什么 | 读什么（必读） | 按需加载 |
 |--------|---------|--------------|---------|
-| **1.1 初始化** | 项目骨架 + `story.md` | `story.md`（检查是否已存在，存在则跳过） | — |
+| **1.1 新建项目** | 项目骨架 + `story.md` | `scripts/init.py`（创建骨架） | — |
+| **1.1 导入已有** | 切分的章纲 + archives/ | `scripts/import.py`（导入切分） | — |
 | **1.2 世界观** | `settings/world-setting.md` | `references/world-setup-style.md`（引导讨论+自检） | — |
 | **1.3 角色** | `settings/character-setting/<id>.md` | 已有角色文件（追加时不覆盖）<br>`references/character-setting-style.md`（认知6层+自检） | — |
 | **1.4 写作风格** | `settings/writing-style.md` | `references/writing-style.md`（指南+自检） | — |
