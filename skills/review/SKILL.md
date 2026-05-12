@@ -26,10 +26,10 @@ description: 章节深度评审。Phase 4——对已完成正文进行 10 维 6
 | 检查项 | 操作 |
 |--------|------|
 | `archives/vol-{N}-ch-{M}-*.md` 存在？ | 不存在 → **STOP**，正文尚未生成 |
-| `chapters/vol-{N}-ch-{M}.yaml` 存在且 outline 完整？ | 不存在/不完整 → **STOP**，无评审依据 |
-| `volumes/volume-{N}.yaml` 存在？ | 不存在 → 标注"无卷纲，跳过卷级评审" |
-| `settings/writing-style.yaml` 存在？ | 不存在 → 标注"无风格指南，跳过风格评审" |
-| `settings/world-setting.yaml` 存在？ | 不存在 → 标注"无世界设定，跳过世界观评审" |
+| `chapters/vol-{N}-ch-{M}.md` 存在且 outline 完整？ | 不存在/不完整 → **STOP**，无评审依据 |
+| `volumes/volume-{N}.md` 存在？ | 不存在 → 标注"无卷纲，跳过卷级评审" |
+| `settings/writing-style.md` 存在？ | 不存在 → 标注"无风格指南，跳过风格评审" |
+| `settings/world-setting.md` 存在？ | 不存在 → 标注"无世界设定，跳过世界观评审" |
 
 ## 评审流程
 
@@ -44,13 +44,13 @@ description: 章节深度评审。Phase 4——对已完成正文进行 10 维 6
 | 文件 | 评审用途 |
 |------|---------|
 | `archives/vol-{N}-ch-{M}-*.md` | **评审对象**——章正文全文 |
-| `chapters/vol-{N}-ch-{M}.yaml` | 章纲——outline、memo（7段）、emotional_design、micro_payoffs |
-| `volumes/volume-{N}.yaml` | 卷纲——核心冲突、章节摘要、主线走向 |
-| `settings/world-setting.yaml` | 世界设定——geography/politics/culture/history/rules/physics/biology/sociology |
+| `chapters/vol-{N}-ch-{M}.md` | 章纲——outline、memo（7段）、emotional_design、micro_payoffs |
+| `volumes/volume-{N}.md` | 卷纲——核心冲突、章节摘要、主线走向 |
+| `settings/world-setting.md` | 世界设定——geography/politics/culture/history/rules/physics/biology/sociology |
 | `settings/character-setting/*.md` | 角色设定——世界观/自我定位/价值观/能力/技能/环境/关系/外貌/背景/故事角色/状态历史 |
-| `settings/writing-style.yaml` | 写作风格——core_principles/possible_mistakes/depiction_techniques/genre/skill_layers/reader_psychology/desire_engine/immersion_pillars/emotional_pacing/creative_constitution/character_psychology_method/pov_consistency/natural_expression |
-| `settings/hooks.yaml` | 伏笔/钩子——hooks 列表、状态、payoff_timing、hook_health_rules |
-| `settings/anti-ai.yaml`（若存在） | 原有 AI 味规则（评审时参考，不重复 chapter-loop 检查）。新项目不再生成此文件——AI 味检测由下方 checklist 执行 |
+| `settings/writing-style.md` | 写作风格——core_principles/possible_mistakes/depiction_techniques/genre/skill_layers/reader_psychology/desire_engine/immersion_pillars/emotional_pacing/creative_constitution/character_psychology_method/pov_consistency/natural_expression |
+| `settings/hooks.md` | 伏笔/钩子——hooks 列表、状态、payoff_timing、hook_health_rules |
+| `settings/anti-ai.md`（若存在） | 原有 AI 味规则（评审时参考，不重复 chapter-loop 检查）。新项目不再生成此文件——AI 味检测由下方 checklist 执行 |
 | `archives/vol-{N}-ch-{M-1}-*.md`（上一章正文结尾 200 字） | 前文延续——章节衔接是否无缝 |
 | `prompts/vol-{N}-ch-{M}-prompt.md`（若存在） | 写作指令——对照 subagent 收到的完整指令，检查执行度 |
 
@@ -71,7 +71,7 @@ description: 章节深度评审。Phase 4——对已完成正文进行 10 维 6
 
 ## 评审维度与细项
 
-### 维度 1：章纲执行度（对照 chapters/vol-{N}-ch-{M}.yaml）
+### 维度 1：章纲执行度（对照 chapters/vol-{N}-ch-{M}.md）
 
 逐条检查章正文是否兑现了章纲中的每一项规划。
 
@@ -100,16 +100,16 @@ description: 章节深度评审。Phase 4——对已完成正文进行 10 维 6
 | 1.21 | 情绪强度匹配 | `emotional_design.intensity_level` | 正文的情绪强度是否接近规划的 1-10 级别？偏差超过 2 级 → 标记 |
 | 1.22 | 微兑现交付 | `emotional_design.micro_payoffs[]` | 逐条检查每个 micro_payoff 的 type 是否在正文中兑现、location 是否正确。过渡章至少 1 个微兑现。全部缺失 → 标记 |
 
-### 维度 2：卷纲推进度（对照 volumes/volume-{N}.yaml）
+### 维度 2：卷纲推进度（对照 volumes/volume-{N}.md）
 
 | # | 细项 | 对照字段 | 评审方法 |
 |---|------|---------|---------|
 | 2.1 | 卷核心冲突推进 | `summary`（卷概要） | 本章是否实质推进了本卷的核心冲突？还是在核心冲突外围打转？无推进 → 标记 |
 | 2.2 | 章节定位符合 | `chapters_summary[当前章]` | 本章正文内容是否与卷纲中该章的 summary 描述一致？偏离 → 记录偏离方向 |
 | 2.3 | 卷级主线连贯 | 全卷 chapters_summary | 本章在卷内各章中的位置（起/承/转/合）是否合理？节奏是否与前后章协调？ |
-| 2.4 | 卷级伏笔意识 | 卷纲 + hooks.yaml | 本章是否对卷级伏笔（payoff_timing 为 mid_arc 或更高）有意识地进行铺垫/推进？ |
+| 2.4 | 卷级伏笔意识 | 卷纲 + hooks.md | 本章是否对卷级伏笔（payoff_timing 为 mid_arc 或更高）有意识地进行铺垫/推进？ |
 
-### 维度 3：世界设定一致性（对照 settings/world-setting.yaml）
+### 维度 3：世界设定一致性（对照 settings/world-setting.md）
 
 | # | 细项 | 对照字段 | 评审方法 |
 |---|------|---------|---------|
@@ -142,9 +142,9 @@ description: 章节深度评审。Phase 4——对已完成正文进行 10 维 6
 | 4.1 | 世界观驱动一致 | 世界观 | 角色的信念和判断方式是否通过行为和选择体现？言行不一 → 标记 |
 | 4.14 | 角色间差异化 | 多个角色文件对比 | 不同角色是否有不同的身体反应模式、话风、决策风格？所有角色恐惧都是"喉咙发紧" → 标记模板化 |
 
-### 维度 5：写作风格执行度（对照 settings/writing-style.yaml）
+### 维度 5：写作风格执行度（对照 settings/writing-style.md）
 
-> 对照 writing-style.yaml 对应字段逐条检查。AI 味相关的硬性检测（疲劳词、句式癖好）见 anti-ai.yaml，本维度聚焦内容层面的风格执行。
+> 对照 writing-style.md 对应字段逐条检查。AI 味相关的硬性检测（疲劳词、句式癖好）见 anti-ai.md，本维度聚焦内容层面的风格执行。
 
 | # | 细项 | 对照字段 | 检查要点 |
 |---|------|---------|---------|
@@ -181,7 +181,7 @@ description: 章节深度评审。Phase 4——对已完成正文进行 10 维 6
 | 6.4 | 信息状态延续 | 上一章角色获得的信息 | 上一章角色得知的重要信息在本章是否被记住和使用？角色"遗忘"重要信息 → 标记 |
 | 6.5 | 物品状态延续 | 上一章出现的重要物品 | 上一章获得/使用的重要物品是否在本章保持合理状态？突然消失/突然出现 → 标记 |
 
-### 维度 7：钩子管理（对照 settings/hooks.yaml）
+### 维度 7：钩子管理（对照 settings/hooks.md）
 
 | # | 细项 | 对照字段 | 评审方法 |
 |---|------|---------|---------|
@@ -221,7 +221,7 @@ description: 章节深度评审。Phase 4——对已完成正文进行 10 维 6
 
 ### AI 味手检（读完本章后逐项过）
 
-> 替代原有的 anti-ai.yaml 规则引擎。不阻断评审流程——作为补充信息附在报告末尾。
+> 替代原有的 anti-ai.md 规则引擎。不阻断评审流程——作为补充信息附在报告末尾。
 
 | # | 检查项 | 检查方法 | 判定 |
 |---|--------|---------|------|

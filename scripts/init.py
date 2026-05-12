@@ -30,7 +30,7 @@ from pathlib import Path
 
 def get_template_path(template_name: str) -> Path:
     """获取模板文件路径"""
-    return Path(__file__).parent / "templates" / f"{template_name}.yaml.template"
+    return Path(__file__).parent / "templates" / f"{template_name}.md.template"
 
 
 def create_directory_structure(project_path: Path) -> None:
@@ -73,10 +73,10 @@ def init_project(project_name: str, author: str = "") -> None:
 
     # 复制模板文件
     copy_md_template("story", project_path / "story.md")
-    copy_template("world-setting", project_path / "settings" / "world-setting.yaml")
-    copy_template("writing-style", project_path / "settings" / "writing-style.yaml")
-    copy_template("anti-ai", project_path / "settings" / "anti-ai.yaml")
-    copy_template("hooks", project_path / "settings" / "hooks.yaml")
+    copy_template("world-setting", project_path / "settings" / "world-setting.md")
+    copy_template("writing-style", project_path / "settings" / "writing-style.md")
+    copy_template("anti-ai", project_path / "settings" / "anti-ai.md")
+    copy_template("hooks", project_path / "settings" / "hooks.md")
 
     # 复制角色设定模板（markdown 格式，角色文件后续讨论时创建）
     copy_md_template("character", project_path / "settings" / "character-setting" / "template.md")

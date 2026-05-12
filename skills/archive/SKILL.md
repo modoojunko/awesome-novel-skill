@@ -25,7 +25,7 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
 
 | 检查项 | 操作 |
 |--------|------|
-| chapter.yaml 完整性 | memo（7段）+ emotional_design 全部有值？缺失 → Read `skills/chapter-loop/SKILL.md` Step 2 补全章纲 |
+| chapter.md 完整性 | memo（7段）+ emotional_design 全部有值？缺失 → Read `skills/chapter-loop/SKILL.md` Step 2 补全章纲 |
 | 章提示词文件存在？ | `prompts/vol-{N}-ch-{M}-prompt.md` 存在？缺失 → Read `skills/prompt/SKILL.md` 生成 |
 | 正文通过全部质量检查？ | 未通过 → 返回到 Phase 3（`skills/chapter-loop/SKILL.md` Step 4）修复 |
 | 深度评审已完成？ | 建议归档前先触发 `novel-review`（10 维诊断），未评审 → 提醒作者可选评审 |
@@ -38,9 +38,9 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
 3. 分析角色变化，追加 `状态历史`
 4. 更新角色 yaml 当前状态字段（位置、能力、关系、世界观、概要）
 5. 追记 `情绪弧线`（情绪状态、触发事件、强度、弧线方向、表达方式）
-6. 更新角色 yaml 中的 hooks 引用（全局 hooks.yaml 不再维护——真相源在各 chapter.yaml 的 hooks 字段），运行钩子健康检查
+6. 更新角色 yaml 中的 hooks 引用（全局 hooks.md 不再维护——真相源在各 chapter.md 的 hooks 字段），运行钩子健康检查
 7. 运行情节推进停滞检测（最近 3 章是否有实质性推进）
-8. 将 chapter.yaml status 更新为 `archived`
+8. 将 chapter.md status 更新为 `archived`
 9. 更新 story.md chapters 列表
 10. **更新卷提示词**：往 `prompts/volume-{N}-prompt.md` 追加本章一句话摘要
 11. **滑动窗口审视**：
@@ -49,7 +49,7 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
     - 状态不符 → 报告差异并建议调整
     - 状态一致 → 报告"无需调整"
 12. **检测卷边界**：
-    - 读 `chapters/` 目录，筛选当前卷的章节文件（`vol-{N}-ch-*.yaml`）
+    - 读 `chapters/` 目录，筛选当前卷的章节文件（`vol-{N}-ch-*.md`）
     - 检查这些章节的 status 是否全部为 `archived`
     - 未全部完成 → 不做额外操作
     - 全部完成 → **输出卷完成报告：**
