@@ -223,7 +223,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 ### Step 4: 模型门禁
 
-对照下方「模型门禁（MODEL-GATE）」表，检查目标 Phase 的主会话模型要求。若不满足 → **STOP**，告知用户切换模型后再继续。满足要求 → 进入 Step 5。
+Phase 1-3 主会话必须使用 sonnet；正文写作 subagent 从 `writing_model` 读取（默认 haiku）。不满足 → **STOP**，告知用户切换模型后再继续。满足要求 → 进入 Step 5。
 
 ### Step 5: 分发
 
@@ -237,34 +237,6 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | novel-chapter-loop | 逐章写作循环 | `skills/chapter-loop/SKILL.md` |
 
 子技能文件位于主技能安装目录的 `skills/` 下，即 `~/.claude/skills/awesome-novel/skills/{name}/SKILL.md`。
-
-## Anti-Patterns
-
-| 借口 | 现实 |
-|------|------|
-| "作者说写第一章，我直接生成所有文件" | 必须按 Phase 顺序推进 |
-| "差不多就行，不用那么详细" | 缺 memo，subagent 不知道读者在等什么 |
-| "视角转换跳过自动质量防护" | Agent 自动执行时仍需跑完整双轮净化和 AI 味自检 |
-| "模板我看懂了，直接帮作者填好" | Agent 引导讨论，不代笔填字段 |
-
-## 模型门禁（MODEL-GATE）
-
-```
-深度推理阶段（Phase 1-3）→ 主会话必须使用 sonnet。
-若不满足 → STOP，告知用户切换模型后再继续。不得在 haiku 下执行深度推理。
-```
-
-| Phase | 子技能 | 主会话模型 | 原因 |
-|-------|--------|-----------|------|
-| 1 | novel-setup | **sonnet（强制）** | 设定讨论——需要深度思考 |
-| 2 | novel-volume | **sonnet（强制）** | 主线拆纲+卷纲规划——需要结构推理 |
-| 3 | novel-chapter-loop | **sonnet（强制）** | 情节提案、章纲、视角转换——核心推理 |
-| 3 | novel-chapter-loop（subagent 写作） | 从 `writing_model` 读取 | 正文生成，默认 haiku |
-| — | novel-style-extract | **sonnet（强制）** | 风格分析——需要深度推理 |
-
-**模型切换方法：**
-- Claude Code: 输入 `/model` 选择 sonnet，或按 `Alt+T` 切换
-- OpenClaw / Hermes / DeepSeek TUI: 使用平台模型切换机制，或留空使用默认
 
 ## 授权模式
 
