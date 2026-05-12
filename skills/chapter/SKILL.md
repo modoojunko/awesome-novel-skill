@@ -20,7 +20,7 @@ description: 章纲设定——从卷纲拆出每章内容规划。触发："规
 | 检查项 | 操作 |
 |--------|------|
 | volume-N.md 存在且章节列表非空？ | 不存在 → STOP，先走 `novel-outline` |
-| 本章 chapter.md 已存在且 status = draft？ | 是 → 章纲已确认，提示词已生成，直接路由到 `skills/prompt/SKILL.md` |
+| 本章 chapter.md 已存在且 status = draft？ | 是 → 章纲已确认，告知作者"本章章纲已完成"，回主流程 |
 | 本章 chapter.md 已存在且 status = archived？ | 是 → 本章已完成，回主流程进入下一章 |
 
 ## 执行参数
@@ -125,8 +125,6 @@ primary_mood、mood_progression、intensity_peak、emotional_hook、intensity_le
 | 5 | "不是而是"句式 | 所有字段 | "不是X，而是Y" |
 | 6 | 抽象标签 | memo.current_task、memo.required_changes | "关系递进""冲突升级"——应写具体事件 |
 
-**写入文件：** `chapters/vol-{N}-ch-{M}.md`，status → `outline`
-
 **作者确认章纲后：**
-- "继续" → 自动进入 `skills/prompt/SKILL.md` 生成提示词
-- "调整" → 回到本章纲修改
+- 写入 `chapters/vol-{N}-ch-{M}.md`，status → `outline`
+- 回到主流程 Step 1，由主 SKILL.md 检测进度并自动分发到提示词生成
