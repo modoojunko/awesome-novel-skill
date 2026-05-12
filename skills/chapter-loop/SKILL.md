@@ -138,6 +138,7 @@ primary_mood、mood_progression、intensity_peak、emotional_hook、intensity_le
 5. 文件头部写入标记：`# 自动生成 — 修改章纲后重新生成覆盖。手动编辑不持久。`
 6. AI 味自检 → 命中自动修复 → 二次扫描确认
 7. chapter.md status → `draft`
+8. 更新 `.agent/status.md`：current_phase = chapter-loop, current_chapter = {M}, project_status = writing
 
 **汇报结果：**
 ```
@@ -249,6 +250,12 @@ Read `agents/pipeline/exec-prose.md`，注入写作参数后调用写作 subagen
 
 ### 卷提示词更新
 9. 往 `prompts/volume-{N}-prompt.md` 追加本章一句话摘要
+
+### 状态持久化
+10. 更新 `.agent/status.md`：
+    - current_chapter → {M+1}（如本卷还有下章）或保持 {M}（卷完成时）
+    - last_volume_completed → true（卷全部归档时）
+    - project_status → writing（如还有章节）或 paused（作者选暂停时）
 
 ---
 

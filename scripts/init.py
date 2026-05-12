@@ -36,6 +36,7 @@ def get_template_path(template_name: str) -> Path:
 def create_directory_structure(project_path: Path) -> None:
     """创建项目目录结构"""
     dirs = [
+        project_path / ".agent",
         project_path / "settings" / "character-setting",
         project_path / "volumes",
         project_path / "chapters",
@@ -78,8 +79,15 @@ def init_project(project_name: str, author: str = "") -> None:
     copy_template("anti-ai", project_path / "settings" / "anti-ai.md")
     copy_template("hooks", project_path / "settings" / "hooks.md")
 
-    # 复制角色设定模板（markdown 格式，角色文件后续讨论时创建）
+    # 角色设定模板
     copy_md_template("character", project_path / "settings" / "character-setting" / "template.md")
+
+    # 生成 .agent/status.md（带时间戳）
+    status_src = get_template_path("agent-status")
+    status_dest = project_path / ".agent" / "status.md"
+    now = datetime.datetime.now().strftime("%Y-%m-%d")
+    content = status_src.read_text(encoding="utf-8").replace("{{created_at}}", now)
+    status_dest.write_text(content, encoding="utf-8")
 
     print(f"项目已创建: {project_path}")
     print(f"请进入项目目录: cd {project_path}")

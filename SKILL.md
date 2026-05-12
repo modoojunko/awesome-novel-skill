@@ -114,7 +114,8 @@ Agent 在用户当前目录下创建/编辑以下文件：
 ├── chapters/
 │   └── vol-{N}-ch-{M}.md # ★ 章纲唯一存放处（memo + emotional_design + status）
 ├── prompts/
-│   ├── global-prompt.md    # Phase 1 产出：写作方法论汇总（作者参考）
+│   ├── global-prompt.md         # Phase 1 产出：写作方法论汇总（作者参考）
+│   ├── volume-{N}-prompt.md     # 卷提示词（Phase 2 生成，归档时追加本章摘要）
 │   └── vol-{N}-ch-{M}-prompt.md  # ★ 章提示词（自动生成，可覆盖）
 └── archives/
     ├── vol-{N}-ch-{M}-{slug}.draft.md  # 草稿（写作中）
@@ -160,40 +161,49 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 ## 各阶段文件读取指南
 
-不同阶段必须读的文件不同。长会话中逐章循环重复 N 次，agent 容易遗忘约束——每次进入阶段必须先读"必读"文件再开始执行。
+每个子步骤按"输出什么 → 读什么 → 按需加载什么"加载上下文。读完产出，再释放换下一步。
 
-| 阶段 / 路由 | 必读（每次都看） | 一次性看完 / 按需查 |
-|------------|-----------------|-------------------|
-| **Phase 1 设定**（novel-setup） | `story.md`（项目索引，检查是否已初始化）+ `world-setting.md`（8 字段填写进度，引导逐项讨论）+ `scripts/templates/*` 全部 md 模板（字段结构参考） | `references/genre-example/index.md`（选类型时浏览 24 种 + 推荐）+ 自检：完成后逐项过 `references/world-setup-style.md`（世界观）+ `references/character-setting-style.md`（角色）+ `references/writing-style.md`（写作风格）+ `references/genre-style.md`（题材） |
-| **Phase 2 卷纲**（novel-volume） | `story.md`（story_arc + 卷映射——总主线和分卷规划）+ `world-setting.md` core（geography / politics / rules——冲突空间来源）+ `writing-style.md`（role——叙事身份）+ `genre-setting.md`（pacing_rules——节奏基准） | `references/genre-example/` 对应类型的 `story_arc_templates`（卷结构参考）+ 角色文件（按需看动机）+ 自检：完成后逐项过 `references/volume-setting-style.md` |
-| **Phase 3.1 方向提案**（×N 次，每章一次） | 最新 `chapter.md#emotional_design`（上一章的情绪落点——读者期待来源）+ `volume-N.md#chapters_summary`（本章在卷内的定位）+ `genre-setting.md`（pacing_rules + satisfaction_types——节奏和爽点约束）+ 最近 1 章 `archives/` 结尾段（上一章结尾的情绪状态） | 所有角色文件（活跃角色的当前动机和冲突）+ `world-setting.md`（环境约束）+ 最近 3 章 `chapter.md#emotional_design`（情绪类型，避免连续同类型） |
-| **Phase 3.2 章纲** | 方向提案确认结果 + `volume-N.md#chapters_summary`（本章占位章纲）+ 所有角色文件（性格 / 动机 / 关系——决策合理性来源） | 自检：完成后逐项过 `references/chapter-setting-style.md` |
-| **Phase 3.3 自动提示词**（自动执行，×N 次） | **`writing-style.md` 四字段**（role / core_principles / possible_mistakes / depiction_techniques——缺一不可，缺失则 subagent 放飞）+ `references/genre-example/` 对应类型的 `prompt_segment`（题材特有叙事约束）+ 前文 `archives/` 最近 3 章（文风一致性）+ `world-setting.md`（场景 / 环境描述来源） | 角色文件（性格细节注入提示词 `character_voice`）+ 自检：组装后逐项过 `references/prompt-setting-style.md` |
-| **Phase 3.4 正文生成**（×N 次，被 3.3 调用） | `prompts/vol-N-ch-M-prompt.md` 单一入口——segment 拆分 + 逐段叙事指引 + 视角约束 + writing-style 注入 + genre prompt_segment / `agents/pipeline/exec-prose.md`（subagent 写作契约：输出格式 + 质量门禁 15 项 + 完工自检） | `archives/` 前文（文风参考，卡壳才翻——先按提示词自由写，不要抄袭前文句式） |
-| **Phase 3.6 归档** | 当前 `chapter.md`（status→archived）+ 各角色文件（追加 状态历史 + 情绪弧线——每归档一章状态历史条目数 +1） | 最近 3 章 `chapter.md`（滑动窗口审视参考）+ `prompts/volume-N-prompt.md`（追加本章一句话摘要） |
-| **novel-review** | 目标正文 `archives/` + `writing-style.md`（评分基准：role / core_principles / possible_mistakes / depiction_techniques） | 角色文件（角色一致性校验）+ `world-setting.md`（设定一致性校验） |
+| 子步骤 | 输出什么 | 读什么（必读） | 按需加载 |
+|--------|---------|--------------|---------|
+| **1.1 初始化** | 项目骨架 + `story.md` | `story.md`（检查是否已存在，存在则跳过） | — |
+| **1.2 世界观** | `settings/world-setting.md` | `settings/world-setting.md`（模板字段，逐项讨论）<br>`references/world-setup-style.md`（引导讨论+自检） | — |
+| **1.3 角色** | `settings/character-setting/<id>.md` | 已有角色文件（追加时不覆盖）<br>`references/character-setting-style.md`（认知6层+自检） | — |
+| **1.4 写作风格** | `settings/writing-style.md` | `settings/writing-style.md`（填写四字段）<br>`references/writing-style.md`（指南+自检） | — |
+| **1.5 题材选择** | `settings/genre-setting.md` | `references/genre-style.md`（字段指南） | `references/genre-example/` 对应类型（配置参考） |
+| **1.6 钩子初始化** | `settings/hooks.md` | `settings/hooks.md`（模板初始化） | — |
+| **1.7 全局提示词** | `prompts/global-prompt.md` | `settings/writing-style.md`（四字段读取生成） | — |
+| **2.0 主线拆纲** | `story.md#story_arc`（主线+分卷） | `story.md`（检查是否已拆）<br>`references/story-arc-style.md`（从结局倒推法） | `settings/world-setting.md` core（冲突空间参考） |
+| **2.1 卷方向/卷纲** | `volumes/volume-{N}.md` | `volumes/volume-{N}.md`（核心冲突+章节列表）<br>`references/volume-setting-style.md`（指南+自检） | 角色文件（动机参考） |
+| **2.2 卷提示词** | `prompts/volume-{N}-prompt.md` | `volumes/volume-{N}.md` + `story.md`<br>`settings/writing-style.md`（叙事身份） | — |
+| **3.1 方向提案** | 3-4 个情节方向（内存） | 最新 `chapters/vol-{N}-ch-{M-1}.md#emotional_design`（上章情绪落点）<br>`volumes/volume-{N}.md#chapters_summary`（本章定位）<br>`settings/genre-setting.md`（pacing_rules） | 角色文件（活跃角色动机）<br>`settings/world-setting.md`（环境约束）<br>最近 3 章 emotional_design（避免同类型） |
+| **3.2 章纲** | `chapters/vol-{N}-ch-{M}.md` | 方向提案确认结果<br>`references/chapter-setting-style.md`（指南+自检） | `volumes/volume-{N}.md#chapters_summary`（占位章纲）<br>角色文件（决策合理性） |
+| **3.3 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `settings/writing-style.md` 四字段（缺一不可）<br>`chapters/vol-{N}-ch-{M}.md`（章纲）<br>`settings/world-setting.md`（场景描述来源） | 最近 3 章 `archives/` 定稿（文风一致性）<br>角色文件（性格注入）<br>`references/prompt-setting-style.md`（自检） |
+| **3.4 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口）<br>`agents/pipeline/exec-prose.md`（subagent 写作契约） | `archives/` 前文（卡壳才翻文风参考） |
+| **3.5 验收** | 质量检查报告（内存） | `archives/vol-{N}-ch-{M}-*.md`（正文）<br>`references/chapter-quality-checklist.md`（15 项检查） | `settings/writing-style.md`（评分基准）<br>角色文件/`world-setting.md`（一致性校验） |
+| **3.6 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>角色状态追加 + `status.md` 更新 | `chapters/vol-{N}-ch-{M}.md`（status→archived）<br>各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（滑动窗口审视）<br>`prompts/volume-{N}-prompt.md`（追加摘要） |
+| **review** | 诊断报告（内存） | 目标正文 `archives/vol-{N}-ch-{M}-*.md`<br>`settings/writing-style.md`（评分基准） | 角色文件（角色一致性）<br>`settings/world-setting.md`（设定一致性） |
 
 **要点：**
 - Phase 3.3 的 writing-style 四字段必须全部注入——role 定叙事身份，core_principles 定不可违背的写作信条，possible_mistakes 定 AI 易犯错误列表，depiction_techniques 定描写层次和手法。缺任何一个，subagent 都会在最关键的地方放飞。
-- Phase 3.1 每个循环重读上一章的 emotional_design 和卷纲定位——方向提案的推理链来源不在子技能文件中，在当前项目的 chapter.md 和 archives/ 里。
-- 正文字数目标、写作模型（writing_model）、情绪目标等执行参数从 `writing-style.md` 和 `chapter.md` 读取，不在 prompts/ 中重复定义——一处修改全局生效。
+- Phase 3.1 每个循环重读上一章的 emotional_design 和卷纲定位——方向提案的推理链来源不在子技能文件中，在当前项目的 chapters/ 和 archives/ 里。
+- 正文字数目标、写作模型（writing_model）、情绪目标等执行参数从 `settings/writing-style.md` 和 `chapters/vol-{N}-ch-{M}.md` 读取，不在 prompts/ 中重复定义——一处修改全局生效。
 
 ## The Process
 
 ### Step 1: 检测当前进度
 
-读取项目根目录的 `story.md`。若不存在 → 项目未创建，Read `skills/setup/SKILL.md`。
+先读 `story.md`。不存在 → 项目未创建，Read `skills/setup/SKILL.md`。
 
-若存在：
+存在 → 读 `.agent/status.md` 获取状态缓存（current_volume、current_chapter、current_phase）。然后交叉验证：
+- 读 `chapters/` 下最大章号的 `status` 字段 → 与缓存比对
+- 一致 → 快速定位。不一致 → 以实际文件为准更新 status.md
 
-1. 读 `volumes/` 目录，找到最大卷号 → 当前卷
-2. 读 `chapters/` 目录，筛选当前卷的章节文件，按 chapter 号排序
-3. 取最大 chapter 号的 `chapter.md`，读 status：
+兜底：status.md 不存在 → 回退到目录扫描（volumes/ → chapters/ → status 判断）。
 
 | 信号 | 下一步 |
 |------|--------|
 | 无 volumes/ 或无 volume md | → `novel-setup`（先完成设定和卷纲）|
-| world-setting.md 字段大量为空 | → `novel-setup`（设定未完成）|
+| settings/world-setting.md 字段大量为空 | → `novel-setup`（设定未完成）|
 | 最新 chapter.md status = `outline` | → 走 Chapter Loop（从情节方向提案开始） |
 | 最新 chapter.md status = `draft` | → 走 Chapter Loop（从作者审阅开始。提示词已存在则直接写正文，不存在则自动组装后写） |
 | 最新 chapter.md status = `archived` | 本卷还有未归档章？→ 问"下一章继续？"。全部归档 → 卷完成报告 + 选项 |
@@ -222,13 +232,13 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 | 目标 | 检查项 |
 |------|--------|
-| novel-volume | story.md story_arc 已定义（至少已完成主线拆纲）、settings/world-setting.md 非模板、writing-style.md 非模板 |
-| novel-chapter-loop | volume-N.md 存在且 chapters_summary 非空 |
+| novel-volume | story.md story_arc 已定义（至少已完成主线拆纲）、settings/world-setting.md 非模板、settings/writing-style.md 非模板 |
+| novel-chapter-loop | volumes/volume-{N}.md 存在且 chapters_summary 非空 |
 | novel-review | archives/ 下存在正文文件 |
 
 缺失 → **STOP**。告知作者"XX 还没完成，先补这一环"，路由到前置 Phase 的子技能。
 
-**设定字段优先级（world-setting.md）：**
+**设定字段优先级（settings/world-setting.md）：**
 - core（必填——填完即可进入写作循环）：geography, politics, rules
 - extended（可选——按需在写作中追加）：culture, history, physics, biology, sociology
 
@@ -257,7 +267,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | "作者说写第一章，我直接生成所有文件" | 必须按 Phase 顺序推进 |
 | "差不多就行，不用那么详细" | 缺 memo，subagent 不知道读者在等什么 |
 | "视角转换跳过自动质量防护" | Agent 自动执行时仍需跑完整双轮净化和 AI 味自检 |
-| "模板我看懂了，直接帮作者填好" | Agent 引导讨论，不代笔填 YAML |
+| "模板我看懂了，直接帮作者填好" | Agent 引导讨论，不代笔填字段 |
 
 ## 模型门禁（MODEL-GATE）
 
@@ -292,5 +302,5 @@ Agent 在用户当前目录下创建/编辑以下文件：
 |------|------|---------|
 | `scripts/init.py` | 创建项目骨架 | Phase 1 新建项目时执行 |
 | `scripts/import.py` | 导入已有小说，切分章节 | Phase 1 导入模式时执行 |
-| `scripts/templates/` | YAML 模板（world-setting、writing-style、hooks 等）；Markdown 模板（character、story） | 新建项目时 init.py 自动复制；讨论设定时参考字段结构 |
+| `scripts/templates/` | 全部 md 模板（world-setting、writing-style、hooks、character、story 等） | 新建项目时 init.py 自动复制；讨论设定时参考字段结构 |
 | `references/genre-example/` | 类型案例（24 种预置类型，自包含文件） | Phase 2 设定阶段参考类型配置；Phase 3 提示词注入 prompt_segment |
