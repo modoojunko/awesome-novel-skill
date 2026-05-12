@@ -160,7 +160,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | **1.3 世界观** | `settings/world-setting.md` | `references/world-setup-style.md`（引导讨论+自检） | — |
 | **1.4 角色** | `settings/character-setting/<id>.md` | 已有角色文件（追加时不覆盖）<br>`references/character-setting-style.md`（认知6层+自检） | — |
 | **2.0 主线拆纲** | `story.md#story_arc`（主线+分卷） | `references/story-arc-style.md`（从结局倒推法） | `settings/world-setting.md` core（冲突空间参考）<br>角色文件（按需看动机） |
-| **2.1 卷方向/卷纲** | `volumes/volume-{N}.md`（章节列表） | `references/volume-setting-style.md`（指南+自检） | 角色文件（动机参考） |
+| **2.1 卷纲** | `volumes/volume-{N}.md`（章节列表） | `references/volume-setting-style.md`（指南+自检） | 角色文件（动机参考） |
 | **3.1 章纲** | `chapters/vol-{N}-ch-{M}.md` | `volumes/volume-{N}.md#chapters_summary`（卷纲给的本章方向）<br>`references/chapter-setting-style.md`（指南+自检） | 最新 `chapters/vol-{N}-ch-{M-1}.md#emotional_design`（上章情绪落点）<br>`settings/genre-setting.md`（pacing_rules）<br>角色文件（决策合理性）<br>`settings/world-setting.md`（环境约束） |
 | **3.2 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `settings/writing-style.md` 四字段（缺一不可）<br>`chapters/vol-{N}-ch-{M}.md`（章纲）<br>`settings/world-setting.md`（场景描述来源） | 最近 3 章 `archives/` 定稿（文风一致性）<br>角色文件（性格注入）<br>`references/prompt-setting-style.md`（自检） |
 | **3.3 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口）<br>`agents/pipeline/exec-prose.md`（subagent 写作契约） | `archives/` 前文（卡壳才翻文风参考） |
