@@ -79,6 +79,11 @@ def init_project(project_name: str, author: str = "") -> None:
     copy_template("anti-ai", project_path / "settings" / "anti-ai.md")
     copy_template("hooks", project_path / "settings" / "hooks.md")
 
+    # 长篇小说追踪文件
+    copy_template("timeline", project_path / "settings" / "timeline.md")
+    copy_template("foreshadowing", project_path / "settings" / "foreshadowing.md")
+    copy_template("setting-change-log", project_path / "settings" / "setting-change-log.md")
+
     # 角色设定模板
     copy_md_template("character", project_path / "settings" / "character-setting" / "template.md")
 

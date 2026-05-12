@@ -143,6 +143,14 @@ Read `agents/pipeline/exec-prose.md`，注入写作参数后调用写作 subagen
 | 14 | 句式单调检测 | 连续 4 句相同开头 |
 | 15 | 身体反应模板化 | 高密度复用同一反应 |
 
+### 长篇小说附加检查（16-18，项目存在 foreshadowing.md 等追踪文件时执行）
+
+| # | 检查项 | 不通过处理 |
+|---|--------|-----------|
+| 16 | 时间线冲突 | 对照 timeline.md，story_date 与前章间隔不合理或矛盾 |
+| 17 | 伏笔遗漏 | 对照 foreshadowing.md，前卷活跃伏笔本章应触及但未触及 |
+| 18 | 设定版本对齐 | 新引入的设定元素与 setting-change-log.md 已有记录冲突 |
+
 全部通过 → 执行深度评审（主 Agent 直接执行 `novel-review`）
 
 ---
@@ -179,9 +187,14 @@ Read `agents/pipeline/exec-prose.md`，注入写作参数后调用写作 subagen
 4. 追记 `情绪弧线`
 5. **更新 hooks**：从当前 chapter.md 读取 hooks 操作，追加到各角色 yaml。**不维护全局 hooks.md。**
 
+### 长篇小说追踪文件（项目 `settings/` 下存在对应文件时执行）
+6. **timeline.md 追加**：读 `settings/timeline.md`，提取本章 `outline.story_date` 和核心事件，追加一行到 timeline 表格
+7. **foreshadowing.md 重新生成**：扫描 `chapters/` 下各 chapter.md 的 hooks 字段，重新生成 `settings/foreshadowing.md` 的三张汇总表（活跃/已收束/废弃伏笔）
+8. **setting-change-log.md 检查**：比对本章正文引入的新设定元素与初始设定。有显着偏离 → 追加一行到 `settings/setting-change-log.md`
+
 ### 动态报告（不落盘）
-6. 运行情节推进停滞检测
-7. **滑动窗口审视**（动态生成）：
+9. 运行情节推进停滞检测
+10. **滑动窗口审视**（动态生成）：
 
 ```
 ## 滑动窗口审视（第 {M} 章归档后自动生成）
@@ -197,12 +210,12 @@ Read `agents/pipeline/exec-prose.md`，注入写作参数后调用写作 subagen
 ```
 
 ### 卷完成检测
-8. 读 `chapters/` 目录，检查当前卷所有章节是否全部 archived：
+11. 读 `chapters/` 目录，检查当前卷所有章节是否全部 archived：
    - 未全部完成 → 问"下一章继续？"
    - 全部完成 → 卷完成报告 + "下一卷 / 回顾 / 修改"
 
 ### 状态持久化
-9. 更新 `.agent/status.md`：
+12. 更新 `.agent/status.md`：
     - current_chapter → {M+1}（如本卷还有下章）或保持 {M}（卷完成时）
     - last_volume_completed → true（卷全部归档时）
     - project_status → writing（如还有章节）或 paused（作者选暂停时）
@@ -223,3 +236,13 @@ Read `agents/pipeline/exec-prose.md`，注入写作参数后调用写作 subagen
   - "规划下一卷" → 回到 SKILL.md 路由到 novel-volume
   - "回顾整卷" → Read `skills/review/SKILL.md` 做整卷评审
   - "修改某章" → 指定章节修改
+
+### 跨卷检查（规划下一卷前执行）
+
+项目存在 `settings/foreshadowing.md` 等长篇小说追踪文件时，在进入 `novel-volume` 前执行三项预检：
+
+1. **伏笔完整性**：读 `settings/foreshadowing.md` 活跃伏笔表，确认前卷未收束钩子已知悉并计划在新卷处理。遗漏活跃钩子 → 报告
+2. **时间线衔接**：读 `settings/timeline.md`，确认两卷间 `story_date` 间隔合理（无跳跃断裂或时间倒流）。矛盾 → 报告
+3. **角色状态连续性**：读角色 yaml 和 `settings/setting-change-log.md`，确认前卷结束时角色状态已记录且与新卷起点一致。不一致 → 报告
+
+三项预检结果汇总给作者后，再进入卷规划。

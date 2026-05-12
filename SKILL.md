@@ -75,7 +75,6 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 子步骤 | 写什么文件 | 必读的参考 | 参考阅读 |
 |--------|---------|--------------|---------|
 | **1.1 新建项目** | 项目骨架 + `story.md` | `scripts/init.py`（创建骨架） | — |
-| **1.1 导入已有** | 切分的章纲 + archives/ | `scripts/import.py`（导入切分） | — |
 | **1.2 题材选择+风格** | `settings/genre-setting.md`<br>`settings/writing-style.md`（预填） | `references/genre-style.md`（选题指南+验收） | `references/genre-example/` 对应类型（配置参考） |
 | **1.3 世界观** | `settings/world-setting.md` | `references/world-setup-style.md`（引导讨论+自检） | — |
 | **1.4 角色** | `settings/character-setting/<id>.md` | 已有角色文件（追加时不覆盖）<br>`references/character-setting-style.md`（认知6层+自检） | — |
@@ -134,11 +133,13 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 缺失 → **STOP**，告知作者先补前置产出。
 
-**3）分配**
+**3）分配并执行**
 
-| 模块 | 读取路径 |
-|------|---------|
-| novel-setup | `skills/setup/SKILL.md` |
-| novel-volume | `skills/outline/SKILL.md` |
-| novel-chapter-loop | `skills/chapter-loop/SKILL.md` |
+前置检查通过后，Read 对应子技能的 SKILL.md，按其中的流程执行。子技能执行完后**自动回到 Step 1 重新检测进度**。
+
+| 模块 | 读取并执行 |
+|------|-----------|
+| novel-setup | `skills/setup/SKILL.md` — 项目初始化 + 设定 |
+| novel-volume | `skills/outline/SKILL.md` — 主线拆纲 + 卷纲 |
+| novel-chapter-loop | `skills/chapter-loop/SKILL.md` — 逐章写作循环 |
 
