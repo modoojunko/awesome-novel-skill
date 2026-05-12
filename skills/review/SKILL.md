@@ -9,11 +9,11 @@ description: 章节深度评审。Phase 4——对已完成正文进行 10 维 6
 
 ## Overview
 
-在归档前对章正文进行系统性评审，逐条对照项目中的所有设定文件，给出结构化诊断报告。与 chapter-loop Step 4 的 15 项 AI 味检测互补——AI 味检测是硬性门禁（AI 腔、模板化），本评审是软性的内容质量诊断（情节、人设、风格、逻辑）。
+在归档前对章正文进行系统性评审，逐条对照项目中的所有设定文件，给出结构化诊断报告。与 chapter-loop Step 3 的 15 项 AI 味检测互补——AI 味检测是硬性门禁（AI 腔、模板化），本评审是软性的内容质量诊断（情节、人设、风格、逻辑）。
 
-**定位**：chapter-loop Step 5 正文生成后 → 作者可选触发本评审 → chapter-loop Step 6 归档。也可随时对已归档章节进行回顾评审。
+**定位**：chapter-loop Step 3 正文生成后 → 作者可选触发本评审 → chapter-loop Step 5 归档。也可随时对已归档章节进行回顾评审。
 
-**When NOT to use:** 正文未写入 archives/、章纲不存在、只是想检测 AI 味（→ chapter-loop Step 4）。
+**When NOT to use:** 正文未写入 archives/、章纲不存在、只是想检测 AI 味（→ chapter-loop Step 3）。
 
 **Announce at start:** "我来评审第{N}卷第{M}章《{title}》。将逐条对照项目设定文件进行 10 维诊断。"
 
@@ -346,8 +346,8 @@ Subagent 必须严格按以下格式输出评审报告：
 作者可能的选择：
 - "按关键问题修改" → 主 Agent 直接编辑 archives/ 中的正文
 - "部分修改" → 指定要改的条目编号，主 Agent 逐条修改
-- "已知悉，继续归档" → chapter-loop Step 6（Read `skills/chapter-loop/SKILL.md`）
-- "重新生成" → 退回 chapter-loop Step 4（Read `skills/chapter-loop/SKILL.md`），将关键问题作为补充约束注入 subagent prompt
+- "已知悉，继续归档" → chapter-loop Step 5（Read `skills/chapter-loop/SKILL.md`）
+- "重新生成" → 退回 chapter-loop Step 3（Read `skills/chapter-loop/SKILL.md`），将关键问题作为补充约束注入 subagent prompt
 
 ## 授权模式
 

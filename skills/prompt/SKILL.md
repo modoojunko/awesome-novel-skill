@@ -5,12 +5,12 @@ description: 提示词手动调整参考。Phase 3（已自动执行）。章纲
 
 # Novel Prompt — 章提示词生成（手动模式）
 
-> **注意：** 正常流程中提示词已在章纲确认后自动生成（见 `skills/chapter-loop/SKILL.md` Step 3），无需手动加载此技能。
+> **注意：** 正常流程中提示词已在章纲确认后自动生成（见 `skills/chapter-loop/SKILL.md` Step 2），无需手动加载此技能。
 > 
 > 此技能仅在以下情况使用：
 > - 作者说"看一眼提示词"后想手动调整
 > - 自动生成的提示词有问题需修复
-> - chapter-loop Step 3 因中断未自动完成（memo 完整但提示词不存在）
+> - chapter-loop Step 2 因中断未自动完成（memo 完整但提示词不存在）
 > 
 > 手动模式下仍需走完整质量防护（双轮净化 + AI 味自检）。
 
@@ -32,10 +32,7 @@ description: 提示词手动调整参考。Phase 3（已自动执行）。章纲
 
 | 检查项 | 操作 |
 |--------|------|
-| `prompts/global-prompt.md` 是否存在？ | 不存在 → 生成（从 writing-style.md），作者确认。约束以大白话写，不分类不编号 |
-| `prompts/volume-{N}-prompt.md` 是否存在？ | 不存在 → 生成（从 volume.md + archives/），作者确认 |
-| 模板版本检查 | 读取 `~/.claude/skills/novel/scripts/templates/writing-style.md.template` 头部 `# version: N`，对比项目 `settings/writing-style.md` 头部版本号。模板版本更高 → 向作者报告"写作风格模板有更新"，列出新增的 global_rules 和 possible_mistakes 条目，问作者"合并新规则 / 暂不合并"。合并后自动重新生成 `prompts/global-prompt.md` |
-| 章纲完整性 | memo（7段）+ emotional_design 全部有值？任一为空 → **STOP**，Read `skills/chapter-loop/SKILL.md` Step 2 补全章纲 |
+| 章纲完整性 | memo（7段）+ emotional_design 全部有值？任一为空 → **STOP**，Read `skills/chapter-loop/SKILL.md` Step 1 补全章纲 |
 | segments 已存在？ | segments 不持久化到 YAML，每次从 outline + memo + emotional_design 在内存中重新拆分 |
 | genre_profile 是否已选择？ | 读取 `settings/writing-style.md` 的 `genre_profile` 字段。为空 → **STOP**，列出 `~/.claude/skills/awesome-novel/references/genre-example/index.md` 下可用类型档案，AskUserQuestion 让作者选择。选择后写入 `genre_profile` 并合并 genre_config 到 writing-style.md，然后继续 |
 
@@ -71,12 +68,12 @@ description: 提示词手动调整参考。Phase 3（已自动执行）。章纲
    - `what_to_write`：3-5 句叙述，描述本段具体写什么。**不写对话、不写动作细节**，只描述事件和走向。**用大白话写场景，别写分析结论**——写"天还没亮，陆征拨通电话"，别写"陆征做出决定：不再被动等待后主动出击"
    - `characters`：本段出场角色
    - `emotional_tone`：本段情绪基调
-   - `word_target`：按段落 function 推算（见下表）。留 `null`，chapter-loop Step 3 组装提示词时自动填入。作者有特殊需要可手动覆盖
+   - `word_target`：按段落 function 推算（见下表）。留 `null`，本章节组装提示词时自动填入。作者有特殊需要可手动覆盖
    - `ends_with`：本段结尾的画面/状态——**作为下一段的起始场景锚点**，使段落间无缝接续。必须是一个可感知的具体画面或状态，不是概述
    - `dialogue_intent`：仅 `dialogue_push` 填写（说服/试探/拒绝/转移/暗示/攻击/隐藏）
    - `micro_payoff`：如果本段承担某个微兑现，填写对应的微兑现 type
 
-   **word_target 推算表**（chapter-loop Step 3 组装时使用）：
+   **word_target 推算表**（组装提示词时使用）：
 
    | function | 建议字数 | 原因 |
    |----------|---------|------|
@@ -166,7 +163,7 @@ mood_progression：日常松弛→好奇→紧张→悬念收束
 
 [在 index.md 的题材列表中查找 genre_profile 的 corpus 字段 → 读 references/genre-example/{corpus} 的 role_override.role + role_override.personality]
 [再读 references/genre-example/{genre_profile}.md（若存在），合并覆盖（variant 文件已扁平化到 references/genre-example/ 根目录）]
-[若 genre_profile 为空或无 role_override → 回退到 prompts/global-prompt.md 的对应段落]
+[若 genre_profile 为空或无 role_override → 回退到 settings/writing-style.md 的 role 字段]
 
 ## 写作原则与禁忌
 
@@ -346,10 +343,10 @@ subagent 需要的是场景骨架，不是缩写版正文。what_to_write 超过
 
 #### 1. 读取约束来源
 
-- `settings/writing-style.md` → 只提取 `core_principles`、`possible_mistakes`、`pov_consistency`、`depiction_techniques`、`genre`、`skill_layers` 字段。**跳过 reader_psychology 到 character_psychology_method 之间的参考文档段**（仅 global-prompt.md 生成或作者问及方法论时读取）
+- `settings/writing-style.md` → 只提取 `core_principles`、`possible_mistakes`、`pov_consistency`、`depiction_techniques`、`genre`、`skill_layers` 字段。**跳过 reader_psychology 到 character_psychology_method 之间的参考文档段**（仅作者问及方法论时读取）
 - `settings/anti-ai.md` → 提取 `structural_tic_patterns` 中 severity=high 的项、`dialogue_rules`、`sentence_rules`
 - `chapter.md` → 提取 `memo.prohibitions`
-- `prompts/global-prompt.md` → 作为参考（若存在），提取"写作原则与禁忌"段的核心约束
+- `settings/writing-style.md` → 提取"写作原则与禁忌"段的核心约束（同上方字段）
 
 **提炼约束规则：** 从上述来源提炼 8-15 条最关键约束。每条一句话大白话。不分类（无🔴🟡🟢），不编号。按致命程度排序——最不能犯的排最前面。必须包含：POV 限制、禁止抽象情绪词、禁止"不是而是"句式、禁止段尾总结升华、句式多样性。**只说"别做什么"，不说"为什么"。**
 
@@ -363,7 +360,7 @@ subagent 需要的是场景骨架，不是缩写版正文。what_to_write 超过
 - `prompt_segment` → 作为"类型专属指引"段（原样注入，保持其结构）
 
 若 genre_profile 为空：
-- "角色定位"段回退到 global-prompt.md 的对应段落
+- "角色定位"段回退到 settings/writing-style.md 的 role 字段
 - 跳过"类型专属指引"段
 
 #### 3. 组装"故事背景"段
@@ -373,7 +370,7 @@ world-setting 全局规则 + 场景片段 + 角色快照 + 前章锚定 + 活跃
 #### 4. 组装共享章节部分（提示词文件前半段）
 
 a. "范本段落" ← Step 0 的正文摘录
-b. "角色定位" ← Step 2 的类型档案 role_override（或 global-prompt.md 回退）
+b. "角色定位" ← Step 2 的类型档案 role_override（或 writing-style.md role 字段回退）
 c. "写作原则与禁忌" ← Step 1 提炼的约束（自然语言，8-15条，不分类不编号）
 d. "类型专属指引" ← Step 2 的类型档案 prompt_segment（若有）
 e. "故事背景" ← Step 3 组装内容

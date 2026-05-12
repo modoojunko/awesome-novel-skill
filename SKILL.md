@@ -1,11 +1,11 @@
 ---
 name: awesome-novel
-description: 和 AI 协作写小说的工作流系统。流程：一次设定→规划卷纲→逐章写作循环（方向提案→章纲→自动提示词→正文生成→归档→下一章）。适用场景：从零写新小说、导入已有小说、学习参考文风。
+description: 和 AI 协作写小说的工作流系统。流程：一次设定→规划卷纲→逐章写作循环（章纲→自动提示词→正文生成→归档→下一章）。适用场景：从零写新小说、导入已有小说、学习参考文风。
 ---
 
 # Novel — 小说创作工作流
 
-和 AI 一起写小说。**一次设定**世界观/角色/写作风格 → **主线拆纲+卷纲展开**（总主线→拆几卷→每卷冲突，再逐卷展开）→ **逐章写作循环**（方向提案→章纲→自动提示词→正文生成→质量门禁→归档→下一章）。每一章都是独立的"提案→确认→生成→检查"闭环，不批量作业。产出物 = 按卷/章拆分的小说正文 + 角色状态追踪。
+和 AI 一起写小说。**一次设定**世界观/角色/写作风格 → **主线拆纲+卷纲展开**（总主线→拆几卷→每卷冲突，再逐卷展开）→ **逐章写作循环**（章纲→自动提示词→正文生成→质量门禁→归档→下一章）。每一章都是独立的"确认→生成→检查"闭环，不批量作业。产出物 = 按卷/章拆分的小说正文 + 角色状态追踪。
 
 ## 适用场景
 
@@ -48,42 +48,38 @@ Phase 2   主线拆纲 + 卷纲展开
                       ↓ 任意一项缺失 → 返回 Phase 2 补全
    ▼
 Phase 3   逐章写作循环
-   3.1  情节方向提案（3-4 个方向）
+   3.1  章纲（memo 7 段 + 情绪设计）
    ▼
-   [硬节点] 作者选择方向 ← 不可跳过。方向不定不进章纲
-   ▼
-   3.2  章纲（memo 7 段 + 情绪设计）
-   ▼
-   [Checkpoint 章纲]  ← 必须停。逐项检查以下内容，任一项不合格返回 3.2 补全：
+   [Checkpoint 章纲]  ← 必须停。逐项检查以下内容，任一项不合格返回 3.1 补全：
                       □ 给作者看章纲，作者点头确认
                       □ 逐项检查：按 references/chapter-setting-style.md 验收标准清单逐条过
                       □ 快速嗅探：遮住章纲能说出"分几段、每段写什么、每个角色知道/不知道、
                         兑现/埋下哪些钩子"
                       □ AI 味自检：6 种要命模式 + 空洞形容词速查无命中
-                      ↓ 任一项缺失 → 返回 3.2 补全
+                      ↓ 任一项缺失 → 返回 3.1 补全
    ▼
-   3.3  自动生成提示词（视角转换 + segment 拆分）
+   3.2  自动生成提示词（视角转换 + segment 拆分）
    ▼
    [Checkpoint 提示词] ← 必须停。确认提示词正确：
                       □ 视角转换已完成（非上帝视角章纲）
                       □ segment 拆分合理（每段叙事功能明确）
                       □ writing-style 四字段已注入（role / core_principles / possible_mistakes / depiction_techniques）
                       □ 类型 prompt_segment 已追加
-                      ↓ 不满意 → 手动调整或返回 3.3 重新生成
+                      ↓ 不满意 → 手动调整或返回 3.2 重新生成
    ▼
-   3.4  正文生成 + 质量门禁（15 项检查）
+   3.3  正文生成 + 质量门禁（15 项检查）
    ▼
    [硬节点] 作者审阅 ← 不可跳过。作者不满意不归档
    ▼
    [Checkpoint Quality]  ← 必须停。确认以下全部通过：
                       □ 15 项正文质量检查通过（含 AI 味检测）
                       □ 作者审阅满意
-                      ↓ 不满意 → 回到 3.4 修改。满意才归档
+                      ↓ 不满意 → 回到 3.3 修改。满意才归档
    ▼
-   3.6  归档（角色状态 + 钩子追踪 + 滑动窗口）
-   3.7  下一章决策 → 回到 3.1（循环）
+   3.5  归档（角色状态 + 钩子追踪 + 滑动窗口）
+   3.6  下一章决策 → 回到 3.1（循环）
 
-   第 1 章走完整流程（强制锚点），第 2~N 章重复 3.1→3.7 直到卷内全部章节归档。
+   第 1 章走完整流程（强制锚点），第 2~N 章重复 3.1→3.6 直到卷内全部章节归档。
    卷完成 → 回到 Phase 2 规划下一卷，或 Phase 1 新增角色/设定。
    所有卷完成 → 全书完结。
 
@@ -165,17 +161,15 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | **1.4 角色** | `settings/character-setting/<id>.md` | 已有角色文件（追加时不覆盖）<br>`references/character-setting-style.md`（认知6层+自检） | — |
 | **2.0 主线拆纲** | `story.md#story_arc`（主线+分卷） | `references/story-arc-style.md`（从结局倒推法） | `settings/world-setting.md` core（冲突空间参考）<br>角色文件（按需看动机） |
 | **2.1 卷方向/卷纲** | `volumes/volume-{N}.md`（章节列表） | `references/volume-setting-style.md`（指南+自检） | 角色文件（动机参考） |
-| **3.1 方向提案** | 3-4 个情节方向（内存） | 最新 `chapters/vol-{N}-ch-{M-1}.md#emotional_design`（上章情绪落点）<br>`volumes/volume-{N}.md#chapters_summary`（本章定位）<br>`settings/genre-setting.md`（pacing_rules） | 角色文件（活跃角色动机）<br>`settings/world-setting.md`（环境约束）<br>最近 3 章 emotional_design（避免同类型） |
-| **3.2 章纲** | `chapters/vol-{N}-ch-{M}.md` | 方向提案确认结果<br>`references/chapter-setting-style.md`（指南+自检） | `volumes/volume-{N}.md#chapters_summary`（占位章纲）<br>角色文件（决策合理性） |
-| **3.3 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `settings/writing-style.md` 四字段（缺一不可）<br>`chapters/vol-{N}-ch-{M}.md`（章纲）<br>`settings/world-setting.md`（场景描述来源） | 最近 3 章 `archives/` 定稿（文风一致性）<br>角色文件（性格注入）<br>`references/prompt-setting-style.md`（自检） |
-| **3.4 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口）<br>`agents/pipeline/exec-prose.md`（subagent 写作契约） | `archives/` 前文（卡壳才翻文风参考） |
-| **3.5 验收** | 质量检查报告（内存） | `archives/vol-{N}-ch-{M}-*.md`（正文）<br>`references/chapter-quality-checklist.md`（15 项检查） | `settings/writing-style.md`（评分基准）<br>角色文件/`world-setting.md`（一致性校验） |
-| **3.6 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（滑动窗口审视） |
+| **3.1 章纲** | `chapters/vol-{N}-ch-{M}.md` | `volumes/volume-{N}.md#chapters_summary`（卷纲给的本章方向）<br>`references/chapter-setting-style.md`（指南+自检） | 最新 `chapters/vol-{N}-ch-{M-1}.md#emotional_design`（上章情绪落点）<br>`settings/genre-setting.md`（pacing_rules）<br>角色文件（决策合理性）<br>`settings/world-setting.md`（环境约束） |
+| **3.2 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `settings/writing-style.md` 四字段（缺一不可）<br>`chapters/vol-{N}-ch-{M}.md`（章纲）<br>`settings/world-setting.md`（场景描述来源） | 最近 3 章 `archives/` 定稿（文风一致性）<br>角色文件（性格注入）<br>`references/prompt-setting-style.md`（自检） |
+| **3.3 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口）<br>`agents/pipeline/exec-prose.md`（subagent 写作契约） | `archives/` 前文（卡壳才翻文风参考） |
+| **3.4 验收** | 质量检查报告（内存） | `archives/vol-{N}-ch-{M}-*.md`（正文）<br>`references/chapter-quality-checklist.md`（15 项检查） | `settings/writing-style.md`（评分基准）<br>角色文件/`world-setting.md`（一致性校验） |
+| **3.5 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（滑动窗口审视） |
 | **review** | 诊断报告（内存） | 目标正文 `archives/vol-{N}-ch-{M}-*.md`<br>`settings/writing-style.md`（评分基准） | 角色文件（角色一致性）<br>`settings/world-setting.md`（设定一致性） |
 
 **要点：**
-- Phase 3.3 的 writing-style 四字段必须全部注入——role 定叙事身份，core_principles 定不可违背的写作信条，possible_mistakes 定 AI 易犯错误列表，depiction_techniques 定描写层次和手法。缺任何一个，subagent 都会在最关键的地方放飞。
-- Phase 3.1 每个循环重读上一章的 emotional_design 和卷纲定位——方向提案的推理链来源不在子技能文件中，在当前项目的 chapters/ 和 archives/ 里。
+- Phase 3.2 的 writing-style 四字段必须全部注入——role 定叙事身份，core_principles 定不可违背的写作信条，possible_mistakes 定 AI 易犯错误列表，depiction_techniques 定描写层次和手法。缺任何一个，subagent 都会在最关键的地方放飞。
 - 正文字数目标、写作模型（writing_model）、情绪目标等执行参数从 `settings/writing-style.md` 和 `chapters/vol-{N}-ch-{M}.md` 读取，不在 prompts/ 中重复定义——一处修改全局生效。
 
 ## The Process
@@ -194,7 +188,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 |------|--------|
 | 无 volumes/ 或无 volume md | → `novel-setup`（先完成设定和卷纲）|
 | settings/world-setting.md 字段大量为空 | → `novel-setup`（设定未完成）|
-| 最新 chapter.md status = `outline` | → 走 Chapter Loop（从情节方向提案开始） |
+| 最新 chapter.md status = `outline` | → 走 Chapter Loop（从章纲开始） |
 | 最新 chapter.md status = `draft` | → 走 Chapter Loop（从作者审阅开始。提示词已存在则直接写正文，不存在则自动组装后写） |
 | 最新 chapter.md status = `archived` | 本卷还有未归档章？→ 问"下一章继续？"。全部归档 → 卷完成报告 + 选项 |
 | 无任何 chapter.md | → 卷纲已定但尚未开始写 → 问"开始写第一章？" |
