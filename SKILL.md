@@ -207,7 +207,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | "规划卷纲""定卷""下一卷""故事线" | Phase 2 `novel-volume` |
 | "写正文""写第X章""继续写""下一章""继续""规划章节""章纲" | Phase 3 `novel-chapter-loop` |
 | "归档""存档" | → Chapter Loop 末步自动归档。手动触发时检测最新 chapter.md：`draft` → 走归档 / `archived` → 告知已完成 |
-| "评审""评价""review""检查这章""这章怎么样" | `novel-review`（独立检查） |
+| "评审""评价""review""检查这章""这章怎么样" | 走 `novel-chapter-loop`（3.4 验收含可选深度诊断） |
 | "小说进度""第X卷进度" | 只读报告，不分发 |
 
 ### Step 3: 前置产出检查
@@ -218,7 +218,6 @@ Agent 在用户当前目录下创建/编辑以下文件：
 |------|--------|
 | novel-volume | story.md story_arc 已定义（至少已完成主线拆纲）、settings/world-setting.md 非模板、settings/writing-style.md 非模板 |
 | novel-chapter-loop | volumes/volume-{N}.md 存在且 chapters_summary 非空 |
-| novel-review | archives/ 下存在正文文件 |
 
 缺失 → **STOP**。告知作者"XX 还没完成，先补这一环"，路由到前置 Phase 的子技能。
 
@@ -240,7 +239,6 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | novel-style-extract | 文风提取（三步） | `skills/style-extract/SKILL.md` |
 | novel-volume | 主线拆纲+卷纲规划 | `skills/outline/SKILL.md`（主线拆纲 + 卷纲部分） |
 | novel-chapter-loop | 逐章写作循环 | `skills/chapter-loop/SKILL.md` |
-| novel-review | 深度评审 | `skills/review/SKILL.md` |
 
 子技能文件位于主技能安装目录的 `skills/` 下，即 `~/.claude/skills/awesome-novel/skills/{name}/SKILL.md`。
 
@@ -266,7 +264,6 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 2 | novel-volume | **sonnet（强制）** | 主线拆纲+卷纲规划——需要结构推理 |
 | 3 | novel-chapter-loop | **sonnet（强制）** | 情节提案、章纲、视角转换——核心推理 |
 | 3 | novel-chapter-loop（subagent 写作） | 从 `writing_model` 读取 | 正文生成，默认 haiku |
-| — | novel-review | haiku 可 | 主 Agent 已持有全部上下文 |
 | — | novel-style-extract | **sonnet（强制）** | 风格分析——需要深度推理 |
 
 **模型切换方法：**
