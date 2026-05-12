@@ -33,7 +33,7 @@ description: 逐章写作循环——从章纲到正文归档的完整闭环。P
 
 ## Step 1: 章纲
 
-基于卷纲 chapters_summary 自动填充：
+Read `references/chapter-setting-style.md`，先执行"一、方向输入"（非首章时分析读者缺口+角色状态+钩子，合成方向给作者确认），再进入填充：
 
 ### a. Outline（Agent 填充，作者确认）
 展开为具体的 key_points，写 summary，列出 characters/location/time，确认 narrative_pov。
