@@ -148,7 +148,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 卷纲（volume-N.yaml） | 每卷一次 | `references/volume-setting-style.md` |
 | 章纲（chapter.yaml） | 每章一次 | `references/chapter-setting-style.md` |
 | 提示词（prompt.md） | 每章一次 | `references/prompt-setting-style.md` |
-| 正文（archives/ 定稿） | 每章一次 | `references/chapter-quality-setting-style.md` + 深度评审（可选） |
+| 正文（archives/ 定稿） | 每章一次 | `references/chapter-quality-checklist.md` + 深度评审（可选） |
 
 **执行方式（按能力降级，优先用更隔离的方式）：**
 
