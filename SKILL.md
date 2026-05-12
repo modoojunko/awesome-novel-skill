@@ -58,7 +58,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 卷纲（volume-N.md） | 每卷一次 | `references/volume-setting-style.md` |
 | 章纲（chapter.md） | 每章一次 | `references/chapter-setting-style.md` |
 | 提示词（prompt.md） | 每章一次 | `references/prompt-setting-style.md` |
-| 正文（archives/ 定稿） | 每章一次 | `references/chapter-quality-checklist.md` + 深度评审（可选） |
+| 正文（archives/ 草稿） | 每章一次 | `references/chapter-quality-checklist.md`（正文验收，主流程独立执行） |
 
 **自检方式（推荐用独立助手完成）：**
 
@@ -84,7 +84,8 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | **3.2 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `references/prompt-setting-style.md`（提示词指南+模板） | — |
 | **3.2a 提示词验收**（主流程独立执行） | `prompts/vol-{N}-ch-{M}-prompt.md`（检查对象） | `references/prompt-setting-style.md` Section 三（验收标准） | — |
 | **3.3 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口） | `skills/write/SKILL.md`（SOP） |
-| **3.4 验收+评审** | 质量检查报告（内存）<br>诊断报告（内存、可选） | `archives/vol-{N}-ch-{M}-*.md`（正文）<br>`references/chapter-quality-checklist.md`（15 项检查） | — |
+| **3.3a 正文验收**（主流程独立执行） | `archives/vol-{N}-ch-{M}-*.draft.md`（检查对象） | `references/chapter-quality-checklist.md`（验收标准） | — |
+| **3.4 深度评审**（可选） | 诊断报告（内存） | `skills/review/SKILL.md` | — |
 | **3.5 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（回顾最近章节） |
 
 ## 主 Agent 运作流程
@@ -105,7 +106,8 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | settings/world-setting.md 字段大量为空 | → `novel-setup`（设定未完成）|
 | 最新 chapter.md status = `outline`，无 prompt 文件 | → 分发 `skills/prompt/SKILL.md` 生成提示词 |
 | 最新 chapter.md status = `outline`，prompt 文件已存在 | → **提示词验收**：读 `prompt-setting-style.md` Section 三，逐条检查后展示报告给作者确认。通过 → 更新 status = `draft`。不通过 → 返回`skills/prompt/SKILL.md` 修改 |
-| 最新 chapter.md status = `draft` | → 分发 `skills/write/SKILL.md` 写正文 |
+| 最新 chapter.md status = `draft`，`archives/` 无本章草稿 | → 分发 `skills/write/SKILL.md` 写正文 |
+| 最新 chapter.md status = `draft`，`archives/` 有本章草稿 | → **正文验收**：读 `chapter-quality-checklist.md` 逐项检查，展示报告给作者确认。通过后，问作者"进入归档还是先做深度评审？" |
 | 最新 chapter.md status = `archived` | 本卷还有未归档章？→ 问"下一章继续？"。全部归档 → 卷完成报告 + 选项 |
 | 无任何 chapter.md | → 卷纲已定但尚未开始写 → 问"开始写第一章？" |
 
