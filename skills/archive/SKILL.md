@@ -40,12 +40,12 @@ description: 章节归档与状态更新。正文验收通过后归档——去 
 6. 更新角色设定文件中的 hooks 引用（全局 hooks.md 不再维护——真相源在各 chapter.md 的 hooks 字段），运行钩子健康检查
 7. 运行情节推进停滞检测（最近 3 章是否有实质性推进）
 8. 将 chapter.md status 更新为 `archived`
-9. 更新 story.md chapters 列表
+9. 更新 story.md 分卷规划中的实际章节数（与预估对比）
 10. **检测卷边界**：
     - 读 `chapters/` 目录，筛选当前卷的章节文件（`vol-{N}-ch-*.md`）
     - 检查这些章节的 status 是否全部为 `archived`
-    - 未全部完成 → 不做额外操作
-    - 全部完成 → **输出卷完成报告：**
+    - 未全部完成 → 更新 `.agent/status.md`：`current_phase` 保持 `chapter-loop`，`current_chapter` 前移
+    - 全部完成 → **更新 `.agent/status.md`：** `last_volume_completed` → `true`，`current_phase` → `review`（等待选择下一步）。然后输出卷完成报告：
 
       ```
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

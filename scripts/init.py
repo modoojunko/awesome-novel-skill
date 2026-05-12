@@ -53,12 +53,6 @@ def copy_template(template_name: str, dest: Path) -> None:
     shutil.copy2(src, dest)
 
 
-def copy_md_template(template_name: str, dest: Path) -> None:
-    """复制 markdown 模板文件到目标路径"""
-    src = Path(__file__).parent / "templates" / f"{template_name}.md.template"
-    shutil.copy2(src, dest)
-
-
 def init_project(project_name: str, author: str = "") -> None:
     """
     初始化小说项目
@@ -72,20 +66,24 @@ def init_project(project_name: str, author: str = "") -> None:
     # 创建目录结构
     create_directory_structure(project_path)
 
-    # 复制模板文件
-    copy_md_template("story", project_path / "story.md")
-    copy_template("world-setting", project_path / "settings" / "world-setting.md")
-    copy_template("writing-style", project_path / "settings" / "writing-style.md")
-    copy_template("anti-ai", project_path / "settings" / "anti-ai.md")
-    copy_template("hooks", project_path / "settings" / "hooks.md")
+    # 复制模板文件（story.md 含占位符替换）
+    now = datetime.datetime.now().strftime("%Y-%m-%d")
+    story_content = get_template_path("story").read_text(encoding="utf-8")
+    story_content = story_content.replace("{title}", project_name)
+    story_content = story_content.replace("{author}", author)
+    story_content = story_content.replace("{created_at}", now)
+    (project_path / "story.md").write_text(story_content, encoding="utf-8")
+
+    for tpl in ["world-setting", "writing-style", "anti-ai", "hooks"]:
+        copy_template(tpl, project_path / "settings" / f"{tpl}.md")
 
     # 长篇小说追踪文件
     copy_template("timeline", project_path / "settings" / "timeline.md")
     copy_template("foreshadowing", project_path / "settings" / "foreshadowing.md")
     copy_template("setting-change-log", project_path / "settings" / "setting-change-log.md")
 
-    # 角色设定模板
-    copy_md_template("character", project_path / "settings" / "character-setting" / "template.md")
+    # 题材设定
+    copy_template("genre-setting", project_path / "settings" / "genre-setting.md")
 
     # 生成 .agent/status.md（带时间戳）
     status_src = get_template_path("agent-status")

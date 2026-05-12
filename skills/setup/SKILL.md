@@ -89,4 +89,5 @@ Read `references/character-setting-style.md`，按以下流程执行：
 
 ## 下一步
 
-完成后引导作者进入 `skills/outline/SKILL.md`。当作者说"规划章节"时，主 Agent Read `skills/outline/SKILL.md` 进入主线拆纲+卷纲。
+1. 更新 `.agent/status.md`：将 `current_phase` 改为 `volume`
+2. 引导作者进入 `skills/outline/SKILL.md`。当作者说"规划章节"时，主 Agent Read `skills/outline/SKILL.md` 进入主线拆纲+卷纲。

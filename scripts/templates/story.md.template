@@ -9,9 +9,10 @@
 
 | 设定 | 路径 | 概要 |
 |------|------|------|
-| 世界观 | `settings/world-setting.yaml` | |
+| 世界观 | `settings/world-setting.md` | |
+| 题材 | `settings/genre-setting.md` | |
 | 角色 | `settings/character-setting/` | |
-| 写作风格 | `settings/writing-style.yaml` | |
+| 写作风格 | `settings/writing-style.md` | |
 
 ## 故事主线
 

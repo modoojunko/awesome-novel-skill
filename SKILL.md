@@ -111,20 +111,16 @@ Step 1（检测状态）→ 匹配路由 → Read 子 skill → 子 skill 改状
 
 先读 `story.md`。不存在 → 项目未创建，Read `skills/setup/SKILL.md`。
 
-存在 → 读 `.agent/status.md` 查看上次记录（current_volume、current_chapter、current_phase）。然后核对：
-- 读 `chapters/` 下最大章号的 `status` 字段 → 与记录比对
-- 一致 → 快速定位。不一致 → 以实际文件为准更新 status.md
-
-如果 status.md 不存在 → 改为目录扫描（volumes/ → chapters/ → 看每章 status）。
+存在 → 执行 `python detect_phase.py --write` 检测实际状态并写入 `.agent/status.md`（自动扫描 volumes/、chapters/、archives/ 下的文件状态，与缓存交叉验证）。然后读 `.agent/status.md` 快速定位。如果 detect_phase.py 不可用 → 回退手动扫描：读 `chapters/` 下最大章号的 `status` 字段。
 
 | 信号 | 下一步 |
 |------|--------|
 | 无 volumes/ 或无 volume md | → `novel-setup`（先完成设定和卷纲）|
 | settings/world-setting.md 字段大量为空 | → `novel-setup`（设定未完成）|
 | 最新 chapter.md status = `outline`，无 prompt 文件 | → 分发 `skills/prompt/SKILL.md` 生成提示词 |
-| 最新 chapter.md status = `outline`，prompt 文件已存在 | → **提示词验收**：读 `prompt-setting-style.md` Section 三，逐条检查后展示报告给作者确认。通过 → 更新 status = `draft`。不通过 → 返回`skills/prompt/SKILL.md` 修改 |
+| 最新 chapter.md status = `outline`，prompt 文件已存在 | → 分发 `skills/prompt-verify/SKILL.md` 做提示词验收。通过 → 更新 status = `draft`。不通过 → 返回 `skills/prompt/SKILL.md` 修改 |
 | 最新 chapter.md status = `draft`，`archives/` 无本章草稿 | → 分发 `skills/write/SKILL.md` 写正文 |
-| 最新 chapter.md status = `draft`，`archives/` 有本章草稿 | → **正文验收**：读 `chapter-quality-checklist.md` 逐项检查，展示报告给作者确认。通过后，问作者"进入归档还是先做深度评审？" |
+| 最新 chapter.md status = `draft`，`archives/` 有本章草稿 | → 分发 `skills/body-verify/SKILL.md` 做正文验收。通过后，问作者"进入归档还是先做深度评审？" |
 | 最新 chapter.md status = `archived` | 本卷还有未归档章？→ 问"下一章继续？"。全部归档 → 卷完成报告 + 选项 |
 | 无任何 chapter.md | → 卷纲已定但尚未开始写 → 问"开始写第一章？" |
 
