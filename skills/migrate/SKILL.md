@@ -1,8 +1,62 @@
+---
+name: novel-migrate
+description: 旧版项目迁移。Step 1 检测到 story.yaml 或 skill_version 过低时分发至此。将 2.x 格式的 YAML 设定→Markdown，挪入 old/ 回滚保留。仅已归档章节迁移，在制章节跳过。
+---
+
 # 迁移子技能
 
 > 作者工作流从 2.x 升级到 3.0 时的自动迁移机制。作者可以在旧版本工作空间中升级技能后直接继续创作。
 
 **模型：** haiku（主 agent 编排），sonnet（subagent 做字段映射）
+
+## 范围 Scope
+
+### 做什么
+- 将旧版 2.x 项目的 YAML 设定文件迁移到新版 Markdown 格式
+- 已归档章节的正文直接拷贝
+- 已归档章纲的 YAML→Markdown 格式转换
+- 废弃文件的清理
+
+### 不做什么
+- ❌ 不迁移在制章节（非 archived）
+- ❌ 不修改正文内容（纯拷贝）
+- ❌ 不改写提示词内容（纯拷贝）
+- ❌ 不处理 git 冲突（假设工作目录干净）
+- ❌ 不恢复已删除的废弃文件
+- ❌ 不创建新章节/新卷
+
+### 边界条件
+- 如果 `old/` 目录已存在 → 使用 `old-2/`、`old-3/` 递增
+- 如果 `scripts/init.py` 不可用 → 手动创建目录结构 + 复制模板
+- 如果旧 `story.yaml` 缺少 title 或 author → 用目录名作标题，author 留空
+- 如果 volumes/ 下无 yaml → story.md 分卷规划标"待补充"
+
+## 工具契约 Tools
+
+| 工具 | 用途 | 限制 |
+|------|------|------|
+| Bash | 执行 shell 命令（文件搬移/拷贝/检测） | 不安装新包，不改系统配置 |
+| Read | 读旧 YAML 文件、读模板 | — |
+| Write/Edit | 写新 Markdown 文件 | 不写 old/ 目录内的文件 |
+| Agent | 启动并行 subagent 做设定迁移 | 仅 Step 4 使用，subagent 只能用 Read/Write/Edit |
+
+## 生命周期 Lifecycle
+
+### Start
+执行任何操作前，读 `.agent/status.md`（如果存在），确认 `migrated` 标志。如果已标记为 migrated → 跳过迁移，分发回报文"该项目已迁移"。
+
+### End
+迁移完成后，更新 `.agent/status.md`：
+```markdown
+# Status
+
+- **migrated:** true
+- **migrated_at:** {当前时间}
+- **old_version:** "2.x"
+- **new_version:** "3.0"
+- **skipped_chapters:** [在制章节列表]
+- **pending_fields:** [待补充字段列表]
+```
 
 ## 版本检测
 
@@ -67,7 +121,7 @@ ls story.yaml story.md 2>/dev/null
 - `story.md` 存在 → 读 `story.md` 头部 `skill_version`，若 < 当前版本 → **待升级**，继续 Step 1
 - 两者都不存在 → **全新项目**，分发到 novel-setup（退出本技能）
 
-## Step 1：展示迁移计划 + 作者确认
+## Step 1：展示迁移计划 + 作者确认 [硬节点]
 
 扫描项目目录，给作者看三张清单：
 
@@ -366,3 +420,21 @@ old/ 目录保留了所有旧文件，确认迁移无误后可以手动 rm -rf o
 ```
 
 汇报中必须列出跳过的章节和待补充的字段，让作者知道迁移后的文件状态，知悉哪些内容需要后续完善。
+
+## Definition of Done
+
+本技能执行完毕的标志（满足全部）：
+
+1. ✅ 所有旧 YAML 已移入 `old/`，无残留
+2. ✅ `story.md` 存在，`skill_version = 3.0`
+3. ✅ 设定文件全部迁移完毕（world-setting / writing-style / genre-setting / anti-ai / foreshadowing）
+4. ✅ 所有角色各有一个 `.md` 文件
+5. ✅ 卷纲数量与旧版一致
+6. ✅ 所有 archived 章纲已迁移
+7. ✅ 正文全部拷贝
+8. ✅ 提示词全部拷贝
+9. ✅ 废弃文件已清理
+10. ✅ `.agent/status.md` 已更新 `migrated: true`
+11. ✅ 验收汇报已展示给作者
+
+有一个不满足就不算 done。如果不满足可修复则修复后继续；不可修复（如旧文件损坏）→ 上报作者。
