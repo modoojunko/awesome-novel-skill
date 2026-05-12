@@ -1,11 +1,11 @@
 ---
 name: awesome-novel
-description: 和 AI 协作写小说的工作流系统。流程：一次设定→规划卷纲→逐章写作循环（章纲→自动提示词→正文生成→归档→下一章）。适用场景：从零写新小说、导入已有小说、学习参考文风。
+description: 和 AI 协作写小说的工作流系统。流程：一次设定→规划卷纲→逐章写作循环（章纲→提示词→验收→正文→验收→评审→归档→下一章）。适用场景：从零写新小说、导入已有小说。
 ---
 
 # Novel — 小说创作工作流
 
-和 AI 一起写小说。**一次设定**世界观/角色/写作风格 → **主线拆纲+卷纲展开** → **逐章写作循环**（章纲→提示词→正文→验收→归档→下一章）
+和 AI 一起写小说。**一次设定**世界观/角色/写作风格 → **主线拆纲+卷纲展开** → **逐章写作循环**（章纲→提示词→提示词验收→正文→正文验收→评审→归档→下一章）
 
 ## 项目目录结构
 
@@ -123,9 +123,11 @@ Agent 在用户当前目录下创建/编辑以下文件：
 |--------|------|
 | "创建项目""写小说""导入""讨论设定""设计角色""世界观""写作风格" | Phase 1 `novel-setup` |
 | "规划卷纲""定卷""下一卷""故事线" | Phase 2 `novel-volume` |
-| "写正文""写第X章""继续写""下一章""继续""规划章节""章纲" | Phase 3 `novel-chapter` |
-| "归档""存档" | 检测最新 chapter.md：`draft` → 走归档 / `archived` → 告知已完成 |
-| "评审""评价""review""检查这章""这章怎么样" | `novel-chapter`（验收含可选深度诊断） |
+| "规划章节""章纲""这章写什么" | → `novel-chapter`（章纲设定） |
+| "提示词""生成本章提示词" | 检测章 status：`outline` 且无 prompt → `novel-prompt` / 已有 → 提示词验收 |
+| "写正文""写第X章""继续写" | 检测章 status + archives 文件 → Step 1 自动分发 |
+| "评审""review""检查这章""这章怎么样" | `novel-review`（10 维深度诊断） |
+| "归档""存档" | 检测 archives 有草稿 → `novel-archive` |
 | "小说进度""第X卷进度" | 只读报告，不分发 |
 
 **2）前置产出检查**
@@ -134,6 +136,10 @@ Agent 在用户当前目录下创建/编辑以下文件：
 |------|--------|
 | novel-volume | story.md story_arc 已定义、world-setting.md + writing-style.md 非模板 |
 | novel-chapter | volume-{N}.md 存在且 chapters_summary 非空 |
+| novel-prompt | chapter.md status = outline、memo + emotional_design 完整 |
+| novel-write | chapter.md status = draft、prompt 文件存在 |
+| novel-review | archives/ 有正文文件 |
+| novel-archive | archives/ 有草稿文件、正文验收已通过 |
 
 缺失 → **STOP**，告知作者先补前置产出。
 
@@ -148,4 +154,6 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | novel-chapter | `skills/chapter/SKILL.md` — 章纲设定 |
 | novel-prompt | `skills/prompt/SKILL.md` — 提示词生成 |
 | novel-write | `skills/write/SKILL.md` — 正文生成 |
+| novel-review | `skills/review/SKILL.md` — 深度评审 |
+| novel-archive | `skills/archive/SKILL.md` — 归档 |
 
