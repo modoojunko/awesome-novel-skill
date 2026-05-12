@@ -24,12 +24,11 @@ description: 和 AI 协作写小说的工作流系统。流程：一次设定→
 ```
 Phase 1   设定
    1.1  项目初始化（新建 / 导入）
-   1.2  题材选择（类型+配置）
+   1.2  题材选择+风格预填
    1.3  世界观搭建（8 字段逐项讨论）
    1.4  角色设定（每角色独立 md）
-   1.5  写作风格确认（默认 / 参考范文提取）
-   1.6  钩子初始化
-   1.7  全局提示词生成
+   1.5  钩子初始化
+   1.6  全局提示词生成
    ▼
 [Checkpoint Setup]   ← 必须停。确认以下设定全部到位：
                       □ 世界观 core 字段已填（geography / politics / rules）
@@ -166,12 +165,11 @@ Agent 在用户当前目录下创建/编辑以下文件：
 |--------|---------|--------------|---------|
 | **1.1 新建项目** | 项目骨架 + `story.md` | `scripts/init.py`（创建骨架） | — |
 | **1.1 导入已有** | 切分的章纲 + archives/ | `scripts/import.py`（导入切分） | — |
-| **1.2 题材选择** | `settings/genre-setting.md` | `references/genre-style.md`（字段指南） | `references/genre-example/` 对应类型（配置参考） |
+| **1.2 题材选择+风格** | `settings/genre-setting.md`<br>`settings/writing-style.md`（预填） | `references/genre-style.md`（字段指南） | `references/genre-example/` 对应类型（配置参考） |
 | **1.3 世界观** | `settings/world-setting.md` | `references/world-setup-style.md`（引导讨论+自检） | — |
 | **1.4 角色** | `settings/character-setting/<id>.md` | 已有角色文件（追加时不覆盖）<br>`references/character-setting-style.md`（认知6层+自检） | — |
-| **1.5 写作风格** | `settings/writing-style.md` | `references/writing-style.md`（指南+自检） | — |
-| **1.6 钩子初始化** | `settings/hooks.md` | — | — |
-| **1.7 全局提示词** | `prompts/global-prompt.md` | `settings/writing-style.md`（四字段读取生成） | — |
+| **1.5 钩子初始化** | `settings/hooks.md` | — | — |
+| **1.6 全局提示词** | `prompts/global-prompt.md` | `settings/writing-style.md`（四字段读取生成） | — |
 | **2.0 主线拆纲** | `story.md#story_arc`（主线+分卷） | `references/story-arc-style.md`（从结局倒推法） | `settings/world-setting.md` core（冲突空间参考） |
 | **2.1 卷方向/卷纲** | `volumes/volume-{N}.md`（章节列表） | `references/volume-setting-style.md`（指南+自检） | 角色文件（动机参考） |
 | **2.2 卷提示词** | `prompts/volume-{N}-prompt.md` | `volumes/volume-{N}.md` + `story.md`<br>`settings/writing-style.md`（叙事身份） | — |
