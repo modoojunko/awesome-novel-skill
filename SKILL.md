@@ -166,21 +166,21 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 子步骤 | 输出什么 | 读什么（必读） | 按需加载 |
 |--------|---------|--------------|---------|
 | **1.1 初始化** | 项目骨架 + `story.md` | `story.md`（检查是否已存在，存在则跳过） | — |
-| **1.2 世界观** | `settings/world-setting.md` | `settings/world-setting.md`（模板字段，逐项讨论）<br>`references/world-setup-style.md`（引导讨论+自检） | — |
+| **1.2 世界观** | `settings/world-setting.md` | `references/world-setup-style.md`（引导讨论+自检） | — |
 | **1.3 角色** | `settings/character-setting/<id>.md` | 已有角色文件（追加时不覆盖）<br>`references/character-setting-style.md`（认知6层+自检） | — |
-| **1.4 写作风格** | `settings/writing-style.md` | `settings/writing-style.md`（填写四字段）<br>`references/writing-style.md`（指南+自检） | — |
+| **1.4 写作风格** | `settings/writing-style.md` | `references/writing-style.md`（指南+自检） | — |
 | **1.5 题材选择** | `settings/genre-setting.md` | `references/genre-style.md`（字段指南） | `references/genre-example/` 对应类型（配置参考） |
-| **1.6 钩子初始化** | `settings/hooks.md` | `settings/hooks.md`（模板初始化） | — |
+| **1.6 钩子初始化** | `settings/hooks.md` | — | — |
 | **1.7 全局提示词** | `prompts/global-prompt.md` | `settings/writing-style.md`（四字段读取生成） | — |
-| **2.0 主线拆纲** | `story.md#story_arc`（主线+分卷） | `story.md`（检查是否已拆）<br>`references/story-arc-style.md`（从结局倒推法） | `settings/world-setting.md` core（冲突空间参考） |
-| **2.1 卷方向/卷纲** | `volumes/volume-{N}.md` | `volumes/volume-{N}.md`（核心冲突+章节列表）<br>`references/volume-setting-style.md`（指南+自检） | 角色文件（动机参考） |
+| **2.0 主线拆纲** | `story.md#story_arc`（主线+分卷） | `references/story-arc-style.md`（从结局倒推法） | `settings/world-setting.md` core（冲突空间参考） |
+| **2.1 卷方向/卷纲** | `volumes/volume-{N}.md`（章节列表） | `references/volume-setting-style.md`（指南+自检） | 角色文件（动机参考） |
 | **2.2 卷提示词** | `prompts/volume-{N}-prompt.md` | `volumes/volume-{N}.md` + `story.md`<br>`settings/writing-style.md`（叙事身份） | — |
 | **3.1 方向提案** | 3-4 个情节方向（内存） | 最新 `chapters/vol-{N}-ch-{M-1}.md#emotional_design`（上章情绪落点）<br>`volumes/volume-{N}.md#chapters_summary`（本章定位）<br>`settings/genre-setting.md`（pacing_rules） | 角色文件（活跃角色动机）<br>`settings/world-setting.md`（环境约束）<br>最近 3 章 emotional_design（避免同类型） |
 | **3.2 章纲** | `chapters/vol-{N}-ch-{M}.md` | 方向提案确认结果<br>`references/chapter-setting-style.md`（指南+自检） | `volumes/volume-{N}.md#chapters_summary`（占位章纲）<br>角色文件（决策合理性） |
 | **3.3 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `settings/writing-style.md` 四字段（缺一不可）<br>`chapters/vol-{N}-ch-{M}.md`（章纲）<br>`settings/world-setting.md`（场景描述来源） | 最近 3 章 `archives/` 定稿（文风一致性）<br>角色文件（性格注入）<br>`references/prompt-setting-style.md`（自检） |
 | **3.4 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口）<br>`agents/pipeline/exec-prose.md`（subagent 写作契约） | `archives/` 前文（卡壳才翻文风参考） |
 | **3.5 验收** | 质量检查报告（内存） | `archives/vol-{N}-ch-{M}-*.md`（正文）<br>`references/chapter-quality-checklist.md`（15 项检查） | `settings/writing-style.md`（评分基准）<br>角色文件/`world-setting.md`（一致性校验） |
-| **3.6 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>角色状态追加 + `status.md` 更新 | `chapters/vol-{N}-ch-{M}.md`（status→archived）<br>各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（滑动窗口审视）<br>`prompts/volume-{N}-prompt.md`（追加摘要） |
+| **3.6 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（滑动窗口审视）<br>`prompts/volume-{N}-prompt.md`（追加摘要） |
 | **review** | 诊断报告（内存） | 目标正文 `archives/vol-{N}-ch-{M}-*.md`<br>`settings/writing-style.md`（评分基准） | 角色文件（角色一致性）<br>`settings/world-setting.md`（设定一致性） |
 
 **要点：**
