@@ -1,6 +1,6 @@
-# 提示词组装及验收指南
+# Prompt 生产 SOP + Prompt 质检标准
 
-将章纲 + writing-style + genre-profile 组装为 subagent 可执行的提示词。产出写入 `prompts/vol-{N}-ch-{M}-prompt.md`。
+**定位：** AI 用的标准作业流程——将章纲 + writing-style + genre-profile 生产为 subagent 可执行的 prompt.md（`prompts/vol-{N}-ch-{M}-prompt.md`），并做产出质量验收。
 
 ---
 
