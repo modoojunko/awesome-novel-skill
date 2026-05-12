@@ -88,6 +88,23 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | **3.4 深度评审**（可选） | 诊断报告（内存） | `skills/review/SKILL.md` | — |
 | **3.5 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（回顾最近章节） |
 
+## 工作机制：状态驱动循环
+
+主 SKILL.md 和子 skill 之间没有显式"调用"。整个系统是一个**状态驱动循环**：
+
+```
+Step 1（检测状态）→ 匹配路由 → Read 子 skill → 子 skill 改状态 → 回到 Step 1（重新检测）
+```
+
+**通信方式：** 不传递消息或参数。主 skill 写 `chapter.md#status` + `.agent/status.md`，子 skill 读这些文件来知道"当前在做什么阶段"。
+
+- 主 skill Step 1 检测 `chapters/` 下的状态 → 匹配到对应子 skill
+- 主 skill Step 2.3 读子 skill 的 SKILL.md，**Agent 直接执行里面的步骤**
+- 子 skill 修改 `chapter.md#status` 和产出文件，末尾写"回到主流程"
+- Agent 读"回到主流程"后，**重新从 Step 1 开始**，检测到新状态后再路由到下一步
+
+**分发判断方式：** Step 1 的决策表（见下）是唯一的路由入口——根据 `status` + 文件存在性做二元判断。子 skill 不自作主张跳转到其他子 skill。
+
 ## 主 Agent 运作流程
 
 ### Step 1: 检测当前进度
