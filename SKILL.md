@@ -168,10 +168,6 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | **3.4 验收+评审** | 质量检查报告（内存）<br>诊断报告（内存、可选） | `archives/vol-{N}-ch-{M}-*.md`（正文）<br>`references/chapter-quality-checklist.md`（15 项检查） | — |
 | **3.5 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（滑动窗口审视） |
 
-**要点：**
-- Phase 3.2 的 writing-style 四字段必须全部注入——role 定叙事身份，core_principles 定不可违背的写作信条，possible_mistakes 定 AI 易犯错误列表，depiction_techniques 定描写层次和手法。缺任何一个，subagent 都会在最关键的地方放飞。
-- 正文字数目标、写作模型（writing_model）、情绪目标等执行参数从 `settings/writing-style.md` 和 `chapters/vol-{N}-ch-{M}.md` 读取，不在 prompts/ 中重复定义——一处修改全局生效。
-
 ## The Process
 
 ### Step 1: 检测当前进度
