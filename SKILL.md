@@ -108,46 +108,39 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 最新 chapter.md status = `archived` | 本卷还有未归档章？→ 问"下一章继续？"。全部归档 → 卷完成报告 + 选项 |
 | 无任何 chapter.md | → 卷纲已定但尚未开始写 → 问"开始写第一章？" |
 
-**章状态（chapter.status）:**
-- `outline` — 章纲已定但提示词尚未生成（Chapter Loop 执行中）
-- `draft` — 提示词已生成，正文写作/修改中，等待归档
-- `archived` — 正文已归档
+**章状态：** `outline`（章纲已定）→ `draft`（正写作/修改）→ `archived`（已归档）
 
-### Step 2: 匹配用户意图
+### Step 2: 分发
+
+匹配用户意图 → 前置检查 → 分配子技能。
+
+**1）匹配用户意图**
 
 | 用户说 | 路由 |
 |--------|------|
 | "创建项目""写小说""导入""讨论设定""设计角色""世界观""写作风格" | Phase 1 `novel-setup` |
-| "学文风""提取风格""学习写作风格""参考小说""分析文风" | 增强 `novel-style-extract` |
+| "学文风""提取风格""学习写作风格""参考小说""分析文风" | `novel-style-extract` |
 | "规划卷纲""定卷""下一卷""故事线" | Phase 2 `novel-volume` |
 | "写正文""写第X章""继续写""下一章""继续""规划章节""章纲" | Phase 3 `novel-chapter-loop` |
-| "归档""存档" | → Chapter Loop 末步自动归档。手动触发时检测最新 chapter.md：`draft` → 走归档 / `archived` → 告知已完成 |
-| "评审""评价""review""检查这章""这章怎么样" | 走 `novel-chapter-loop`（3.4 验收含可选深度诊断） |
+| "归档""存档" | 检测最新 chapter.md：`draft` → 走归档 / `archived` → 告知已完成 |
+| "评审""评价""review""检查这章""这章怎么样" | `novel-chapter-loop`（3.4 验收含可选深度诊断） |
 | "小说进度""第X卷进度" | 只读报告，不分发 |
 
-### Step 3: 前置产出检查
+**2）前置产出检查**
 
-根据目标路由检查前置文件：
-
-| 目标 | 检查项 |
+| 路由 | 检查项 |
 |------|--------|
-| novel-volume | story.md story_arc 已定义（至少已完成主线拆纲）、settings/world-setting.md 非模板、settings/writing-style.md 非模板 |
-| novel-chapter-loop | volumes/volume-{N}.md 存在且 chapters_summary 非空 |
+| novel-volume | story.md story_arc 已定义、world-setting.md + writing-style.md 非模板 |
+| novel-chapter-loop | volume-{N}.md 存在且 chapters_summary 非空 |
 
-缺失 → **STOP**。告知作者"XX 还没完成，先补这一环"，路由到前置 Phase 的子技能。
+缺失 → **STOP**，告知作者先补前置产出。
 
-**设定字段优先级（settings/world-setting.md）：**
-- core（必填——填完即可进入写作循环）：geography, politics, rules
-- extended（可选——按需在写作中追加）：culture, history, physics, biology, sociology
+**3）分配**
 
-### Step 4: 分发
-
-匹配用户意图后，根据目标路由选择对应子技能，**Read 子技能文件并按其中流程执行**：
-
-| 路由 | 子技能 | 读取路径 |
-|------|--------|---------|
-| novel-setup | 创建项目 + 设定 | `skills/setup/SKILL.md` |
-| novel-style-extract | 文风提取（三步） | `skills/style-extract/SKILL.md` |
-| novel-volume | 主线拆纲+卷纲规划 | `skills/outline/SKILL.md`（主线拆纲 + 卷纲部分） |
-| novel-chapter-loop | 逐章写作循环 | `skills/chapter-loop/SKILL.md` |
+| 路由 | 读取路径 |
+|------|---------|
+| novel-setup | `skills/setup/SKILL.md` |
+| novel-style-extract | `skills/style-extract/SKILL.md` |
+| novel-volume | `skills/outline/SKILL.md` |
+| novel-chapter-loop | `skills/chapter-loop/SKILL.md` |
 
