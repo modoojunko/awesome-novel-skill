@@ -67,12 +67,14 @@ Phase 3   逐章写作循环
                       □ 类型 prompt_segment 已追加
                       ↓ 不满意 → 手动调整或返回 3.2 重新生成
    ▼
-   3.3  正文生成 + 质量门禁（15 项检查）
+   3.3  正文生成
+   ▼
+   3.4  验收+评审（15 项质量检查 + 可选深度诊断）
    ▼
    [硬节点] 作者审阅 ← 不可跳过。作者不满意不归档
    ▼
    [Checkpoint Quality]  ← 必须停。确认以下全部通过：
-                      □ 15 项正文质量检查通过（含 AI 味检测）
+                      □ 3.4 正文质量检查通过（含 AI 味检测）
                       □ 作者审阅满意
                       ↓ 不满意 → 回到 3.3 修改。满意才归档
    ▼
@@ -160,13 +162,12 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | **1.3 世界观** | `settings/world-setting.md` | `references/world-setup-style.md`（引导讨论+自检） | — |
 | **1.4 角色** | `settings/character-setting/<id>.md` | 已有角色文件（追加时不覆盖）<br>`references/character-setting-style.md`（认知6层+自检） | — |
 | **2.0 主线拆纲** | `story.md#story_arc`（主线+分卷） | `references/story-arc-style.md`（从结局倒推法） | `settings/world-setting.md` core（冲突空间参考）<br>角色文件（按需看动机） |
-| **2.1 卷纲** | `volumes/volume-{N}.md`（章节列表） | `references/volume-setting-style.md`（指南+自检） | 角色文件（动机参考） |
+| **2.1 卷纲** | `volumes/volume-{N}.md`（章节列表） | `references/volume-setting-style.md`（指南+自检） | — |
 | **3.1 章纲** | `chapters/vol-{N}-ch-{M}.md` | `volumes/volume-{N}.md#chapters_summary`（卷纲给的本章方向）<br>`references/chapter-setting-style.md`（指南+自检） | — |
 | **3.2 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `references/prompt-setting-style.md`（提示词指南+模板） | — |
 | **3.3 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口） | — |
-| **3.4 验收** | 质量检查报告（内存） | `archives/vol-{N}-ch-{M}-*.md`（正文）<br>`references/chapter-quality-checklist.md`（15 项检查） | `settings/writing-style.md`（评分基准）<br>角色文件/`world-setting.md`（一致性校验） |
+| **3.4 验收+评审** | 质量检查报告（内存）<br>诊断报告（内存、可选） | `archives/vol-{N}-ch-{M}-*.md`（正文）<br>`references/chapter-quality-checklist.md`（15 项检查） | — |
 | **3.5 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（滑动窗口审视） |
-| **review** | 诊断报告（内存） | 目标正文 `archives/vol-{N}-ch-{M}-*.md`<br>`settings/writing-style.md`（评分基准） | 角色文件（角色一致性）<br>`settings/world-setting.md`（设定一致性） |
 
 **要点：**
 - Phase 3.2 的 writing-style 四字段必须全部注入——role 定叙事身份，core_principles 定不可违背的写作信条，possible_mistakes 定 AI 易犯错误列表，depiction_techniques 定描写层次和手法。缺任何一个，subagent 都会在最关键的地方放飞。
