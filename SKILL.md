@@ -119,9 +119,9 @@ Agent 在用户当前目录下创建/编辑以下文件：
 |--------|------|
 | "创建项目""写小说""导入""讨论设定""设计角色""世界观""写作风格" | Phase 1 `novel-setup` |
 | "规划卷纲""定卷""下一卷""故事线" | Phase 2 `novel-volume` |
-| "写正文""写第X章""继续写""下一章""继续""规划章节""章纲" | Phase 3 `novel-chapter-loop` |
+| "写正文""写第X章""继续写""下一章""继续""规划章节""章纲" | Phase 3 `novel-chapter` |
 | "归档""存档" | 检测最新 chapter.md：`draft` → 走归档 / `archived` → 告知已完成 |
-| "评审""评价""review""检查这章""这章怎么样" | `novel-chapter-loop`（3.4 验收含可选深度诊断） |
+| "评审""评价""review""检查这章""这章怎么样" | `novel-chapter`（验收含可选深度诊断） |
 | "小说进度""第X卷进度" | 只读报告，不分发 |
 
 **2）前置产出检查**
@@ -129,7 +129,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 要去哪个模块 | 检查项 |
 |------|--------|
 | novel-volume | story.md story_arc 已定义、world-setting.md + writing-style.md 非模板 |
-| novel-chapter-loop | volume-{N}.md 存在且 chapters_summary 非空 |
+| novel-chapter | volume-{N}.md 存在且 chapters_summary 非空 |
 
 缺失 → **STOP**，告知作者先补前置产出。
 
@@ -141,5 +141,5 @@ Agent 在用户当前目录下创建/编辑以下文件：
 |------|-----------|
 | novel-setup | `skills/setup/SKILL.md` — 项目初始化 + 设定 |
 | novel-volume | `skills/outline/SKILL.md` — 主线拆纲 + 卷纲 |
-| novel-chapter-loop | `skills/chapter-loop/SKILL.md` — 逐章写作循环 |
+| novel-chapter | `skills/chapter/SKILL.md` — 章纲设定 |
 

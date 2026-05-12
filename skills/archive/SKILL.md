@@ -1,9 +1,9 @@
 ---
 name: novel-archive
-description: 章节归档与状态更新（参考文档，已内化到 chapter-loop）。正文审阅满意后归档——更新角色状态、情绪弧线、钩子追踪、滑动窗口审视。触发："归档""存档""这章完成了""满意了"。归档前必须先通过 Workflow 完整性检查，不完整章节拒绝归档。
+description: 章节归档与状态更新（参考文档，已内化到 chapter 流程）。正文审阅满意后归档——更新角色状态、情绪弧线、钩子追踪、滑动窗口审视。触发："归档""存档""这章完成了""满意了"。归档前必须先通过 Workflow 完整性检查，不完整章节拒绝归档。
 ---
 
-> 参考文档——归档步骤已内化到 `skills/chapter-loop/SKILL.md` Step 5。此文件保留为详细操作参考，不再独立路由。
+> 参考文档——归档步骤已内化到 `skills/chapter/SKILL.md`。此文件保留为详细操作参考，不再独立路由。
 
 # Novel Archive — 归档
 
@@ -25,9 +25,9 @@ description: 章节归档与状态更新（参考文档，已内化到 chapter-l
 
 | 检查项 | 操作 |
 |--------|------|
-| chapter.md 完整性 | memo（7段）+ emotional_design 全部有值？缺失 → Read `skills/chapter-loop/SKILL.md` Step 1 补全章纲 |
+| chapter.md 完整性 | memo（8段）+ emotional_design 全部有值？缺失 → Read `skills/chapter/SKILL.md` 补全章纲 |
 | 章提示词文件存在？ | `prompts/vol-{N}-ch-{M}-prompt.md` 存在？缺失 → Read `skills/prompt/SKILL.md` 生成 |
-| 正文通过全部质量检查？ | 未通过 → 返回到 `skills/chapter-loop/SKILL.md` Step 3 修复 |
+| 正文通过全部质量检查？ | 未通过 → 返回到写作流程修复 |
 | 深度评审已完成？ | 建议归档前先触发 `novel-review`（10 维诊断），未评审 → 提醒作者可选评审 |
 
 ## 归档步骤
@@ -102,4 +102,4 @@ emotional_arc:
 **卷边界时：** 步骤 11 检测到卷全部完成时，展示卷完成报告，路由选择：
 - "规划下一卷" → 主 Agent Read `skills/outline/SKILL.md` 规划下一卷纲
 - "回顾整卷" → Read `skills/review/SKILL.md` 做整卷评审
-- "修改某章" → 指定章节，Read `skills/chapter-loop/SKILL.md` 重新生成
+- "修改某章" → 指定章节，回主流程重写
