@@ -33,8 +33,8 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 **关键文件与不变约束：**
 
-- **`chapters/vol-{N}-ch-{M}.md#status`** — ★ 进度真相源。`outline → draft → archived` 驱动 Step 1 路由。归档时更新。
-- **`settings/character-setting/<id>.md` → 状态历史** — ★ 角色状态唯一真相源。归档时追加，状态历史条目数必须等于该角色已归档章节数。
+- **`chapters/vol-{N}-ch-{M}.md#status`** — ★ 进度标记。`outline → draft → archived` 驱动 Step 1 判断该做什么。归档时更新。
+- **`settings/character-setting/<id>.md` → 状态历史** — ★ 角色状态的唯一记录。归档时追加，状态历史条目数必须等于该角色已归档章节数。
 - **`archives/vol-{N}-ch-{M}-{slug}.md`** — ★ 正文唯一存放处。文件名有 `-draft` = 未归档，没有 = 已归档。
 - **`volume-{N}.md#chapters_summary`** — 卷纲占位章纲，逐章讨论时详情写入 chapter.md。
 
@@ -49,7 +49,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 下面每个产出完成后，必须先自检 → 修复 → 再汇报/推进：
 
-| 产出 | 生命周期 | 自检清单出处 |
+| 产出 | 时效 | 自检清单出处 |
 |------|---------|-------------|
 | 世界观 | 基础一次性，后续可追加 | `references/world-setup-style.md` |
 | 写作风格 + 题材设定 | 一次性（基本不改） | `references/writing-style.md` + `references/genre-style.md` |
@@ -60,19 +60,19 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 提示词（prompt.md） | 每章一次 | `references/prompt-setting-style.md` |
 | 正文（archives/ 定稿） | 每章一次 | `references/chapter-quality-checklist.md` + 深度评审（可选） |
 
-**执行方式（按能力降级，优先用更隔离的方式）：**
+**自检方式（推荐用独立助手完成）：**
 
-1. **Agent Teams（最优）** — 开一个独立的 reviewer agent，给 ta "产出文件路径 + 对应清单 + 关键上下文"，逐项核查并严格汇报结论（哪几条 pass / 哪几条 fail + 证据 + 改写建议）
-2. **subAgent（次优）** — 没有 Teams 能力但能开 subagent 就用 subagent 走同样流程
-3. **自检（兜底）** — 当前没有上述能力，就自己严格逐项核查——不允许目测一遍就放行
+1. **独立检查助手（推荐）** — 开一个专门的检查助手，告诉它"产出文件路径 + 对应清单 + 关键信息"，逐项核查后报告结论（哪几条 pass / 哪几条 fail + 证据 + 修改建议）
+2. **辅助助手** — 没有独立助手条件时，用辅助助手走同样流程
+3. **自己检查（兜底）** — 上面两种都不行时，自己严格逐项核查——不允许目测一遍就放行
 
-**铁律：** 拿到结论后先按 fail 项把产出改完，再向用户汇报"做完了" + 自检结论 + 改了什么。直接拿原始结论汇报但不修复 = 违规。
+**铁律：** 拿到结论后先按不合格项把产出改完，再向用户汇报"做完了" + 自检结论 + 改了什么。直接拿原始结论汇报但不修复 = 违规。
 
 ## 各阶段文件读取指南
 
-每个子步骤按"输出什么 → 读什么 → 按需加载什么"加载上下文。读完产出，再释放换下一步。
+每个子步骤按"写什么文件 → 读什么参考 → 可选的参考阅读"来准备。读完一份，再看下一份。
 
-| 子步骤 | 输出什么 | 读什么（必读） | 按需加载 |
+| 子步骤 | 写什么文件 | 必读的参考 | 参考阅读 |
 |--------|---------|--------------|---------|
 | **1.1 新建项目** | 项目骨架 + `story.md` | `scripts/init.py`（创建骨架） | — |
 | **1.1 导入已有** | 切分的章纲 + archives/ | `scripts/import.py`（导入切分） | — |
@@ -85,7 +85,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | **3.2 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `references/prompt-setting-style.md`（提示词指南+模板） | — |
 | **3.3 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口） | — |
 | **3.4 验收+评审** | 质量检查报告（内存）<br>诊断报告（内存、可选） | `archives/vol-{N}-ch-{M}-*.md`（正文）<br>`references/chapter-quality-checklist.md`（15 项检查） | — |
-| **3.5 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（滑动窗口审视） |
+| **3.5 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（回顾最近章节） |
 
 ## 主 Agent 运作流程
 
@@ -93,11 +93,11 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 先读 `story.md`。不存在 → 项目未创建，Read `skills/setup/SKILL.md`。
 
-存在 → 读 `.agent/status.md` 获取状态缓存（current_volume、current_chapter、current_phase）。然后交叉验证：
-- 读 `chapters/` 下最大章号的 `status` 字段 → 与缓存比对
+存在 → 读 `.agent/status.md` 查看上次记录（current_volume、current_chapter、current_phase）。然后核对：
+- 读 `chapters/` 下最大章号的 `status` 字段 → 与记录比对
 - 一致 → 快速定位。不一致 → 以实际文件为准更新 status.md
 
-兜底：status.md 不存在 → 回退到目录扫描（volumes/ → chapters/ → status 判断）。
+如果 status.md 不存在 → 改为目录扫描（volumes/ → chapters/ → 看每章 status）。
 
 | 信号 | 下一步 |
 |------|--------|
@@ -112,11 +112,11 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 ### Step 2: 分发
 
-匹配用户意图 → 前置检查 → 分配子技能。
+匹配用户意图 → 前置检查 → 选择对应模块。
 
 **1）匹配用户意图**
 
-| 用户说 | 路由 |
+| 用户说 | 去向 |
 |--------|------|
 | "创建项目""写小说""导入""讨论设定""设计角色""世界观""写作风格" | Phase 1 `novel-setup` |
 | "规划卷纲""定卷""下一卷""故事线" | Phase 2 `novel-volume` |
@@ -127,7 +127,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 **2）前置产出检查**
 
-| 路由 | 检查项 |
+| 要去哪个模块 | 检查项 |
 |------|--------|
 | novel-volume | story.md story_arc 已定义、world-setting.md + writing-style.md 非模板 |
 | novel-chapter-loop | volume-{N}.md 存在且 chapters_summary 非空 |
@@ -136,7 +136,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 **3）分配**
 
-| 路由 | 读取路径 |
+| 模块 | 读取路径 |
 |------|---------|
 | novel-setup | `skills/setup/SKILL.md` |
 | novel-volume | `skills/outline/SKILL.md` |
