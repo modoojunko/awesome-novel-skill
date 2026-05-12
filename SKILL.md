@@ -171,9 +171,22 @@ SOLO 模式下每完成一章（正文验收通过 + 归档完毕），必须在
 
 ### Step 1: 检测当前进度
 
-先读 `story.md`。不存在 → 项目未创建，Read `skills/setup/SKILL.md`。
+先读 `story.md`：
 
-存在 → 执行 `python detect_phase.py --write` 检测实际状态并写入 `.agent/status.md`（自动扫描 volumes/、chapters/、archives/ 下的文件状态，与缓存交叉验证）。然后读 `.agent/status.md` 快速定位。如果 detect_phase.py 不可用 → 回退手动扫描：读 `chapters/` 下最大章号的 `status` 字段。
+1. **`story.md` 不存在，但 `story.yaml` 存在** → 旧版 v2.x 项目 → 分发到 `skills/migrate/SKILL.md` 执行迁移
+2. **`story.md` 存在** → 读 `skill_version` 字段。低于当前版本（如 < 3.0）→ 需要升级迁移 → 分发到 `skills/migrate/SKILL.md`
+3. **`story.md` 存在且版本匹配** → 正常流程，执行 `python detect_phase.py --write` 检测实际状态并写入 `.agent/status.md`（自动扫描 volumes/、chapters/、archives/ 下的文件状态，与缓存交叉验证）。然后读 `.agent/status.md` 快速定位。如果 detect_phase.py 不可用 → 回退手动扫描：读 `chapters/` 下最大章号的 `status` 字段。
+4. **两者都不存在** → 新项目 → Read `skills/setup/SKILL.md`
+
+**版本检测命令：**
+```bash
+# 旧版格式检测
+test -f story.yaml && test ! -f story.md && echo "v2x"
+# skill_version 检测
+grep -E "技能版本.*3\.0" story.md && echo "version_ok"
+```
+
+正常流程信号表：
 
 | 信号 | 下一步 |
 |------|--------|
@@ -224,6 +237,7 @@ SOLO 模式下每完成一章（正文验收通过 + 归档完毕），必须在
 
 | 模块 | 读取并执行 |
 |------|-----------|
+| novel-migrate | `skills/migrate/SKILL.md` — 旧版项目迁移到 3.0 格式 |
 | novel-setup | `skills/setup/SKILL.md` — 项目初始化 + 设定 |
 | novel-volume | `skills/outline/SKILL.md` — 主线拆纲 + 卷纲 |
 | novel-chapter | `skills/chapter/SKILL.md` — 章纲设定 |
