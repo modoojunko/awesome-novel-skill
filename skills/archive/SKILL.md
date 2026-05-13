@@ -112,6 +112,10 @@ description: 章节归档与状态更新。正文验收通过后归档——去 
 
 ## 下一步
 
-归档完成后告知作者，回到主流程由主 SKILL.md 分发下一步。
+**状态汇报 + 自动路由：**
+- ✅ 本章归档：`chapters/vol-{N}-ch-{M}.md` → `status: archived`
+- ✅ 角色状态已更新、情绪弧线已追记
+- 📁 定稿：`archives/vol-{N}-ch-{M}-{slug}.md`
+- → 主流程检测到 `status=archived`，**分发到下一章章纲**（`skills/chapter/SKILL.md`）或询问"下一章继续？"
 
-**卷边界时：** 步骤 10 检测到卷全部完成时，展示卷完成报告，然后同样回到主流程。
+归档完成后告知作者，回到主流程由主 SKILL.md 分发下一步。

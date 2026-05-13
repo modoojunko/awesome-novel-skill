@@ -64,4 +64,9 @@ Read `references/prompt-setting-style.md`，按以下顺序执行：
 
 ## 下一步
 
-回到主流程，由主 SKILL.md 检测进度并分发到下一步。
+**状态汇报 + 自动路由：**
+- ✅ 章纲：`chapters/vol-{N}-ch-{M}.md` → `status: outline`
+- 📄 提示词：`prompts/vol-{N}-ch-{M}-prompt.md` → 已生成
+- → 主流程检测到 `status=outline` + prompt 存在，**分发到提示词验收**（`skills/prompt-verify/SKILL.md`）
+
+回到主流程，由主 SKILL.md 检测进度并分发到验收。

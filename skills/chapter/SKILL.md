@@ -143,4 +143,9 @@ primary_mood、mood_progression、intensity_peak、emotional_hook、intensity_le
 
 **作者确认章纲后：**
 - 写入 `chapters/vol-{N}-ch-{M}.md`，status → `outline`
-- 回到主流程 Step 1，由主 SKILL.md 检测进度并自动分发到提示词生成
+
+## 下一步
+
+**状态汇报 + 自动路由：**
+- ✅ 章纲：`chapters/vol-{N}-ch-{M}.md` → `status: outline`
+- → 主流程检测到 `status=outline` + 无 prompt 文件，**分发到提示词生成**（`skills/prompt/SKILL.md`）

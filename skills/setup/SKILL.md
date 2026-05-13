@@ -128,5 +128,9 @@ Read `references/character-setting-style.md`，按以下流程执行：
 
 ## 下一步
 
-1. 更新 `.agent/status.md`：将 `current_phase` 改为 `volume`
-2. 引导作者进入 `skills/outline/SKILL.md`。当作者说"规划章节"时，主 Agent Read `skills/outline/SKILL.md` 进入主线拆纲+卷纲。
+**状态汇报 + 自动路由：**
+- ✅ 设定完成：story.md + world-setting.md + writing-style.md + genre-setting.md + character-setting/
+- 📋 Phase 1 完成，等待作者确认进入 Phase 2
+- → 主流程检测到 `.agent/status.md current_phase=volume`，**分发到主线拆纲+卷纲**（`skills/outline/SKILL.md`）
+
+**入口：** 当作者说"规划章节""规划卷""故事线"时，主 Agent Read `skills/outline/SKILL.md` 进入主线拆纲+卷纲。
