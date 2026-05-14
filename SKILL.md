@@ -160,6 +160,15 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | Agent | 启动 subagent 执行正文写作（skills/write/）、深度评审（skills/review/）、设定迁移（skills/migrate/ Step 4） | subagent 只能用 Read/Write/Edit，不可执行 Bash |
 | WebSearch | 作者要求导入/分析参考作品时查风格 | 仅在 Phase 1 风格讨论或独立导入流程中使用 |
 
+## 主 Agent 禁止行为
+
+主 Agent 在执行本技能时，**禁止**以下行为：
+
+- **禁止自行判断"不需要 dispatch"** — 检测到状态后必须按信号表分发到对应子 skill，不可跳过
+- **禁止直接读写项目文件（status.md 除外）** — 项目文件（settings/、chapters/、volumes/、archives/ 等）的读写必须通过子 skill 执行，不可主 Agent 直接操作
+
+**违反处理：** 违反以上任意一条 → 立即上报作者，描述违反内容，不自行修复后再报告。
+
 ## 生命周期 Lifecycle
 
 ### Start（开始时）
