@@ -152,13 +152,15 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 ## 工具契约
 
-| 工具 | 用途 | 限制 |
+| 工具 | 允许 | 禁止 |
 |------|------|------|
-| Bash | 执行 shell 命令（init.py 创建骨架、文件操作、git 操作） | 不安装新包，不改系统配置 |
-| Read | 读项目设定文件、章纲、正文 | — |
-| Write/Edit | 写/修改项目文件（settings/、volumes/、chapters/、prompts/、archives/） | 不写 `.agent/` 以外的基础设施文件 |
-| Agent | 启动 subagent 执行正文写作（skills/write/）、深度评审（skills/review/）、设定迁移（skills/migrate/ Step 4） | subagent 只能用 Read/Write/Edit，不可执行 Bash |
-| WebSearch | 作者要求导入/分析参考作品时查风格 | 仅在 Phase 1 风格讨论或独立导入流程中使用 |
+| **Bash** | 执行 init.py 创建骨架；文件列表扫描（ls）；版本检测（grep）；状态文件写入 | 安装新包；修改系统配置；git 提交/推送/分支操作 |
+| **Read** | 读 story.md、.agent/status.md；读子 skill SKILL.md；读 references/ 指南文件 | 读项目文件（settings/、chapters/、volumes/、archives/ 等）——应由子 skill 代为读写 |
+| **Write/Edit** | 写 .agent/status.md；写入检测后的状态结果 | 写项目文件（settings/、chapters/、volumes/、prompts/、archives/ 等）——应由子 skill 执行 |
+| **Agent** | 启动子 skill（setup/outline/chapter/prompt/write/review/archive/migrate） | 跳过 dispatch 直接操作项目文件；给 subagent 传递主 Agent 未读取的文件路径 |
+| **WebSearch** | 作者明确要求导入/分析参考作品时查风格 | 自行判断需要搜索而不经作者确认 |
+
+**分发原则：** 主 Agent 只负责状态检测 + dispatch。实际的项目文件操作（读设定、写章纲、生成提示词、写正文等）全部通过对应子 skill 执行。
 
 ## 主 Agent 禁止行为
 
