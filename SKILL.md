@@ -160,6 +160,31 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | Agent | 启动 subagent 执行正文写作（skills/write/）、深度评审（skills/review/）、设定迁移（skills/migrate/ Step 4） | subagent 只能用 Read/Write/Edit，不可执行 Bash |
 | WebSearch | 作者要求导入/分析参考作品时查风格 | 仅在 Phase 1 风格讨论或独立导入流程中使用 |
 
+## 生命周期 Lifecycle
+
+### Start（开始时）
+
+1. 读 `.agent/status.md`（如果存在）→ 确认当前进度和 `migrated` 标志
+2. 读 `story.md` → 判断走哪个分支（迁移 / 正常流程 / 新项目）
+3. 如是新项目 → 读 `skills/setup/SKILL.md` 开始初始化
+
+### End（结束时）
+
+每个子技能执行完毕后，主 Agent 必须：
+
+1. **写回状态** — 用 Write 把最新检测结果写入 `.agent/status.md`
+2. **角色状态追加** — 如刚完成归档，必须用 Edit 在对应角色文件追加状态历史
+3. **汇报路由** — 告诉用户"回到主流程，当前状态：X，下一步：Y"
+
+### 跨会话恢复
+
+用户说"继续写小说"或触发技能时：
+1. 读 `.agent/status.md` → 获取 current_phase / current_volume / current_chapter
+2. 读对应 chapter.md + volume.md → 恢复上下文
+3. 从 Step 1 信号表继续路由
+
+---
+
 ## 工作机制：状态驱动循环
 
 主 SKILL.md 和子 skill 之间没有显式"调用"。整个系统是一个**状态驱动循环**：
@@ -247,7 +272,13 @@ SOLO 模式下每完成一章（正文验收通过 + 归档完毕），必须在
 
 1. **`story.md` 不存在，但 `story.yaml` 存在** → 旧版 v2.x 项目 → 分发到 `skills/migrate/SKILL.md` 执行迁移
 2. **`story.md` 存在** → 读 `skill_version` 字段。低于当前版本（如 < 3.0）→ 需要升级迁移 → 分发到 `skills/migrate/SKILL.md`
-3. **`story.md` 存在且版本匹配** → 正常流程，执行 `python detect_phase.py --write` 检测实际状态并写入 `.agent/status.md`（自动扫描 volumes/、chapters/、archives/ 下的文件状态，与缓存交叉验证）。然后读 `.agent/status.md` 快速定位。如果 detect_phase.py 不可用 → 回退手动扫描：读 `chapters/` 下最大章号的 `status` 字段。
+3. **`story.md` 存在且版本匹配** → 正常流程，**主 Agent 自己执行状态检测**：
+   - 用 `Bash ls` 扫描 `volumes/volume-*.md` → 取最大卷号
+   - 用 `Bash ls` 扫描 `chapters/vol-*-ch-*.md` → 取最新章（按卷号+章号最大）
+   - 用 `Read` 读最新 chapter.md 的 `status` 字段
+   - 用 `Bash test` 检查 prompt 文件和 archives 草稿是否存在
+   - 用 `Write` 把检测结果写入 `.agent/status.md`
+   - 读 `.agent/status.md` 快速定位当前进度
 4. **两者都不存在** → 新项目 → Read `skills/setup/SKILL.md`
 
 **版本检测命令：**
