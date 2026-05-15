@@ -7,7 +7,7 @@ description: 旧版项目迁移。Step 1 检测到 story.yaml 或 skill_version 
 
 > 作者工作流从 2.x 升级到 3.0 时的自动迁移机制。作者可以在旧版本工作空间中升级技能后直接继续创作。
 
-**模型：** haiku（主 agent 编排），sonnet（subagent 做字段映射）
+**模型：** 通用编排（轻量级）+ 字段映射（DeepSeek V4 / Claude Sonnet 级）
 
 ## 范围 Scope
 
@@ -262,7 +262,7 @@ python3 "$SKILL_DIR/scripts/init.py" "$(pwd)" --author "$AUTHOR"
 
 主 Agent 启动多个并行 subagent，每个负责一个迁移子步骤。subagent 之间的工作互不依赖，可以全部同时启动。
 
-**模型：** sonnet（字段映射需要质量）
+**模型：** 字段映射需要较强推理能力（DeepSeek V4 / Claude Sonnet 级）
 
 每个 subagent 的通用指令框架：
 
