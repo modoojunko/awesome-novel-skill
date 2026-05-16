@@ -77,6 +77,48 @@ The system is designed for multiple AI tools (DeepSeek TUI, Claude Code, Hermes,
 
 ---
 
+## 产出检查规则
+
+每个产出完成后，**必须先按对应指南自检 → 修复不合格项 → 再汇报**。
+
+### 检查清单
+
+| 产出 | 检查内容 | 验收规范 |
+|------|----------|----------|
+| 世界观设定 | 地理/政治/规则完整性 | `references/world-setup-style.md` |
+| 写作风格 | 叙事身份/核心原则/描写技法 | `references/writing-style.md` |
+| 题材设定 | 满足类型/节奏/禁忌配置 | `references/genre-style.md` |
+| 角色设定 | 认知6层模型完整性 | `references/character-setting-style.md` |
+| 主线拆纲 | 总主线/断点/分卷冲突 | `references/story-arc-style.md` |
+| 卷纲 | 章节列表/因果链/章末变化 | `references/volume-setting-style.md` |
+| 章纲 | memo 8段/情绪设计6字段/hooks | `references/chapter-setting-style.md` |
+| 提示词 | 6模块完整性/风格注入 | `references/prompt-setting-style.md` |
+| 正文 | 15项质量门禁/AI味检测 | `references/chapter-quality-checklist.md` |
+
+### 检查方式
+
+1. **读指南** — 先读 `references/对应指南.md`，理解验收标准
+2. **逐项检查** — 按指南中的清单逐项核查，证据要落在原文
+3. **修复** — 不合格项先修复，再进行下一步
+
+### 铁律
+
+- ❌ 边写边检查 → 应写完后统一检查
+- ❌ 检查完直接汇报不修复 → 先修复再汇报
+- ❌ 目测一遍就放行 → 必须逐项打勾
+
+### 汇报格式
+
+```
+[产出] 已完成。
+检查结论：X 项通过 / Y 项不合格
+不合格项已修复：
+- [修复项 1]
+- [修复项 2]
+```
+
+---
+
 ## Critical Invariants
 
 | 文件 | 约束 |
