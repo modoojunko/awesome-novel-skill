@@ -67,6 +67,9 @@ cp -r scripts ~/.deepseek/skills/awesome-novel/
 
 看到 "安装完成" 就可以了。
 
+> **看到这个项目觉得有用？** 顺手点个 Star，这样它会出现在你的 GitHub 首页，让更多人发现。
+> {: .prompt-info }
+
 ## 开始写小说
 
 安装后，打开终端，在**你想放小说项目的目录**下启动你的 AI 工具。然后说一句：
