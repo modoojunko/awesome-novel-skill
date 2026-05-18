@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novel Agent — 和 AI 一起写小说</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      color: #e8e8e8;
+      line-height: 1.6;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, #e94560, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle { font-size: 1.5rem; color: #a8a8a8; margin-bottom: 3rem; }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+    .feature {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .feature h3 { color: #e94560; margin-bottom: 0.5rem; }
+    .install {
+      background: rgba(233,69,96,0.2);
+      border: 2px solid #e94560;
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+    pre {
+      background: #0d0d0d;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+    code { color: #ff6b6b; }
+    .badge { display: inline-block; padding: 0.3rem 0.8rem; background: #e94560; border-radius: 4px; font-size: 0.8rem; margin-right: 0.5rem; }
+    footer { text-align: center; color: #666; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    a { color: #e94560; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Novel Agent</h1>
+    <p class="subtitle">和 AI 一起写小说 —— 无需订阅，DeepSeek V4 原生支持</p>
+
+    <div class="features">
+      <div class="feature">
+        <h3>🎯 完整工作流</h3>
+        <p>世界观搭建 → 角色塑造 → 章节规划 → 正文写作，AI 全程陪你完成</p>
+      </div>
+      <div class="feature">
+        <h3>✨ 去 AI 味</h3>
+        <p>自动净化机器腔，检测句式重复，让文字更自然流畅</p>
+      </div>
+      <div class="feature">
+        <h3>🔮 伏笔追踪</h3>
+        <p>自动记录和追踪伏笔/钩子，该填坑时提醒你</p>
+      </div>
+      <div class="feature">
+        <h3>📖 角色管理</h3>
+        <p>角色状态自动更新，写下一章时 AI 记得他的最新状态</p>
+      </div>
+      <div class="feature">
+        <h3>⚡ 节奏检查</h3>
+        <p>连续高压/平淡过多时提醒你调整叙事节奏</p>
+      </div>
+      <div class="feature">
+        <h3>🛠️ 多端支持</h3>
+        <p>DeepSeek TUI、Claude Code、Hermes、OpenClaw 均可使用</p>
+      </div>
+    </div>
+
+    <div class="install">
+      <h2>快速安装</h2>
+      <p><span class="badge">DeepSeek TUI</span></p>
+      <pre><code>git clone https://github.com/modoojunko/awesome-novel-skill.git && cd awesome-novel-skill && ./install.sh deepseek-tui</code></pre>
+
+      <p style="margin-top: 1rem;"><span class="badge">Claude Code</span></p>
+      <pre><code>git clone https://github.com/modoojunko/awesome-novel-skill.git && cd awesome-novel-skill && ./install.sh claude-code</code></pre>
+    </div>
+
+    <h2>开始创作</h2>
+    <p>安装完成后，在你想放小说项目的目录下启动 AI 工具，然后说一句：</p>
+    <pre><code>帮我写本小说</code></pre>
+
+    <footer>
+      <p>基于 <a href="https://github.com/hust-open-atom-club/DeepSeek-TUI">DeepSeek TUI</a> 完全免费使用</p>
+      <p><a href="https://github.com/modoojunko/awesome-novel-skill">GitHub</a> · <a href="https://github.com/modoojunko/awesome-novel-skill/blob/main/README.md">文档</a></p>
+    </footer>
+  </div>
+</body>
+</html>
