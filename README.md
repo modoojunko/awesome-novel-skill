@@ -193,3 +193,14 @@ Agent 会在设定阶段问你要不要选。
 感谢 [@hust-open-atom-club](https://github.com/hust-open-atom-club) 的 [DeepSeek TUI](https://github.com/hust-open-atom-club/DeepSeek-TUI) 项目为 DeepSeek V4 用户提供免费、流畅的终端体验，让本 Skill 对个人用户完全免费可用。
 
 本项目部分设计受到 [InkOS](https://github.com/Narcooo/inkos) 的启发——包括 AI 味检测体系、伏笔/钩子追踪、题材配置和分层技法模型。感谢 [@Narcooo](https://github.com/Narcooo) 的优秀工作。
+
+## 贡献
+
+欢迎参与贡献！详情请查看 [CONTRIBUTING.md](./CONTRIBUTING.md)。
+
+| 方式 | 说明 |
+|------|------|
+| [Bug 反馈](https://github.com/modoojunko/awesome-novel-skill/issues/new) | 报告功能异常、安装问题 |
+| [功能建议](https://github.com/modoojunko/awesome-novel-skill/issues/new) | 提出新功能或改进想法 |
+| [素材扩充](https://github.com/modoojunko/awesome-novel-skill/issues) | 补充题材档案、文风特征库 |
+| [提交 PR](https://github.com/modoojunko/awesome-novel-skill/pulls) | 修复 bug、优化代码或文档 |
