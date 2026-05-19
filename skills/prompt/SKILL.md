@@ -33,9 +33,9 @@ description: 章提示词生成——从章纲生产 prompt.md。触发：章纲
 ## Step 1: 读取输入源
 
 1. **writing-style.md** → 提取 core_principles、possible_mistakes、pov_consistency、depiction_techniques、genre
-2. **anti-ai.md** → 提取 structural_tic_patterns（severity=high）、dialogue_rules、sentence_rules
-3. **chapter.md** → 提取 outline、memo、emotional_design、payoff_plan
-4. **genre-example** → 读 index.md 找 genre_profile 对应的 corpus，取 `提示词注入段`（模块 5 用）；variant 文件存在则合并覆盖
+2. **chapter.md** → 提取 outline、memo、emotional_design、payoff_plan
+3. **genre-example** → 读 index.md 找 genre_profile 对应的 corpus，取 `提示词注入段`（模块 5 用）；variant 文件存在则合并覆盖
+4. **anti-ai库** → 读 `references/anti-ai/common-rules.md`（通用规则）+ `references/anti-ai/{genre}.md`（题材规则，如文件存在）
 
 ## Step 2: 按指南填充提示词
 
@@ -47,7 +47,10 @@ Read `references/prompt-setting-style.md`，按以下顺序执行：
    - 每个场景填种子三字段（前置状态/核心事件/收尾落点）
    - 填分段叙事入口（画面重入/情绪导向/节奏点）
    - 从章纲提取约束与边界、核心情绪落点、爽点与跌宕设计
-3. **模块 5（文字与细节要求）** — 用 Step 1 读取的 genre-example `提示词注入段` 替换。无题材特定约束则用指南模板通用版
+3. **模块 5（文字与细节要求）** — 组装顺序：genre-example基础内容 → 通用反AI规范 → 题材反AI正反例：
+   - 用 Step 1 读取的 genre-example `提示词注入段` 填入视角、描写要求、节奏、禁止项
+   - 追加 `anti-ai/common-rules.md` 的通用反AI规范（疲劳词阈值 + 句式规则 + 元叙事禁止）
+   - 追加 `anti-ai/{genre}.md` 的题材正反例（高频AI病句 ❌/✅ 对照，如文件存在）
 4. **模块 6（真人感补充）** — 从章纲 memo + 作者补充提取无用细节和情绪波动，语言风格照搬 writing-style
 
 全部填完后全局通读一次——掩住字段名，看每个种子读起来是叙事画面还是写作指令。

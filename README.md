@@ -207,3 +207,94 @@ Agent 会在设定阶段问你要不要选。
 | [功能建议](https://github.com/modoojunko/awesome-novel-skill/issues/new) | 提出新功能或改进想法 |
 | [素材扩充](https://github.com/modoojunko/awesome-novel-skill/issues) | 补充题材档案、文风特征库 |
 | [提交 PR](https://github.com/modoojunko/awesome-novel-skill/pulls) | 修复 bug、优化代码或文档 |
+
+### 写作风格贡献（作家）
+
+如果你是有创作经验的作家，欢迎为反AI写作库贡献题材正反例：
+
+**贡献内容：** `references/anti-ai/{genre}.md` — 你所在题材的高频AI病句正反例
+
+**贡献格式：**
+```markdown
+# {题材名}反AI规则
+
+> 适用题材：{genre-id}
+
+## 高频AI病句正反例
+
+### 1. {问题类型}
+
+❌ "AI味的写法"
+✅ "真人感的写法"
+
+## 写作要点
+
+1. **{要点}** — 说明
+```
+
+**正反例原则：**
+- ❌ 要具体：给真实的AI味句子，不是抽象描述
+- ✅ 要可执行：给可复制的真人感写法，不是"要自然"
+- 每类问题包含一对对照，同一场景、同一情绪，转化清晰
+
+**提交方式：**
+1. Fork 项目
+2. 在 `references/anti-ai/` 下新建或编辑题材文件
+3. 提交 PR，标题格式：`反AI: 添加{题材名}正反例`
+
+详细规范见 [references/anti-ai/README.md](./references/anti-ai/README.md)。
+
+### 代码贡献（程序员）
+
+**项目结构：**
+```
+awesome-novel-skill/
+├── SKILL.md              # 主技能入口
+├── skills/              # 子技能模块
+│   ├── setup/           # 项目初始化
+│   ├── outline/         # 主线拆纲
+│   ├── chapter/         # 章纲设定
+│   ├── prompt/          # 提示词生成
+│   ├── write/           # 正文写作
+│   ├── review/          # 深度评审
+│   ├── archive/         # 归档
+│   └── ...
+├── references/          # 参考指南
+│   ├── anti-ai/         # 反AI写作库
+│   ├── genre-example/   # 题材画像
+│   └── ...
+└── scripts/             # 工具脚本
+```
+
+**开发规范：**
+- 代码遵循 PEP 8（Python）或项目既有风格
+- 所有子技能修改需更新对应 SKILL.md
+- 新增功能需更新 README 和 CONTRIBUTING.md
+
+**提交方式：**
+1. Fork 项目，创建功能分支
+2. 提交 PR，标题格式：`类型: 简短描述`（feat/fix/refactor/docs/test）
+3. PR 描述包含：改了什么、为什么改、测试方式
+
+### Agent 技能贡献
+
+本 Skill 由多个子技能模块组成，每个模块可独立改进：
+
+| 模块 | 路径 | 贡献方向 |
+|------|------|---------|
+| 提示词生成 | `skills/prompt/` | 改进模板结构、增强AI味约束 |
+| 正文写作 | `skills/write/` | 优化写作指令、强化质量门禁 |
+| 提示词验收 | `skills/prompt-verify/` | 增加验收维度、完善报告格式 |
+| 正文验收 | `skills/body-verify/` | 扩展检测规则、优化检测效率 |
+| 反AI写作库 | `references/anti-ai/` | 新增题材正反例、丰富通用规则 |
+| 题材画像 | `references/genre-example/` | 新增题材档案、丰富配置内容 |
+
+**贡献流程：**
+1. 阅读目标模块的 SKILL.md 了解当前逻辑
+2. 在测试项目（如有）中验证改动效果
+3. 提交 PR，附上改动说明和验证结果
+
+**Skill 贡献原则：**
+- 改动需有明确的问题驱动（"因为XX问题，所以改XX"）
+- 新增功能需向后兼容，不破坏现有项目
+- 复杂改动先提 Issue 讨论再实现
