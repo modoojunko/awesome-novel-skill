@@ -5,7 +5,7 @@ description: 章纲设定——从卷纲拆出每章内容规划。触发："规
 
 # Novel Chapter — 章纲设定
 
-> 流程：方向输入（含角色发声）→ 展开纲要点 → 禁止清单 → Memo 8段 → 情绪设计 → Hooks → 验收。章纲确认后自动进提示词生成。
+> 流程：PreFlight（四 agent 并行）→ 作者确认规划草案 → 方向输入 → 展开纲要点 → 禁止清单 → Memo 8段 → 情绪设计 → Hooks → 验收。章纲确认后自动进提示词生成。
 
 ## Overview
 
@@ -45,15 +45,112 @@ description: 章纲设定——从卷纲拆出每章内容规划。触发："规
 - `{M}` = 当前章号（从 chapters/ 目录取当前卷最新未归档章号）
 - `{slug}` = 章节标题的 slug 形式
 
+## PreFlight：四 agent 并行读取
+
+规划新章前，必须先完成四份观察报告。**四 agent 并行读取，互不等待各自的输出。**
+
+### 分发任务
+
+主 agent 同时向四个 subagent 发送任务：
+
+```
+→ plot-agent      → skills/chapter/subagents/plot-agent.md
+→ architecture-agent → skills/chapter/subagents/architecture-agent.md
+→ emotion-agent  → skills/chapter/subagents/emotion-agent.md
+→ reader-agent   → skills/chapter/subagents/reader-agent.md
+```
+
+### 1. 情节 agent（plot-agent）
+
+职责：守住情节逻辑链——上章发生的事如何自然延续
+
+读取：vol-{N}-ch-{M-1}.md（outline、key_points）、volume-{N}.md（chapters_summary）、相关角色文件（状态历史）
+
+输出：`## 情节观察\n↳ 来源：vol-{N}-ch-{M-1}.md outline\n[上章关键情节]\n[本章情节如何衔接]`
+
+### 2. 架构 agent（architecture-agent）
+
+职责：守住钩子兑现路径——哪些旧钩子必须在这章处理
+
+读取：所有 chapter.md 的 hooks 字段（汇总未兑现项）、story.md（story_arc）
+
+输出：`## 架构观察\n↳ 来源：hooks 全局汇总\n[必须兑现的旧钩子]\n[本章应新增的钩子]\n[与主线的关系]`
+
+### 3. 情绪 agent（emotion-agent）
+
+职责：守住角色情绪弧线——角色此刻的心理状态
+
+读取：vol-{N}-ch-{M-1}.md（emotional_design）、相关角色文件（状态历史）
+
+输出：`## 情绪观察\n↳ 来源：vol-{N}-ch-{M-1}.md emotional_design\n[上章情绪弧线]\n[角色当前心理状态]\n[本章情绪走向建议]`
+
+### 4. 读者 agent（reader-agent）
+
+职责：守住读者期待——读者追到这章想知道什么
+
+读取：vol-{N}-ch-{M-1}.md（emotional_hook）、所有未兑现钩子清单
+
+输出：`## 读者观察\n↳ 来源：vol-{N}-ch-{M-1}.md emotional_hook\n[读者此刻最大的悬念]\n[读者期待的情感回报]\n[本章应给出的 micro_payoff 位置]`
+
+### 主 agent 汇总 + 仲裁
+
+收到四份报告后，主 agent **不自己读文件补充**，直接基于四份报告输出规划草案。
+
+**仲裁规则：**
+
+| 优先级 | 规则 | 说明 |
+|--------|------|------|
+| 1 | 架构 > 情节 | 钩子兑现是硬约束，情节逻辑不得违背钩子路径 |
+| 2 | 架构 > 读者 | 必须兑现的钩子优先于读者期待的 micro_payoff |
+| 3 | 情节 > 情绪 | 角色情绪不能与情节逻辑冲突——先有行动再有情绪 |
+| 4 | 超出以上规则的冲突 | 标注【冲突】+ 两个 agent 的观点 → 提交作者仲裁 |
+
+冲突报告格式：
+```
+【冲突】{agent A} vs {agent B}
+- {agent A}：[内容]
+- {agent B}：[内容]
+→ 等待作者裁定
+```
+
+### 规划草案输出格式
+
+```
+## 规划草案
+
+### 本章定位
+[一句话，基于四份报告综合]
+
+### 情节方向
+[基于情节 agent 报告]
+
+### 必须兑现的钩子
+[基于架构 agent 报告]
+
+### 情绪走向
+[基于情绪 agent 报告]
+
+### 读者期待回应
+[基于读者 agent 报告]
+```
+
+展示给作者确认后，才进入"一、方向输入"阶段。
+
+---
+
+## 执行顺序
+
+```
+PreFlight（四 agent 并行）→ 作者确认规划草案 → 方向输入 → 展开纲要点 → ...
+```
+
+**没有四份报告，规划草案不能输出。**
+
 ## 章纲流程
 
-Read `references/chapter-setting-style.md`，先执行"一、方向输入"：
+规划草案经作者确认后，进入章纲细化阶段。
 
-1. **章级角色发声** — 读各活跃角色设定文件的最新状态历史，生成每角色当前处境和动机。格式同卷级角色发声（`【处境】【未完成的事】【现在想做的事】`），范围收敛到上一章结束时
-2. **收集四组输入** — 读者缺口（上章 emotional_hook）+ 角色状态（发声结果）+ 钩子盘点 + 卷纲定位
-3. **合成 1-3 个方向** — 交叉输入推方向选项，展示给作者确认
-
-详见指南。方向确认后，执行"二、从方向到纲要点"——用字数倒推法确定关键点数量，用三段锚点法填充每条关键点（感官/动作/判断），对话场景用对话变体（场景/对话/权力）。详见指南。
+Read `references/chapter-setting-style.md`，按以下步骤执行：
 
 ### a. 展开纲要点（Agent 填充，作者确认）
 
