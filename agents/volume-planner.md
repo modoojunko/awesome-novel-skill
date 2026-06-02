@@ -80,7 +80,7 @@ knowledge_base:
     展示方案 → 作者确认 → 写volume-{N}.md
     写前加载：volume-setting-style.md 产出格式规则
     工具：五(Write → volumes/)
-    约束：三(Output Schema): 符合volume-setting-style
+    约束：三(Output Artifacts): 符合volume-setting-style 格式
 
   VERIFY:
     完成标准？← 八(Definition of Done): 格式正确 + 可追溯 + 作者确认
