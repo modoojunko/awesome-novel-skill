@@ -80,5 +80,6 @@ cp -r "$SCRIPT_DIR/scripts" "$DEST/"
 cp -r "$SCRIPT_DIR/skills" "$DEST/"
 cp -r "$SCRIPT_DIR/agents" "$DEST/"
 cp -r "$SCRIPT_DIR/references" "$DEST/"
+cp -r "$SCRIPT_DIR/templates" "$DEST/"
 
 echo "安装完成!"

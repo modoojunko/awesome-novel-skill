@@ -30,6 +30,9 @@
     "SKILL.md",
     "skills/",
     "references/",
-    "scripts/"
+    "scripts/",
+    "agents/",
+    "templates/",
+    "tools/"
   ]
 }
