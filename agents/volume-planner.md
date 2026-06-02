@@ -12,6 +12,8 @@ memory:
     description: 作家文风偏好
     access: read
 knowledge_base:
+  - path: .claude/agents/skills/volume-planner.md
+    description: 主线拆纲 + 卷纲规划 SOP
   - path: .claude/knowledge/story-arc-style.md
     description: 从结局倒推法
   - path: .claude/knowledge/volume-setting-style.md

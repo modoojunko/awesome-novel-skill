@@ -131,9 +131,9 @@
 │ └─ 不做: 跳过设定顺序、正文写作、卷纲规划               │
 │                                                        │
 │ Inputs                                                 │
-│ ├─ references/genre-style.md（题材指南）               │
-│ ├─ references/world-setup-style.md（世界观指南）       │
-│ └─ references/character-setting-style.md（角色指南）   │
+│ ├─ knowledge/format-specs/genre-style.md（题材指南）               │
+│ ├─ knowledge/format-specs/world-setup-style.md（世界观指南）       │
+│ └─ knowledge/format-specs/character-setting-style.md（角色指南）   │
 │                                                        │
 │ Outputs                                                │
 │ ├─ story.md（项目索引）                                │
@@ -181,7 +181,7 @@
 │ Inputs                                                 │
 │ ├─ story.md（项目索引）                                │
 │ ├─ settings/world-setting.md                           │
-│ └─ references/story-arc-style.md（主线指南）           │
+│ └─ knowledge/format-specs/story-arc-style.md（主线指南）           │
 │                                                        │
 │ Outputs                                                │
 │ ├─ story.md#story_arc（主线+分卷规划）                 │
@@ -237,7 +237,7 @@
 │ Inputs                                                 │
 │ ├─ volumes/volume-{N}.md（卷纲）                      │
 │ ├─ chapters/vol-{N}-ch-{M-1}.md（上一章章纲）         │
-│ └─ references/chapter-setting-style.md                │
+│ └─ knowledge/format-specs/chapter-setting-style.md                │
 │                                                        │
 │ Outputs                                                │
 │ └─ chapters/vol-{N}-ch-{M}.md                        │
@@ -301,7 +301,7 @@
 │ ├─ chapters/vol-{N}-ch-{M}.md（章纲）                 │
 │ ├─ settings/writing-style.md                           │
 │ ├─ settings/anti-ai.md                                 │
-│ └─ references/prompt-setting-style.md                 │
+│ └─ knowledge/format-specs/prompt-setting-style.md                 │
 │                                                        │
 │ Outputs                                                │
 │ └─ prompts/vol-{N}-ch-{M}-prompt.md（6模块提示词）   │
@@ -417,7 +417,7 @@
 │ Inputs                                                 │
 │ ├─ archives/vol-{N}-ch-{M}-*.draft.md                │
 │ ├─ chapters/vol-{N}-ch-{M}.md                        │
-│ └─ references/chapter-quality-checklist.md            │
+│ └─ knowledge/format-specs/chapter-quality-checklist.md            │
 │                                                        │
 │ Outputs                                                │
 │ └─ 验收报告（不出文件，只出结论）                      │
@@ -805,9 +805,9 @@ cat SKILL.md
 | 文件 | 用途 |
 |------|------|
 | `SKILL.md` | 主技能入口 |
-| `references/` | 10 份 SOP 指南 |
-| `skills/` | 子技能模块 |
-| `scripts/templates/` | 14 份模板 |
+| `agents/` | 8 个 agent 定义 + 7 个 skill SOP |
+| `templates/` | 项目骨架模板 |
+| `templates/migration/` | 旧版迁移模板 |
 
 ---
 

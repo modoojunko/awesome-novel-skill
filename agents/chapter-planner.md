@@ -9,6 +9,8 @@ memory:
     description: 反 AI 模式库（避免常见套路）
     access: read
 knowledge_base:
+  - path: .claude/agents/skills/chapter-planner.md
+    description: 章纲设定 SOP（PreFlight / Memo 8段 / 情绪设计 / Hooks / 验收）
   - path: .claude/knowledge/chapter-setting-style.md
     description: 章纲格式 + 情绪设计 + 验收标准
   - path: .claude/knowledge/genre-example.md

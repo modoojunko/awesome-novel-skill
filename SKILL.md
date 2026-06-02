@@ -90,14 +90,14 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 | 产出 | 时效 | 自检清单出处 |
 |------|---------|-------------|
-| 世界观 | 基础一次性，后续可追加 | `references/world-setup-style.md` |
-| 写作风格 + 题材设定 | 一次性（基本不改） | `references/writing-style.md` + `references/genre-style.md` |
-| 角色设定 | 基础一次性，后续可追加 | `references/character-setting-style.md` |
-| 主线拆纲（story.md 故事主线 + 分卷规划） | 一次性（Phase 2 入口处） | `references/story-arc-style.md` |
-| 卷纲（volume-N.md） | 每卷一次 | `references/volume-setting-style.md` |
-| 章纲（chapter.md） | 每章一次 | `references/chapter-setting-style.md` |
-| 提示词（prompt.md） | 每章一次 | `references/prompt-setting-style.md` |
-| 正文（archives/ 草稿） | 每章一次 | `references/chapter-quality-checklist.md`（正文验收，主流程独立执行） |
+| 世界观 | 基础一次性，后续可追加 | `knowledge/format-specs/world-setup-style.md` |
+| 写作风格 + 题材设定 | 一次性（基本不改） | `knowledge/format-specs/writing-style.md` + `knowledge/format-specs/genre-style.md` |
+| 角色设定 | 基础一次性，后续可追加 | `knowledge/format-specs/character-setting-style.md` |
+| 主线拆纲（story.md 故事主线 + 分卷规划） | 一次性（Phase 2 入口处） | `knowledge/format-specs/story-arc-style.md` |
+| 卷纲（volume-N.md） | 每卷一次 | `knowledge/format-specs/volume-setting-style.md` |
+| 章纲（chapter.md） | 每章一次 | `knowledge/format-specs/chapter-setting-style.md` |
+| 提示词（prompt.md） | 每章一次 | `knowledge/format-specs/prompt-setting-style.md` |
+| 正文（archives/ 草稿） | 每章一次 | `knowledge/format-specs/chapter-quality-checklist.md`（正文验收，主流程独立执行） |
 
 **自检方式（推荐用独立助手完成）：**
 
@@ -114,16 +114,16 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 子步骤 | 写什么文件 | 必读的参考 | 参考阅读 |
 |--------|---------|--------------|---------|
 | **1.1 新建项目** | 项目骨架 + `story.md` | `scripts/init.py`（创建骨架） | — |
-| **1.2 题材选择+风格** | `settings/genre-setting.md`<br>`settings/writing-style.md`（预填） | `references/genre-style.md`（选题指南+验收） | `references/genre-example/` 对应类型（配置参考） |
-| **1.3 世界观** | `settings/world-setting.md` | `references/world-setup-style.md`（引导讨论+自检） | — |
-| **1.4 角色** | `settings/character-setting/<id>.md` | 已有角色文件（追加时不覆盖）<br>`references/character-setting-style.md`（认知6层+自检） | — |
-| **2.0 主线拆纲** | `story.md#story_arc`（主线+分卷） | `references/story-arc-style.md`（从结局倒推法） | `settings/world-setting.md` core（冲突空间参考）<br>角色文件（按需看动机） |
-| **2.1 卷纲** | `volumes/volume-{N}.md`（章节列表） | `references/volume-setting-style.md`（指南+自检） | — |
-| **3.1 章纲** | `chapters/vol-{N}-ch-{M}.md` | `volumes/volume-{N}.md#chapters_summary`（卷纲给的本章方向）<br>`references/chapter-setting-style.md`（指南+自检） | — |
-| **3.2 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `references/prompt-setting-style.md`（提示词指南+模板） | — |
-| **3.2a 提示词验收**（主流程独立执行） | `prompts/vol-{N}-ch-{M}-prompt.md`（检查对象） | `references/prompt-setting-style.md` Section 三（验收标准） | — |
+| **1.2 题材选择+风格** | `settings/genre-setting.md`<br>`settings/writing-style.md`（预填） | `knowledge/format-specs/genre-style.md`（选题指南+验收） | `knowledge/genre-example/` 对应类型（配置参考） |
+| **1.3 世界观** | `settings/world-setting.md` | `knowledge/format-specs/world-setup-style.md`（引导讨论+自检） | — |
+| **1.4 角色** | `settings/character-setting/<id>.md` | 已有角色文件（追加时不覆盖）<br>`knowledge/format-specs/character-setting-style.md`（认知6层+自检） | — |
+| **2.0 主线拆纲** | `story.md#story_arc`（主线+分卷） | `knowledge/format-specs/story-arc-style.md`（从结局倒推法） | `settings/world-setting.md` core（冲突空间参考）<br>角色文件（按需看动机） |
+| **2.1 卷纲** | `volumes/volume-{N}.md`（章节列表） | `knowledge/format-specs/volume-setting-style.md`（指南+自检） | — |
+| **3.1 章纲** | `chapters/vol-{N}-ch-{M}.md` | `volumes/volume-{N}.md#chapters_summary`（卷纲给的本章方向）<br>`knowledge/format-specs/chapter-setting-style.md`（指南+自检） | — |
+| **3.2 提示词** | `prompts/vol-{N}-ch-{M}-prompt.md` | `knowledge/format-specs/prompt-setting-style.md`（提示词指南+模板） | — |
+| **3.2a 提示词验收**（主流程独立执行） | `prompts/vol-{N}-ch-{M}-prompt.md`（检查对象） | `knowledge/format-specs/prompt-setting-style.md` Section 三（验收标准） | — |
 | **3.3 正文生成** | `archives/vol-{N}-ch-{M}-*.draft.md` | `prompts/vol-{N}-ch-{M}-prompt.md`（单一入口） | `skills/write/SKILL.md`（SOP） |
-| **3.3a 正文验收**（主流程独立执行） | `archives/vol-{N}-ch-{M}-*.draft.md`（检查对象） | `references/chapter-quality-checklist.md`（验收标准） | — |
+| **3.3a 正文验收**（主流程独立执行） | `archives/vol-{N}-ch-{M}-*.draft.md`（检查对象） | `knowledge/format-specs/chapter-quality-checklist.md`（验收标准） | — |
 | **3.4 深度评审**（可选） | 诊断报告（内存） | `skills/review/SKILL.md` | — |
 | **3.5 归档** | `archives/vol-{N}-ch-{M}-*.md`（去 draft）<br>`chapters/vol-{N}-ch-{M}.md`（status→archived）<br>角色状态追加 + `status.md` 更新 | 各角色文件（追加状态历史+情绪弧线） | 最近 3 章 `chapters/`（回顾最近章节） |
 
@@ -154,7 +154,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 
 | 失败场景 | 恢复策略 |
 |---------|---------|
-| `init.py` 不可用或报错 | 手动创建目录结构 + 复制模板文件（`scripts/templates/` 下各 .template → 对应路径去 .template） |
+| `init.py` 不可用或报错 | 手动创建目录结构 + 复制模板文件（`templates/` 下文件 + `templates/migration/` 下各 .template → 对应路径去 .template） |
 | subagent 超时（正文写作） | 主 Agent 直接写，降级不退费 |
 | 文件被占用/锁定 | 等 5 秒重试，最多 3 次。仍失败 → 报作者手动关闭 |
 | 网络错误（WebSearch） | 重试 1 次。仍失败 → 跳过，标记"网络不可用" |
@@ -166,7 +166,7 @@ Agent 在用户当前目录下创建/编辑以下文件：
 | 工具 | 允许 | 禁止 |
 |------|------|------|
 | **Bash** | 执行 init.py 创建骨架；文件列表扫描（ls）；版本检测（grep）；状态文件写入 | 安装新包；修改系统配置；git 提交/推送/分支操作 |
-| **Read** | 读 story.md、.agent/status.md；读子 skill SKILL.md；读 references/ 指南文件 | 读项目文件（settings/、chapters/、volumes/、archives/ 等）——应由子 skill 代为读写 |
+| **Read** | 读 story.md、.agent/status.md；读子 skill SKILL.md；读 knowledge/ + memory/ 参考文件 | 读项目文件（settings/、chapters/、volumes/、archives/ 等）——应由子 skill 代为读写 |
 | **Write/Edit** | 写 .agent/status.md；写入检测后的状态结果 | 写项目文件（settings/、chapters/、volumes/、prompts/、archives/ 等）——应由子 skill 执行 |
 | **Agent** | 启动子 skill（setup/outline/chapter/prompt/write/review/archive/migrate） | 跳过 dispatch 直接操作项目文件；给 subagent 传递主 Agent 未读取的文件路径 |
 | **WebSearch** | 作者明确要求导入/分析参考作品时查风格 | 自行判断需要搜索而不经作者确认 |

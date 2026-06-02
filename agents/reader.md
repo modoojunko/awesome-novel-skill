@@ -9,6 +9,8 @@ memory:
     description: 检查是否仍有 AI 味
     access: read
 knowledge_base:
+  - path: .claude/agents/skills/reader.md
+    description: 10 维 60+ 细项深度评审 SOP
   - path: .claude/knowledge/chapter-quality-checklist.md
     description: 验收清单
   - path: .claude/knowledge/genre-example.md

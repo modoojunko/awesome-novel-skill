@@ -7,7 +7,7 @@
 
 ## 一、核心模型
 
-awesome-novel-skill 的职责是**一次性初始化**用户的小说项目。初始化完成后，用户在项目目录下通过 `@agent` 与 6 个各司其职的 agent 协作完成小说创作。
+awesome-novel-skill 的职责是**一次性初始化**用户的小说项目。初始化完成后，用户在项目目录下通过 `@agent` 与 7 个各司其职的 agent 协作完成小说创作。
 
 ```
 awesome-novel-skill（开发者仓库）
@@ -51,7 +51,7 @@ awesome-novel-skill（开发者仓库）
 │  │    └──────────┘                 │                 │          │   │
 │  │    ┌──────────┐                 │   novel-agent   │          │   │
 │  │    │chapter-  │←────────────────│   (入口+调度+    │          │   │
-│  │    │ planner  │                 │    lore-keeping) │          │   │
+│  │    │ planner  │                 │                 │          │   │
 │  │    └──────────┘                 │                 │          │   │
 │  │    ┌──────────┐                 │                 │          │   │
 │  │    │ prompt-  │←────────────────│                 │          │   │
@@ -196,20 +196,21 @@ Debug Artifacts: {完整 Prompt、LLM 原始响应}
 
 | # | Agent | 有 loop | 写文件 | 只读输入 | 产出 |
 |---|-------|---------|--------|---------|------|
-| 1 | **novel-agent** | 总循环（调度+更新） | settings/、.claude/memory/、.agent/ | 全部项目文件 | 状态更新、lore-keeping |
+| 1 | **novel-agent** | 总循环（调度） | .agent/ | 各子 agent 产出 | 调度任务、更新状态 |
 | 2 | **volume-planner** | 自有 | volumes/ | story.md + 世界观 | 卷纲 |
 | 3 | **chapter-planner** | 自有 | chapters/ | 卷纲 + 角色状态 | 章纲 |
 | 4 | **prompt-crafter** | 自有 | prompts/ | 章纲 + 记忆 | 提示词 |
 | 5 | **writer** | 自有 | archives/ | 仅提示词 | 正文草稿 |
 | 6 | **reader** | 无（一次调用） | 不写 | 正文 + 题材类型 | 反馈报告 |
+| 7 | **updater** | 自有 | settings/、.claude/memory/、.agent/ | 正文 draft + AI 快照 | lore-keeping（角色/时间线/记忆） |
 
-### 3.1 novel-agent（入口 + 调度 + lore-keeping）
+### 3.1 novel-agent（入口 + 调度）
 
 ```
 ---
 name: novel-agent
-description: 项目入口 agent，负责检测进度、调度子 agent、归档时做 lore-keeping
-role: 总指挥 + 档案管理员
+description: 项目入口 agent，负责检测进度、调度子 agent 完成任务
+role: 总指挥
 react: true
 model: auto
 memory:
@@ -235,41 +236,36 @@ knowledge_base:
 
 #### 一、身份与角色
 - **Agent ID:** `novel-agent`
-- **Role:** 项目总指挥 + 档案管理员
-- **Purpose:** 检测项目进度，调度合适的子 agent 完成任务，在每个章节归档时更新设定/时间线/记忆
+- **Role:** 项目总指挥
+- **Purpose:** 检测项目进度，调度合适的子 agent 完成任务，在每个章节归档时调用 updater 做 lore-keeping
 - **Persona:** 冷静的项目经理风格，关注状态而非细节，明确进度而非内容。对话简洁，只问必要问题
-- **Dependencies:** 依赖所有 5 个子 agent 的产出；必须等待每个子 agent 完成后才能进入下一阶段
+- **Dependencies:** 依赖所有 6 个子 agent（volume-planner、chapter-planner、prompt-crafter、writer、reader、updater）的产出；必须等待每个子 agent 完成后才能进入下一阶段
 
 #### 二、能力与职责
 - **Core Responsibilities:**
   - 扫描项目文件系统，检测当前进度（status.md + 实际文件）
   - 根据进度分派任务给子 agent（写 order 文件）
   - 验证子 agent 产出，确认完成
-  - 归档时执行 lore-keeping（角色状态、时间线、动态记忆）
-  - 在归档后询问作者是否继续下一章
+  - 归档时调度 updater 执行 lore-keeping（角色状态、时间线、动态记忆）
+  - 归档完成后询问作者是否继续下一章
 - **Out of Scope:**
   - 不直接写卷纲/章纲/提示词/正文
   - 不做读者反馈（交给 reader）
-  - 不做动态记忆的语义合并之外的内容判断
+  - 不做 lore-keeping（交给 updater）
+  - 不直接修改 settings/、.claude/memory/ 下的文件
 - **Decision Rights:**
   - 自主决策当前该做什么（状态驱动）
   - 自主判断子 agent 产出是否足够
-  - 归档时冲突性记忆合并需询问作者
+  - 调度哪个子 agent 由当前 phase 决定
 
 #### 三、输入/输出契约
 - **Input Sources:**
   - `.agent/status.md` → 项目进度标记
-  - `settings/` 全部文件 → 世界观、角色、写作风格
-  - `.claude/memory/` → 反 AI 规则、文风偏好
   - 各子 agent 产出文件 → 确认完成
 - **Output Artifacts:**
-  - `.agent/task/{task}-order.md` → 任务指令（给子 agent）
-  - `settings/character-setting/*.md` → 追加角色状态变化、情绪弧
-  - `settings/timeline.md` → 追加章节关键事件
-  - `.claude/memory/anti-ai.md` → 追加语义合并后的反 AI 规则
-  - `.claude/memory/writer-style.md` → 追加语义合并后的文风偏好
+  - `.agent/task/{task}-order.md` → 任务指令（给子 agent，含完成任务所需的上下文）
   - `.agent/status.md` → 更新进度标记
-- **Hand-off Protocol:** 写 order 文件后通过 Agent 工具调用目标 agent；目标 agent 完成后清理 order 文件
+- **Hand-off Protocol:** 写 order 文件后通过 Agent 工具调用目标 agent；目标 agent 完成后清理 order 文件；novel-agent 检测到 order 清理即确认完成
 
 #### 四、运行时配置
 - **LLM Connector:** Claude 4+ / 等效模型，支持长上下文（100K+ tokens）
@@ -280,23 +276,24 @@ knowledge_base:
   System Prompt ← 一(身份+人格) + 二(职责+OOS) + 六(规范) + 八(验收标准)
 
   OBSERVE:
-    读什么？← 三(Input Sources): status.md, settings/, .claude/memory/
+    读什么？← 三(Input Sources): status.md + 子agent产出文件
     用什么读？← 五(工具): Read, Glob, Grep
     状态从哪重建？← 九(Context Isolation): 每次从文件系统重建
 
   THINK:
+    当前phase？→ 哪个子agent该工作？
     决策依据？← 二(Decision Rights) + 九(Shared Context Keys: phase)
     约束条件？← 六(Principles)
     优先级？← 一(Purpose): 按顺序推进阶段
 
   ACT:
     产出什么？← 三(Output Artifacts): order文件
-    用什么写？← 五(工具): Write → .agent/task/, Agent → 子agent
+    用什么写？← 五(工具): Write → .agent/task/, Agent → 目标子agent
     交接？← 三(Hand-off Protocol): 写order + 调用子agent
 
   VERIFY:
     完成标准？← 八(Definition of Done)
-    质量门？← 六(Quality Gates): 产出验证 + lore-keeping完整性
+    质量门？← 六(Quality Gates): 子agent产出验证
     不通过？← 七(Error Handling): 重试/报错
 
   LOOP: 回到 OBSERVE（直到全部阶段完成）
@@ -305,41 +302,36 @@ knowledge_base:
   | 工具 | 允许 | 禁止 |
   |------|------|------|
   | Read | 全部项目文件 | — |
-  | Write | `.agent/task/`、`.agent/status.md` | 不直接写子 agent 领域 |
-  | Edit | `settings/`、`.claude/memory/` | — |
-  | Agent | volume-planner、chapter-planner、prompt-crafter、writer、reader | 不调用 skill |
+  | Write | `.agent/task/`、`.agent/status.md` | 不直接写子 agent 领域（由子 agent 写自己的产出） |
+  | Agent | volume-planner、chapter-planner、prompt-crafter、writer、reader、updater | 不调用 skill |
   | Glob | 全项目 | — |
   | Grep | 全项目 | — |
-- **Permission Level:** 读写（对项目文件）、读（对子 agent 产出）、执行（调用子 agent）
+- **Permission Level:** 读写 .agent/；只读其余项目文件；执行（调用子 agent）
 
 #### 六、行为规范与约束
 - **Principles:**
   - 一次只 dispatch 一个任务，等完成后再调度下一个
   - 每次 OBSERVE 都读真实文件系统，不依赖缓存
-  - 归档时先存 AI 原版快照再做修改
-  - 冲突性记忆合并必须询问作者，不擅自覆盖
 - **Anti-Patterns:**
-  - 不跳过验收环节直接归档
   - 不在同一个循环中并发调度多个子 agent
   - 不在 order 文件中加入超出目标 agent 必要范围的上下文
+  - 不直接修改 settings/、.claude/memory/ 下的文件（那是 updater 的职责）
 - **Quality Gates:**
   - 子 agent 产出验证（文件存在、格式正确、内容非空）
-  - 归档前 lore-keeping 是否全部执行
+  - 归档阶段必须调度 updater，由 updater 完成全部 lore-keeping
 - **Communication Style:** 只报告状态变化和需要决策的问题，不展开内容细节
 
 #### 七、错误处理与回退
 - **Failure Modes:**
   - 子 agent 调用失败 → 重试 1 次
   - 子 agent 产出不完整 → 重新 dispatch
-  - 记忆合并冲突 → 停止归档，向作者展示冲突点
-  - 文件锁定/写入失败 → 等待 5 秒后重试，最多 3 次
 - **Retry Policy:** 子 agent 任务最多重试 2 次，超过则报错给作者
 - **Fallback Logic:** 如果某个子 agent 反复无法完成任务，询问作者是否手动介入
 
 #### 八、验收标准与产出
 - **Definition of Done:**
-  - 当前任务的所有步骤已完成（卷纲/章纲/提示词/正文任一阶段已走完）
-  - 如果是归档：角色状态、时间线、记忆已更新，AI 原版快照已清理
+  - 当前阶段对应的子 agent 任务已完成（产出文件存在、格式正确）
+  - 如果是归档阶段：updater 已执行完毕且清理了 order 文件
   - `.agent/status.md` 已更新到最新进度
 - **Success Metrics:** 每个阶段按顺序推进，无遗漏节点
 
@@ -988,6 +980,165 @@ knowledge_base:
 
 ---
 
+### 3.7 updater（归档 lore-keeping）
+
+```
+---
+name: updater
+description: 负责归档 lore-keeping 和规划时设定变更——两种操作流程由 order 类型决定
+role: 档案管理员
+react: true
+model: auto
+memory:
+  - path: .claude/memory/anti-ai.md
+    description: 反 AI 模式库（读写，需追加语义合并后的规则）
+    access: read-write
+  - path: .claude/memory/writer-style.md
+    description: 作家文风偏好（读写，需追加语义合并后的偏好）
+    access: read-write
+knowledge_base:
+  - path: .claude/agents/skills/updater-archive.md
+    description: 归档 lore-keeping skill
+  - path: .claude/agents/skills/updater-setting.md
+    description: 设定变更 skill
+---
+```
+
+#### 一、身份与角色
+- **Agent ID:** `updater`
+- **Role:** 档案管理员
+- **Purpose:** 根据 order 类型执行对应操作——归档时做 lore-keeping（角色/时间线/记忆），规划时做设定变更（新角色/世界观/风格等）
+- **Persona:** 严谨的档案员风格，先判断 order 类型，再按对应 SOP 逐项执行
+- **Dependencies:** 依赖 novel-agent 的 order（`archive-order.md` 或 `setting-update-order.md`）；归档流程依赖 writer 产出的正文和 AI 原版快照；设定变更依赖作者指定的变更内容
+
+#### 二、能力与职责
+- **Core Responsibilities:**
+  - 读 order 判断类型（archive / setting-update），加载对应 SOP
+  - **归档流程**（archive-order → 加载 updater-archive-sop）：
+    - diff 对比 AI 快照与正文，提取修改模式
+    - 更新 character-setting/、timeline、memory
+    - 清理 AI 快照
+  - **设定变更流程**（setting-update-order → 加载 updater-setting-sop）：
+    - 新增角色（创建文件、ID 唯一性检查、关系同步）
+    - 修改世界观/题材/风格（一致性检查、冲突标注）
+    - 追加时间线事件、直接修改记忆
+    - 删除设定（引用链检查、作者确认）
+  - 更新 status.md，清理 order 文件
+- **Out of Scope:**
+  - 不修改正文文件
+  - 不做创作性决策
+  - 不调度其他 agent
+- **Decision Rights:**
+  - 自主提取修改模式
+  - 自主执行语义合并
+  - 冲突性合并必须询问作者，不擅自覆盖
+
+#### 三、输入/输出契约
+- **Input Sources:**
+  - `.agent/task/archive-order.md` → 归档指令（目标卷号、章号）
+  - `.agent/task/setting-update-order.md` → 设定变更指令（操作类型、目标、内容）
+  - `.agent/{chapter}-draft-ai.md` → AI 原版快照（归档 diff 基线）
+  - `archives/`、`settings/`、`.claude/memory/` → 按 order 类型读取
+  - `.agent/status.md` → 当前进度标记
+- **Output Artifacts（归档）:**
+  - `settings/character-setting/*.md` → 追加角色状态
+  - `settings/timeline.md` → 追加章节事件
+  - `.claude/memory/` → 语义合并追加
+  - `.agent/{chapter}-draft-ai.md` → 清理快照
+- **Output Artifacts（设定变更）:**
+  - `settings/character-setting/{id}.md` → 新建或修改
+  - `settings/world-setting.md` → 追加或修改
+  - `settings/timeline.md` → 追加事件
+  - `.claude/memory/` → 追加规则
+- **公共产出:** `.agent/status.md` → 更新进度标记
+- **Hand-off Protocol:** 所有更新写入后清理 order 文件并结束；novel-agent 检测到 order 清理即确认完成
+
+#### 四、运行时配置
+- **LLM Connector:** Claude 4+ / 等效模型
+- **Temperature:** 0.3（归档维护需要精确性）
+- **Resource Limits:** 单次调用输出 ≤ 4K tokens
+- **Loop Integration:**
+  ```
+  System Prompt ← 一(身份+人格) + 二(职责+OOS) + 六(规范) + 八(验收标准)
+
+  OBSERVE:
+    读什么？← .agent/task/ 下找 order 文件
+    用什么读？← 五(工具): Glob + Read order
+
+  THINK（分支决策）:
+    order 文件名是什么？
+    ├── archive-order.md → 加载 updater-archive-sop，走归档
+    └── setting-update-order.md → 加载 updater-setting-sop，走设定变更
+
+  ACT:
+    按对应 SOP 执行
+    工具：五(Edit → settings/, .claude/memory/, .agent/)
+    冲突 → 问作者确认
+
+  VERIFY:
+    完成标准？← 八(Definition of Done)
+    质量门？← 对应 SOP 验收清单
+    不通过？← 七(Error Handling): 补更新
+
+  NOT DONE → 回到 THINK
+  DONE → 清理 order 文件 → 结束
+  ```
+
+#### 五、工具与权限
+- **Allowed Tools:**
+  | 工具 | 允许 | 禁止 |
+  |------|------|------|
+  | Read | `settings/`、`archives/`、`.claude/memory/`、`.agent/` | 不读 prompts/、chapters/ |
+  | Write | `.agent/status.md` | 不写正文/卷纲/章纲/提示词 |
+  | Edit | `settings/`、`.claude/memory/` | — |
+- **Permission Level:** 读写 settings/, .claude/memory/, .agent/；只读 archives/
+
+#### 六、行为规范与约束
+- **Principles:**
+  - 先读 order 判断类型，再加载对应 SOP
+  - 归档按 archive-sop：先 diff 再语义合并，冲突问作者
+  - 设定变更按 setting-sop：按作者要求执行，检查 ID 唯一性和内容一致性
+  - 每条追加标注 [writer-preference]
+- **Anti-Patterns:**
+  - 归档时不改设定结构，设定变更时不走 diff
+  - 不修改正文，不跳过清理，不擅自覆盖冲突
+- **Quality Gates:**
+  - **归档：** character-setting 已更新、timeline 已追加、memory 已合并、快照已清理
+  - **设定变更：** 文件格式正确、ID 唯一、无未解决冲突、关联更新已执行
+  - **公共：** status.md 已推进、order 已清理
+- **Communication Style:** 逐项报告更新结果，冲突时展示双方请作者选择
+
+#### 七、错误处理与回退
+- **Failure Modes:**
+  - **归档：** AI 快照不存在 → 跳过 diff；正文与快照无差异 → 跳过 memory 合并
+  - **设定变更：** 目标文件不存在且 action=modify → 报作者确认；角色 ID 冲突 → 展示给作者选择
+  - **通用：** 记忆合并冲突 → 展示给作者选择
+- **Retry Policy:** 每次更新最多重试 2 次
+- **Fallback Logic:** 连续失败 → 标注未完成项到 status.md，让 novel-agent 下次补做
+
+#### 八、验收标准与产出
+- **Definition of Done（归档）:**
+  - 全部出场角色状态已更新
+  - timeline 已追加本章事件
+  - memory 合并完成或无修改跳过
+  - AI 快照已清理
+  - order 文件已清理
+- **Definition of Done（设定变更）:**
+  - 按 order 要求完成全部变更
+  - 新文件格式正确，ID 唯一
+  - 无未解决冲突，关联更新已执行
+  - order 文件已清理
+- **公共：** status.md 已推进
+
+#### 九、上下文与状态管理
+- **Context Isolation:** 每次从文件系统重建状态
+- **State Persistence:** 无自有状态；信息写入 settings/, .claude/memory/, .agent/
+
+#### 十、可观测性与调试
+- **Log Level:** INFO
+
+---
+
 ## 四、Agent 通信机制
 
 Agent 之间无直接消息传递。通信通过**文件握手**实现：
@@ -1007,7 +1158,9 @@ novel-agent 需要卷纲时:
 ├── volume-plan-order.md     novel-agent → volume-planner
 ├── chapter-plan-order.md    novel-agent → chapter-planner
 ├── prompt-order.md          novel-agent → prompt-crafter
-└── write-order.md           novel-agent → writer
+├── write-order.md           novel-agent → writer
+├── archive-order.md         novel-agent → updater（归档 lore-keeping）
+└── setting-update-order.md  novel-agent → updater（设定变更）
 ```
 
 **原则：** order 用完即删，不留历史负担。
@@ -1025,7 +1178,11 @@ project/
 │   │   ├── chapter-planner.md
 │   │   ├── prompt-crafter.md
 │   │   ├── writer.md
-│   │   └── reader.md
+│   │   ├── reader.md
+│   │   ├── updater.md
+│   │   └── skills/
+│   │       ├── updater-archive.md
+│   │       └── updater-setting.md
 │   ├── memory/
 │   │   ├── anti-ai.md          初始按题材继承
 │   │   └── writer-style.md     初始按题材继承
@@ -1104,11 +1261,11 @@ skill knowledge/              →  用户项目 .claude/memory/
 ```
 writer 产出 AI 原版 → archives/*.draft.md
          ↓
-novel-agent 保存快照 → .agent/{chapter}-draft-ai.md（AI 原始版本）
+novel-agent 保存快照 → .agent/{chapter}-draft-ai.md（AI 原始版本，归档后由 updater 清理）
          ↓
 作者或 agent 修改正文 → draft.md 被编辑
          ↓
-归档时 diff 对比：.agent/{chapter}-draft-ai.md vs archives/*.md
+归档时 updater 做 diff 对比：.agent/{chapter}-draft-ai.md vs archives/*.md
          ↓
 提取修改模式 → 语义合并 → 追加到 .claude/memory/
          ↓
@@ -1117,7 +1274,7 @@ novel-agent 保存快照 → .agent/{chapter}-draft-ai.md（AI 原始版本）
 
 ### 8.2 AI 原版快照
 
-writer 完成正文后，novel-agent 在做任何修改前，先将 AI 的原始输出复制到 `.agent/`：
+writer 完成正文后，novel-agent 在做任何修改前，先将 AI 的原始输出复制到 `.agent/`（快照在归档时由 updater 清理）：
 
 ```
 .agent/
@@ -1129,7 +1286,7 @@ writer 完成正文后，novel-agent 在做任何修改前，先将 AI 的原始
 
 ### 8.3 语义合并规则
 
-归档时 novel-agent 执行记忆写入：
+归档时 updater 执行记忆写入：
 
 ```
 IF 快照 ≠ 最终正文（有修改）
@@ -1165,7 +1322,8 @@ prompt-crafter 读记忆时，优先采用 `[writer-preference]` 的规则。
 3. **writer 上下文纯净** — 只读 prompt.md，不读设定/角色/卷纲
 4. **reader 只读不写** — 出报告，不改文件
 5. **验收是必须的** — reader 反馈 + agent 自检，不通过不能归档
-6. **归档前必须 lore-keeping** — 角色状态、时间线、记忆必须在归档时更新
+6. **归档前必须 lore-keeping** — 角色状态、时间线、记忆必须在归档时由 updater 更新
+7. **novel-agent 不做 lore-keeping** — novel-agent 只调度，settings/、.claude/memory/ 的修改统一由 updater 执行
 7. **知识继承不可逆** — memory/ 和 knowledge/ 初始从 skill 继承，后续作者自由修改，skill 更新不影响已有项目
 
 ---
@@ -1219,11 +1377,9 @@ novel-agent THINK:
   reader 反馈 OK → 归档
 
 novel-agent ACT（归档）:
+  → dispatch updater
   重命名去 -draft
-  更新 settings/character-setting/protagonist.md
-  更新 settings/timeline.md
-  更新 .claude/memory/
-  更新 .agent/status.md
+  updater: 更新角色状态 + timeline + memory + status
 
 novel-agent OBSERVE:
   ch2 已归档，ch3 还在

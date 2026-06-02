@@ -22,7 +22,7 @@ The following files are subject to GPL-3.0 license:
 |----------|-------|
 | **Core** | `SKILL.md` |
 | **Documentation** | `README.md`, `PRODUCTION.md`, `docs/*.md` |
-| **Reference Guides** | `references/*.md` |
+| **Reference Guides** | `knowledge/*.md + memory/*.md` |
 | **Sub-skills** | `skills/setup/*.md`, `skills/outline/*.md`, `skills/chapter/*.md`, `skills/prompt/*.md`, `skills/prompt-verify/*.md`, `skills/write/*.md`, `skills/body-verify/*.md`, `skills/review/*.md`, `skills/archive/*.md`, `skills/migrate/*.md`, `skills/best-practices/*.md` |
 | **Scripts** | `scripts/*.py`, `scripts/*.sh`, `install.sh`, `install.ps1` |
 

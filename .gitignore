@@ -1,3 +1,4 @@
 .claude/
 docs/
 scripts/__pycache__/
+tools/__pycache__/

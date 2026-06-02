@@ -25,11 +25,13 @@ GENRES = [
 SKILL_HOME = Path(os.environ.get("NOVEL_SKILL_HOME", Path(__file__).parent.parent))
 
 SOURCE_AGENTS = SKILL_HOME / "agents"
-SOURCE_KNOWLEDGE = SKILL_HOME / "references"
+SOURCE_KNOWLEDGE = SKILL_HOME / "knowledge"
 SOURCE_TEMPLATES = SKILL_HOME / "templates"
-SOURCE_ANTI_AI = SKILL_HOME / "references" / "anti-ai"
-SOURCE_WRITER_STYLE = SKILL_HOME / "references" / "writer-style"  # optional
-SOURCE_GENRE_EXAMPLE = SKILL_HOME / "references" / "genre-example"
+SOURCE_MEMORY = SKILL_HOME / "memory"
+SOURCE_ANTI_AI = SKILL_HOME / "memory" / "anti-ai"
+SOURCE_WRITER_STYLE = SKILL_HOME / "memory" / "writer-style"  # optional
+SOURCE_GENRE_EXAMPLE = SKILL_HOME / "knowledge" / "genre-example"
+SOURCE_FORMAT_SPECS = SKILL_HOME / "knowledge" / "format-specs"
 
 
 def main():
@@ -105,11 +107,13 @@ def create_skeleton(project_path: Path):
     for d in dirs:
         (project_path / d).mkdir(parents=True)
 
-    # Copy template files into project
+    # Copy template files into project (skip migration/ — old project upgrade only)
     if SOURCE_TEMPLATES.exists():
         for item in SOURCE_TEMPLATES.rglob("*"):
             if item.is_file() and item.name != ".gitkeep":
                 rel_path = item.relative_to(SOURCE_TEMPLATES)
+                if rel_path.parts[0] == "migration":
+                    continue
                 target = project_path / rel_path
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(item, target)
@@ -117,15 +121,18 @@ def create_skeleton(project_path: Path):
 
 
 def deploy_agents(project_path: Path):
-    """复制 6 个 agent 定义到项目 .claude/agents/"""
+    """复制所有 agent 定义和 agent skill 到项目 .claude/agents/"""
     target = project_path / ".claude" / "agents"
     if SOURCE_AGENTS.exists():
         count = 0
-        for agent_file in SOURCE_AGENTS.iterdir():
-            if agent_file.suffix == ".md":
-                shutil.copy2(agent_file, target / agent_file.name)
+        for item in SOURCE_AGENTS.rglob("*"):
+            if item.is_file() and item.suffix == ".md":
+                rel_path = item.relative_to(SOURCE_AGENTS)
+                dest = target / rel_path
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(item, dest)
                 count += 1
-        print(f"  ✅ 已部署 {count} 个 agent")
+        print(f"  ✅ 已部署 {count} 个 agent/skill 文件")
     else:
         print("  ⚠️  agent 目录不存在，跳过")
 
@@ -170,22 +177,12 @@ def deploy_memory(project_path: Path, genre: str):
 def deploy_knowledge(project_path: Path, genre: str):
     """按题材拷贝参考材料到 .claude/knowledge/"""
     knowledge_dir = project_path / ".claude" / "knowledge"
-
-    # 从 references/ 复制关键格式规范
-    format_specs = [
-        "chapter-quality-checklist.md",
-        "chapter-setting-style.md",
-        "prompt-setting-style.md",
-        "story-arc-style.md",
-        "volume-setting-style.md",
-        "world-setup-style.md",
-        "writing-style.md",
-    ]
     count = 0
-    for spec in format_specs:
-        src = SOURCE_KNOWLEDGE / spec
-        if src.exists():
-            shutil.copy2(src, knowledge_dir / spec)
+
+    # 从 knowledge/format-specs/ 复制格式规范
+    if SOURCE_FORMAT_SPECS.exists():
+        for f in SOURCE_FORMAT_SPECS.glob("*.md"):
+            shutil.copy2(f, knowledge_dir / f.name)
             count += 1
 
     # 题材案例
@@ -203,7 +200,7 @@ def write_claude_md(project_path: Path):
 
 ## AI 指引
 
-本项目的写作流程由 6 个 agent 协作完成，定义在 `.claude/agents/` 下。
+本项目的写作流程由 7 个 agent 协作完成，定义在 `.claude/agents/` 下。
 
 **开始写作：** 输入 `@novel-agent` 进入写作循环。
 

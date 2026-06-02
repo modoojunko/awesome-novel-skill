@@ -86,26 +86,26 @@ Step 1（检测状态）→ 匹配路由 → Read 子skill → 执行子task →
 
 ---
 
-## 4. references/ 内容说明
+## 4. knowledge/ 与 memory/ 内容说明
 
 ```
-references/
-├── chapter-quality-checklist.md  # 正文验收清单（15项）
-├── chapter-setting-style.md      # 章纲格式 + 情绪设计
-├── character-setting-style.md    # 角色认知6层模型
-├── genre-style.md               # 节奏规则/满足类型/禁忌
-├── world-setup-style.md         # 地理/政治/规则结构
-├── story-arc-style.md           # 主线拆纲方法论
-├── volume-setting-style.md      # 卷纲格式
-├── prompt-setting-style.md      # 提示词组装结构
-├── writing-style.md             # 写作风格方法论
-├── anti-ai/                    # 反 AI 规则库
-│   ├── fanqie.md              # 反 AI 规则学习库
-│   ├── common-rules.md         # 通用反 AI 规则
-│   └── {genre}/defaults.md     # 题材反 AI 默认模式
-├── writer-style/              # 作家文风参考
-│   └── {genre}/defaults.md     # 题材文风默认参考
-└── genre-example/              # 填充案例（按题材）
+knowledge/                   # 静态参考知识（→ 项目 .claude/knowledge/）
+├── format-specs/            # 格式规范
+│   ├── chapter-quality-checklist.md  # 正文验收清单（15项）
+│   ├── chapter-setting-style.md      # 章纲格式 + 情绪设计
+│   ├── character-setting-style.md    # 角色认知6层模型
+│   ├── genre-style.md               # 节奏规则/满足类型/禁忌
+│   ├── world-setup-style.md         # 地理/政治/规则结构
+│   ├── story-arc-style.md           # 主线拆纲方法论
+│   ├── volume-setting-style.md      # 卷纲格式
+│   ├── prompt-setting-style.md      # 提示词组装结构
+│   └── writing-style.md             # 写作风格方法论
+└── genre-example/           # 填充案例（按题材）
+
+memory/                      # 动态记忆参考（→ 项目 .claude/memory/）
+└── anti-ai/                 # 反 AI 规则库
+    ├── common-rules.md      # 通用反 AI 规则
+    └── {genre}.md           # 题材反 AI 默认模式
 ```
 
 ---
@@ -137,10 +137,10 @@ references/
 ### 提示词注入
 
 每次生成提示词时：
-1. 读取 `{project}/.memory/anti-ai.md`
-2. 读取 `{project}/.memory/writer-style.md`
-3. 读取 `references/anti-ai/{genre}/defaults.md`
-4. 读取 `references/writer-style/{genre}/defaults.md`
+1. 读取 `{project}/.claude/memory/anti-ai.md`
+2. 读取 `{project}/.claude/memory/writer-style.md`
+3. 读取 `memory/anti-ai/{genre}.md`
+4. 读取 `memory/anti-ai/common-rules.md`
 5. Agent 语义去重、合并冲突、提炼规则
 6. 标注来源 `[作家偏好]` / `[社区defaults]`，注入提示词"写作风格"部分
 
@@ -149,7 +149,7 @@ references/
 1. 作家说"贡献这个模式"
 2. Skill 读取 `.memory/`，提取适合社区的条目
 3. 生成 community-ready 格式
-4. 引导作家提 PR 到 `references/`
+4. 引导作家提 PR 到 `memory/anti-ai/` 或 `knowledge/`
 
 ---
 
@@ -157,16 +157,16 @@ references/
 
 ### 贡献社区 defaults
 
-1. 作家在 `.memory/` 积累自己的模式
+1. 作家在 `.claude/memory/` 积累自己的模式
 2. 说"贡献这个模式"
 3. Skill 生成 community-ready 格式
-4. 引导作家提 PR 到 `references/`
+4. 引导作家提 PR 到 `memory/anti-ai/` 或 `knowledge/`
 
 ### 新增题材类型
 
-1. 在 `references/genre-example/` 添加题材填充案例
-2. 在 `references/anti-ai/{genre}/defaults.md` 添加反 AI 默认模式
-3. 在 `references/writer-style/{genre}/defaults.md` 添加文风参考
+1. 在 `knowledge/genre-example/` 添加题材填充案例
+2. 在 `memory/anti-ai/` 添加反 AI 默认模式
+3. 在 `memory/writer-style/` 添加文风参考
 
 ---
 

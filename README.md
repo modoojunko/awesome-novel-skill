@@ -213,7 +213,7 @@ Agent 会在设定阶段问你要不要选。
 
 如果你是有创作经验的作家，欢迎为反AI写作库贡献题材正反例：
 
-**贡献内容：** `references/anti-ai/{genre}.md` — 你所在题材的高频AI病句正反例
+**贡献内容：** `memory/anti-ai/{genre}.md` — 你所在题材的高频AI病句正反例
 
 **贡献格式：**
 ```markdown
@@ -240,31 +240,32 @@ Agent 会在设定阶段问你要不要选。
 
 **提交方式：**
 1. Fork 项目
-2. 在 `references/anti-ai/` 下新建或编辑题材文件
+2. 在 `memory/anti-ai/` 下新建或编辑题材文件
 3. 提交 PR，标题格式：`反AI: 添加{题材名}正反例`
 
-详细规范见 [references/anti-ai/README.md](./references/anti-ai/README.md)。
+详细规范见 [memory/anti-ai/README.md](./memory/anti-ai/README.md)。
 
 ### 代码贡献（程序员）
 
 **项目结构：**
 ```
 awesome-novel-skill/
-├── SKILL.md              # 主技能入口
-├── skills/              # 子技能模块
-│   ├── setup/           # 项目初始化
-│   ├── outline/         # 主线拆纲
-│   ├── chapter/         # 章纲设定
-│   ├── prompt/          # 提示词生成
-│   ├── write/           # 正文写作
-│   ├── review/          # 深度评审
-│   ├── archive/         # 归档
-│   └── ...
-├── references/          # 参考指南
-│   ├── anti-ai/         # 反AI写作库
-│   ├── genre-example/   # 题材画像
-│   └── ...
-└── scripts/             # 工具脚本
+├── agents/              # 多 Agent 协作
+│   ├── novel-agent.md   # 总指挥
+│   ├── volume-planner.md# 叙事架构师
+│   ├── chapter-planner.md# 场景设计师
+│   ├── prompt-crafter.md# 提示词工程师
+│   ├── writer.md        # 写手
+│   ├── reader.md        # 测试读者
+│   ├── migrator.md      # 迁移工程师
+│   ├── updater.md       # 档案管理员
+│   └── skills/          # Agent 技能 SOP
+├── knowledge/            # 知识库（→ 项目 .claude/knowledge/）
+│   ├── format-specs/    # 格式规范
+│   └── genre-example/   # 题材案例
+├── memory/               # 动态记忆（→ 项目 .claude/memory/）
+│   └── anti-ai/         # 反AI写作库
+└── tools/                # 工具脚本
 ```
 
 **开发规范：**
@@ -283,12 +284,10 @@ awesome-novel-skill/
 
 | 模块 | 路径 | 贡献方向 |
 |------|------|---------|
-| 提示词生成 | `skills/prompt/` | 改进模板结构、增强AI味约束 |
-| 正文写作 | `skills/write/` | 优化写作指令、强化质量门禁 |
-| 提示词验收 | `skills/prompt-verify/` | 增加验收维度、完善报告格式 |
-| 正文验收 | `skills/body-verify/` | 扩展检测规则、优化检测效率 |
-| 反AI写作库 | `references/anti-ai/` | 新增题材正反例、丰富通用规则 |
-| 题材画像 | `references/genre-example/` | 新增题材档案、丰富配置内容 |
+| Agent/Skill | `agents/` + `agents/skills/` | 改进 agent 定义、新增 skill SOP |
+| 格式规范 | `knowledge/format-specs/` | 改进各环节规范文档 |
+| 反AI写作库 | `memory/anti-ai/` | 新增题材正反例、丰富通用规则 |
+| 题材画像 | `knowledge/genre-example/` | 新增题材档案、丰富配置内容 |
 
 **贡献流程：**
 1. 阅读目标模块的 SKILL.md 了解当前逻辑

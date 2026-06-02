@@ -6,6 +6,8 @@ react: true
 model: auto
 memory: []
 knowledge_base:
+  - path: .claude/agents/skills/writer.md
+    description: 正文生成 SOP（写作指令 + 防 AI 味规则 + 验证 + 快照）
   - path: .claude/knowledge/chapter-quality-checklist.md
     description: 正文验收清单
 ---

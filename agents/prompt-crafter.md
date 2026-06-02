@@ -12,6 +12,8 @@ memory:
     description: 作家文风偏好
     access: read
 knowledge_base:
+  - path: .claude/agents/skills/prompt-crafter.md
+    description: 9 层提示词组装 SOP（填充规则 + 冲突检测 + 验收自检）
   - path: .claude/knowledge/prompt-setting-style.md
     description: 9 层提示词骨架 + 填充规则 + 质检标准
   - path: .claude/knowledge/chapter-quality-checklist.md
