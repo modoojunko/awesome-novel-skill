@@ -1,6 +1,6 @@
 ---
 name: awesome-novel
-description: 和 AI 协作写小说的工作流系统。流程：一次设定→规划卷纲→逐章写作循环（章纲→提示词→验收→正文→验收→评审→归档→下一章）。适用场景：从零写新小说、导入已有小说。
+description: 和 AI 协作写小说的工作流系统。使用 6 个 agent（novel-agent → volume-planner → chapter-planner → prompt-crafter → writer → reader）协作完成从设定到归档的完整写作流程。适用场景：从零写新小说、导入已有小说。
 ---
 
 # Novel — 小说创作工作流
@@ -34,6 +34,17 @@ description: 和 AI 协作写小说的工作流系统。流程：一次设定→
 - 如果检测到未提交的 git 变更 → 提示作者先提交/stash，不自动操作
 - 如果 `.agent/status.md` 与文件系统状态不一致 → 以文件系统为准重新检测，更新 status.md
 - 如果是全新项目（无任何文件）→ 分发到 novel-setup
+
+## 架构
+
+本 skill 是一个 **agent 工厂**：通过 `tools/init.py` 初始化用户项目，在项目 `.claude/agents/` 下部署 6 个 agent。
+
+**初始化：**
+```
+python tools/init.py <project-path>
+```
+
+**写作流程：** 在项目目录下 `@novel-agent` 进入 ReAct 循环 → 按阶段自动调度子 agent。
 
 ## 项目目录结构
 
