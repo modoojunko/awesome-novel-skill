@@ -180,13 +180,12 @@ After chapter one, Agent asks "下一章继续吗？" (Continue to next chapter?
 | "迁移项目" | Auto-migrate from legacy to 4.0 format |
 | "solo" or "你全权写" | Enter fully automatic mode without stop points |
 
-## Three Collaboration Modes
+## Two Collaboration Modes
 
 | Mode | Trigger | Behavior |
 |------|---------|----------|
 | **Step-by-Step** (default) | — | Waits for your confirmation at each step |
 | **Full Delegation** | "你全权决定" | Process nodes still exist, Agent confirms on your behalf |
-| **SOLO Mode** | "solo" / "单机" | Simplified flow, no stop points, Agent completes all creative and writing work alone. Great for letting AI go wild |
 
 You can switch modes anytime by telling the Agent.
 
@@ -197,15 +196,6 @@ You can switch modes anytime by telling the Agent.
 Don't want to set up writing style from scratch? The project includes 24 built-in genre profiles — pick one and start immediately. Each profile includes character archetype tendencies, narrative tone, and chapter prompt templates. Covers Xianxia, urban, mystery, historical, sci-fi post-apocalyptic, Western fantasy, and more.
 
 Agent asks if you want to choose one during setup.
-
-### Learn Style from Novels You Love
-
-Have a novel you love and want AI to write in that style?
-
-1. Put the reference novel file in the project directory
-2. Tell Agent "分析一下这本小说的文风" (Analyze this novel's style)
-3. Agent runs statistical analysis (sentence length, dialogue ratio, description density), then qualitatively extracts style features, outputs a style profile for your confirmation
-4. After confirmation, auto-merges into writing config; all subsequent chapters follow this style
 
 ## FAQ
 
