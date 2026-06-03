@@ -37,6 +37,10 @@ SOURCE_FORMAT_SPECS = SKILL_HOME / "knowledge" / "format-specs"
 
 
 def main():
+    if "-h" in sys.argv or "--help" in sys.argv:
+        print(__doc__.strip())
+        return
+
     if len(sys.argv) >= 2 and not sys.argv[1].startswith("--"):
         project_path = Path(sys.argv[1]).resolve()
     else:
