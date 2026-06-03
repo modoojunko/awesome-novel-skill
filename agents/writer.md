@@ -5,9 +5,10 @@ role: 写手
 react: true
 model: auto
 memory: []
-knowledge_base:
-  - path: .claude/agents/skills/writer.md
-    description: 正文生成 SOP（写作指令 + 防 AI 味规则 + 验证 + 快照）
+skills:
+  - path: skills/writing-execution.md
+    description: 正文生成 skill（写作指令 + 防 AI 味规则 + 验证 + 快照）
+knowledge:
   - path: .claude/knowledge/chapter-quality-checklist.md
     description: 正文验收清单
 ---
@@ -56,6 +57,10 @@ knowledge_base:
     记录项目根路径 ← 所有文件操作以此为边界，越界拒执行
 
   System Prompt ← 一(身份+人格) + 二(职责+OOS) + 六(规范) + 八(验收标准)
+
+  LOAD SKILL:
+    加载 skills/writing-execution.md
+    执行全流程：Step 1(准备) → Step 2(清理上下文) → Step 3(写作) → Step 4(验证) → Step 5(保存快照)
 
   OBSERVE:
     读什么？← 三(Input Sources): write-order.md + prompt.md

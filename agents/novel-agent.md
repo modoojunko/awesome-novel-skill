@@ -5,7 +5,17 @@ role: 总指挥
 react: true
 model: auto
 memory: []            # 不自带记忆——lore-keeping 交给 updater
-knowledge_base:
+knowledge:
+  - path: .agent/status.md
+    description: 小说进度
+  - path: story.md
+    description: 主线拆纲
+  - path: settings/world-setting.md
+    description: 世界观设定
+  - path: settings/genre-setting.md
+    description: 题材设定
+  - path: settings/writing-style.md
+    description: 写作文风
   - path: .claude/knowledge/story-arc-style.md
     description: 主线拆纲方法论
   - path: .claude/knowledge/volume-setting-style.md
