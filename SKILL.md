@@ -28,10 +28,12 @@ python tools/init.py <project-path>
 1. 选题材
 2. 创建项目骨架（settings/、volumes/、chapters/、prompts/、archives/）
 3. 部署 agent 定义到 `.claude/agents/`
-4. 按题材继承记忆（反 AI 规则）到 `.claude/memory/`
-5. 按题材继承知识到 `.claude/knowledge/`
-6. 生成 CLAUDE.md
-7. 初始化状态文件 `.agent/status.md`
+4. 按题材继承反 AI 规则和文风偏好到 `.claude/knowledge/`
+5. 按题材继承格式规范、题材案例到 `.claude/knowledge/`
+6. 创建空白的写作记忆文件（`.claude/memory/*.md`）
+7. 创建永久记忆占位文件（`.claude/knowledge/permanent-memory.md`）
+8. 生成 CLAUDE.md
+9. 初始化状态文件 `.agent/status.md`
 
 完成后进入项目目录，输入 `@novel-agent` 开始写作。
 
@@ -167,6 +169,13 @@ cp old/prompts/*.txt prompts/ 2>/dev/null
 ├── archives/
 │   ├── *.draft.md        # 草稿
 │   └── *.md              # 定稿
+├── .agent/
+│   ├── status.md         # 进度追踪
+│   └── task/             # agent 间 order 文件
+└── .claude/
+    ├── agents/           # Agent 定义
+    ├── knowledge/        # 反 AI 规则、文风偏好、永久记忆、格式规范
+    └── memory/           # 写作动态记忆
 ```
 
 ## Agent 协作架构
