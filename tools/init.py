@@ -36,20 +36,35 @@ SOURCE_FORMAT_SPECS = SKILL_HOME / "knowledge" / "format-specs"
 
 def main():
     if len(sys.argv) < 2:
-        print("用法: python init.py <project-path>")
+        print("用法: python init.py <project-path> [--genre <编号>]")
         sys.exit(1)
 
     project_path = Path(sys.argv[1]).resolve()
 
+    # 解析可选参数
+    genre = None
+    if "--genre" in sys.argv:
+        idx = sys.argv.index("--genre")
+        if idx + 1 < len(sys.argv):
+            try:
+                genre = GENRES[int(sys.argv[idx + 1]) - 1]
+            except (IndexError, ValueError):
+                print(f"无效题材编号，可选 1-{len(GENRES)}")
+                sys.exit(1)
+
     if project_path.exists():
-        print(f"错误: {project_path} 已存在")
-        sys.exit(1)
+        print(f"目录已存在，将在其中创建缺失的文件和目录")
+    else:
+        project_path.mkdir(parents=True)
 
     print(f"初始化小说项目: {project_path}")
     print(f"技能仓库: {SKILL_HOME}")
 
     # Step 1: 选题材
-    genre = select_genre()
+    if genre is None:
+        genre = select_genre()
+    else:
+        print(f"题材: {genre}")
 
     # Step 2: 创建骨架
     create_skeleton(project_path)
