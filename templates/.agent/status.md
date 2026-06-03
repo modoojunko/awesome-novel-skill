@@ -1,5 +1,6 @@
 # 项目状态
 
+- **skill_version:** 4.0
 - **phase:** setup
 - **current_volume:**
 - **current_chapter:**

@@ -58,8 +58,12 @@ Manual installation (using DeepSeek V4 as example):
 git clone https://github.com/modoojunko/awesome-novel-skill.git
 cd awesome-novel-skill
 mkdir -p ~/.deepseek/skills/awesome-novel
+cp -r agents ~/.deepseek/skills/awesome-novel/
+cp -r templates ~/.deepseek/skills/awesome-novel/
+cp -r knowledge ~/.deepseek/skills/awesome-novel/
+cp -r memory ~/.deepseek/skills/awesome-novel/
+cp -r tools ~/.deepseek/skills/awesome-novel/
 cp SKILL.md ~/.deepseek/skills/awesome-novel/
-cp -r scripts ~/.deepseek/skills/awesome-novel/
 ```
 
 > Claude Code users: use `~/.claude/skills/awesome-novel`. Hermes users: use `~/.hermes/skills/awesome-novel`. OpenClaw users: use `~/.openclaw/skills/awesome-novel`.
@@ -82,6 +86,30 @@ On first novel, the Agent discusses these areas. **No need to decide everything 
 2. **World Setting** — What world does the story take place in? Any special rules? (e.g., "cultivation world where spiritual roots determine talent")
 3. **Main Characters** — Who's the protagonist? What kind of person are they? Agent discusses personality, abilities, and growth history for each character
 4. **Writing Style** — Prefer more description or more dialogue? More classical or modern tone? Can also import a novel you like to extract its style
+
+### Project Structure
+
+After setup, the Agent creates your novel project in the current directory:
+
+```
+{your-novel-folder}/
+├── story.md              # Project index (metadata/arc/volume plan)
+├── settings/             # Setting files
+│   ├── world-setting.md  # World building
+│   ├── writing-style.md  # Writing style
+│   ├── genre-setting.md  # Genre configuration
+│   ├── timeline.md       # Timeline
+│   └── character-setting/ # Character profiles
+│       └── <id>.md       # One file per character
+├── volumes/              # Volume outlines
+├── chapters/             # Chapter outlines
+├── prompts/              # Writing prompts
+├── archives/             # Finalized prose
+├── .agent/               # Agent progress data
+└── .claude/              # Agent definitions + knowledge base
+```
+
+All files are plain Markdown — you can open and edit them directly.
 
 ### Planning the Story Framework
 
@@ -125,7 +153,7 @@ After chapter one, Agent asks "下一章继续吗？" (Continue to next chapter?
 | "这章写完了" or "归档" | Confirm chapter complete |
 | "看看进度" | View current progress |
 | "导入这本小说" | Import existing draft to continue writing |
-| "迁移项目" | Auto-migrate from 2.x to 3.0 format |
+| "迁移项目" | Auto-migrate from legacy to 4.0 format |
 | "solo" or "你全权写" | Enter fully automatic mode without stop points |
 
 ## Three Collaboration Modes

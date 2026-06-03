@@ -23,8 +23,9 @@
 | **核心文件** | `SKILL.md` |
 | **文档** | `README.md`, `PRODUCTION.md`, `docs/*.md` |
 | **参考指南** | `knowledge/*.md + memory/*.md` |
-| **子技能** | `skills/setup/*.md`, `skills/outline/*.md`, `skills/chapter/*.md`, `skills/prompt/*.md`, `skills/prompt-verify/*.md`, `skills/write/*.md`, `skills/body-verify/*.md`, `skills/review/*.md`, `skills/archive/*.md`, `skills/migrate/*.md`, `skills/best-practices/*.md` |
-| **脚本** | `scripts/*.py`, `scripts/*.sh`, `install.sh`, `install.ps1` |
+| **Agent 定义** | `agents/*.md`, `agents/skills/*.md` |
+| **模板** | `templates/*`, `templates/migration/*` |
+| **工具** | `tools/*.py`, `install.sh`, `install.ps1` |
 
 ---
 

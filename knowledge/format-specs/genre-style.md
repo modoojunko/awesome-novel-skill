@@ -290,13 +290,13 @@ xianxia — 东方仙侠
 
 | 字段 | 谁用 | 怎么用 |
 |------|------|--------|
-| 选定类型 | `skills/prompt/SKILL.md` 组装提示词 | 读 genre_profile，去 `knowledge/genre-example/` 取 `prompt_segment` 注入提示词 |
-| 满足类型 | `skills/chapter/SKILL.md` 方向提案 | 本章提案必须兑现至少 1 种满足类型，一段不兑现=读者白等一章 |
-| 节奏倾向 | `skills/chapter/SKILL.md` 方向提案 | 控制连续同类型章节数（比如"行动偏多"也不能连续 3 章全是高潮，读者绷不住） |
-| 张力周期 | `skills/archive/SKILL.md` 滑动窗口审视 | 超过张力周期上限还没小高潮 → 提醒作者"节奏可能有风险" |
-| 铺垫上限 | `skills/chapter/SKILL.md` 方向提案 | 连续铺垫章数接近上限时，提案必须推一个有进展的方向 |
-| 避免套路 | `skills/write/SKILL.md` 质量门禁 | 检查正文是否命中了 avoid_cliches 列表中的模式 |
-| 类型禁忌 | `skills/prompt/SKILL.md` 组装提示词 | 禁忌写入提示词的"写作原则与禁忌"段，subagent 不得违反 |
+| 选定类型 | `prompt-crafter agent` 组装提示词 | 读 genre_profile，去 `knowledge/genre-example/` 取 `prompt_segment` 注入提示词 |
+| 满足类型 | `chapter-planner agent` 方向提案 | 本章提案必须兑现至少 1 种满足类型，一段不兑现=读者白等一章 |
+| 节奏倾向 | `chapter-planner agent` 方向提案 | 控制连续同类型章节数（比如"行动偏多"也不能连续 3 章全是高潮，读者绷不住） |
+| 张力周期 | `updater-archive skill` 滑动窗口审视 | 超过张力周期上限还没小高潮 → 提醒作者"节奏可能有风险" |
+| 铺垫上限 | `chapter-planner agent` 方向提案 | 连续铺垫章数接近上限时，提案必须推一个有进展的方向 |
+| 避免套路 | `writer agent` 质量门禁 | 检查正文是否命中了 avoid_cliches 列表中的模式 |
+| 类型禁忌 | `prompt-crafter agent` 组装提示词 | 禁忌写入提示词的"写作原则与禁忌"段，subagent 不得违反 |
 
 **规则：** 上面任何一个字段为空或只有占位值，对应消费环节的 Agent 会在缺失约束的情况下自行判断。某章写出来味道不对，先检查"消费环节读了 genre-setting.md 没有"。
 
@@ -312,7 +312,7 @@ xianxia — 东方仙侠
 |---------|--------|
 | 有没有 | 有类型 id 或"暂无选择"，非空 |
 | 该不该 | 是作者确认过的，不是 Agent 猜的 |
-| 对不对 | 后续 `skills/prompt/SKILL.md` 要根据这个 id 去 `knowledge/genre-example/` 找对应文件。id 写错了就找不到。→ 验证：去 knowledge/genre-example/ 看一眼对应的文件存在吗？ |
+| 对不对 | 后续 `prompt-crafter agent` 要根据这个 id 去 `knowledge/genre-example/` 找对应文件。id 写错了就找不到。→ 验证：去 knowledge/genre-example/ 看一眼对应的文件存在吗？ |
 
 ### 满足类型
 

@@ -30,7 +30,7 @@ memory/anti-ai/
 ## 工作原理
 
 ```
-skills/prompt/SKILL.md 生成提示词时：
+prompt-crafter agent 生成提示词时：
     ↓
 读取 anti-ai/common-rules.md（通用规则）
     ↓

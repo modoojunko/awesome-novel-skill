@@ -5,7 +5,6 @@ description: 主线拆纲 + 卷纲规划 SOP——先拆全书主线，再逐卷
 
 # volume-planner skill
 
-> 来源：skills/outline/SKILL.md。主线拆纲仅首次执行，卷纲规划每卷循环。
 
 ## 流程概览
 

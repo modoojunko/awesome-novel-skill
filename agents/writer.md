@@ -51,6 +51,10 @@ knowledge_base:
 - **Resource Limits:** 单次输出 ≤ 目标字数 × 1.2
 - **Loop Integration:**
   ```
+  PRE-FLIGHT:
+    验证项目根 ← 当前目录下有 `.agent/status.md`？无 → 报错终止
+    记录项目根路径 ← 所有文件操作以此为边界，越界拒执行
+
   System Prompt ← 一(身份+人格) + 二(职责+OOS) + 六(规范) + 八(验收标准)
 
   OBSERVE:
@@ -95,6 +99,7 @@ knowledge_base:
 - **Principles:**
   - 严格遵守提示词中的场景顺序和内容约束
   - 如确需超出提示词范围的内容，用 `[AI addition: ...]` 标注
+  - **所有操作限定在当前工作目录内，不得访问上级或无关路径**
 - **Anti-Patterns:**
   - 不添加提示词未指定的角色/情节
   - 不使用 AI 疲劳词（"突然"、"意识到"、"某种"等）

@@ -725,8 +725,8 @@ Phase 3: 逐章循环（可跨会话持久化）
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-repo/awesome-novel-skilll.git
-cd awesome-novel-skilll
+git clone https://github.com/your-repo/awesome-novel-skill.git
+cd awesome-novel-skill
 
 # 安装（创建项目骨架）
 ./install.sh
@@ -779,7 +779,7 @@ awesome-novel → 输入项目名 → 回答设定问题 → 生成项目骨架
 **流程可复用**
 - 从零创建新小说
 - 导入已有小说继续写作
-- 旧版 2.x 项目自动迁移到 3.0
+- 旧版项目自动迁移到 4.0
 
 ---
 
@@ -793,7 +793,7 @@ awesome-novel → 输入项目名 → 回答设定问题 → 生成项目骨架
 
 ```bash
 # 直接使用
-cd /home/zhuke/awesome-novel-skilll
+cd /home/zhuke/awesome-novel-skill
 
 # 查看完整文档
 cat README.md
@@ -805,7 +805,7 @@ cat SKILL.md
 | 文件 | 用途 |
 |------|------|
 | `SKILL.md` | 主技能入口 |
-| `agents/` | 8 个 agent 定义 + 7 个 skill SOP |
+| `agents/` | 7 个 agent 定义 + 7 个 skill SOP |
 | `templates/` | 项目骨架模板 |
 | `templates/migration/` | 旧版迁移模板 |
 
@@ -815,5 +815,5 @@ cat SKILL.md
 
 ---
 
-*项目地址：[awesome-novel-skilll](https://github.com/your-repo/awesome-novel-skilll)*
+*项目地址：[awesome-novel-skill](https://github.com/your-repo/awesome-novel-skill)*
 *许可证：GPL 3.0*

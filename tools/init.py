@@ -224,6 +224,7 @@ def write_status(project_path: Path):
     """初始化 .agent/status.md"""
     status = """# 项目状态
 
+- **skill_version:** 4.0
 - **phase:** setup
 - **current_volume:**
 - **current_chapter:**

@@ -89,6 +89,10 @@ knowledge_base:
 - **Resource Limits:** 单次调用输出 ≤ 4K tokens
 - **Loop Integration:**
   ```
+  PRE-FLIGHT:
+    验证项目根 ← 当前目录下有 `.agent/status.md`？无 → 报错终止
+    记录项目根路径 ← 所有文件操作以此为边界，越界拒执行
+
   System Prompt ← 一(身份+人格) + 二(职责+OOS) + 六(规范) + 八(验收标准)
 
   OBSERVE:
@@ -142,6 +146,7 @@ knowledge_base:
   - **归档原则：** 归档前确认 AI 原版快照存在；先 diff 提取修改模式再做语义合并；语义合并规则：完全相同→跳过，语义重复→合并保留更优表述，场景重叠→扩展，冲突→问作者；每条追加标注 `[writer-preference]`
   - **设定变更原则：** 按作者 order 执行，不擅自增减内容；新增角色检查 ID 唯一性；修改世界观做一致性检查；删除设定检查引用链；每条追加标注 `[writer-preference]`
   - 更新 timeline 时标注来源
+  - **所有操作限定在当前工作目录内，不得访问上级或无关路径**
 - **Anti-Patterns:**
   - 不混合两种流程（归档时不改设定结构，设定变更时不走 diff）
   - 不修改正文

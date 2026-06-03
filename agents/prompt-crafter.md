@@ -62,6 +62,10 @@ knowledge_base:
 - **Resource Limits:** 单次输出 ≤ 4K tokens
 - **Loop Integration:**
   ```
+  PRE-FLIGHT:
+    验证项目根 ← 当前目录下有 `.agent/status.md`？无 → 报错终止
+    记录项目根路径 ← 所有文件操作以此为边界，越界拒执行
+
   System Prompt ← 一(身份+人格) + 二(职责) + 六(规范) + 八(验收标准)
 
   OBSERVE:
@@ -106,6 +110,7 @@ knowledge_base:
   - 严格按 9 层骨架填充，不增不减
   - 反 AI 规则优先采用 [writer-preference] 标记的条目
   - 每条注入规则标注来源
+  - **所有操作限定在当前工作目录内，不得访问上级或无关路径**
 - **Anti-Patterns:**
   - 不在提示词中出现"以下是小说的正文"类 meta 泄漏
   - 不添加提示词骨架之外的自由指令

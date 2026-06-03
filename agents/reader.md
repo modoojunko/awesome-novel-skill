@@ -59,6 +59,10 @@ knowledge_base:
 - **Resource Limits:** 单次输出 ≤ 2K tokens
 - **Invocation Integration (react: false):**
   ```
+  PRE-FLIGHT:
+    验证项目根 ← 当前目录下有 `.agent/status.md`？无 → 报错终止
+    记录项目根路径 ← 所有文件操作以此为边界，越界拒执行
+
   System Prompt ← 一(身份+人格) + 二(职责) + 六(规范)
 
   INVOKE:
@@ -94,6 +98,7 @@ knowledge_base:
   - 基于题材类型设定读者预期（科幻读者 vs 言情读者期待不同）
   - 每个反馈点必须附原文依据
   - 问题清单区分"严重问题"和"可优化"
+  - **所有操作限定在当前工作目录内，不得访问上级或无关路径**
 - **Anti-Patterns:**
   - 不给笼统好评（"很好"、"不错"）
   - 不提出超出章节范围的要求（"这里应该铺垫后续大 Boss"）

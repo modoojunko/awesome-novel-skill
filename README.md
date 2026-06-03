@@ -59,8 +59,12 @@ git clone https://github.com/modoojunko/awesome-novel-skill.git && cd awesome-no
 git clone https://github.com/modoojunko/awesome-novel-skill.git
 cd awesome-novel-skill
 mkdir -p ~/.deepseek/skills/awesome-novel
-cp SKILL.md ~/.deepseek/skills/awesome-novel/
-cp -r scripts ~/.deepseek/skills/awesome-novel/
+cp -r agents ~/.deepseek/skills/awesome-novel/
+cp -r templates ~/.deepseek/skills/awesome-novel/
+cp -r knowledge ~/.deepseek/skills/awesome-novel/
+cp -r memory ~/.deepseek/skills/awesome-novel/
+cp -r tools ~/.deepseek/skills/awesome-novel/
+cp SKILL.md CLAUDE.md ~/.deepseek/skills/awesome-novel/
 ```
 
 > Claude Code 用户把路径换成 `~/.claude/skills/awesome-novel`，Hermes 用户换成 `~/.hermes/skills/awesome-novel`，OpenClaw 用户换成 `~/.openclaw/skills/awesome-novel`。
@@ -76,7 +80,7 @@ cp -r scripts ~/.deepseek/skills/awesome-novel/
 
 > **帮我写本小说**
 
-Agent 会引导你完成后续步骤。下面是你将经历的完整流程：
+Agent 会引导你完成后续步骤。系统由 7 个 AI Agent 协作驱动，自动检测进度、调度任务，你只需确认方向和审阅内容。
 
 ### 一次性设定
 
@@ -86,6 +90,30 @@ Agent 会引导你完成后续步骤。下面是你将经历的完整流程：
 2. **世界观** — 故事发生在什么世界？有什么特殊规则？（比如"修仙世界，灵根决定天赋"）
 3. **主要角色** — 主角是谁？TA 是什么样的人？Agent 会逐个角色和你讨论性格、能力、成长经历
 4. **写作风格** — 偏好更偏描写还是更偏对话、更古风还是更现代？也可以导入你喜欢的小说来提取文风
+
+### 项目结构
+
+设定聊完后，Agent 会在当前目录下创建你的小说项目，结构如下：
+
+```
+{你的小说文件夹}/
+├── story.md              # 项目总索引（元信息/主线/卷规划）
+├── settings/             # 设定文件
+│   ├── world-setting.md  # 世界观
+│   ├── writing-style.md  # 写作风格
+│   ├── genre-setting.md  # 题材设定
+│   ├── timeline.md       # 时间线
+│   └── character-setting/ # 角色档案
+│       └── <id>.md       # 每个角色一个文件
+├── volumes/              # 卷纲
+├── chapters/             # 章纲
+├── prompts/              # 提示词
+├── archives/             # 正文（定稿）
+├── .agent/               # Agent 进度数据
+└── .claude/              # Agent 定义 + 知识库
+```
+
+这些全是纯文本 Markdown 文件，你可以直接用编辑器打开看或手动改。
 
 ### 规划故事骨架
 
@@ -97,27 +125,28 @@ Agent 会引导你完成后续步骤。下面是你将经历的完整流程：
 
 > **不知道结局？** 告诉 Agent"我只知道开头"，它照样帮你规划第一卷。
 
-### 逐章写作循环
+### 逐章写作循环（Agent 协作）
 
-每章按这个流程走，Agent 自动推进：
+多 Agent 协作自动推进，你只需审阅和决策：
 
-| 步骤 | 做什么 |
-|------|--------|
-| **① 章纲** | Agent 给出本章写作计划——写什么、分几段、情绪怎么走。你看完后说"可以"或"改一下" |
-| **② 提示词** | 根据章纲和全局设定自动组装写作提示词 |
-| **③ 写正文** | Agent 按提示词写完整一章 |
-| **④ 审阅** | 读一遍。满意就说"归档"，不满意就说"修改第 X 段"或"重写" |
-| **⑤ 归档** | 你确认后，这章正式存档。角色状态自动更新，准备下一章 |
+| 步骤 | 负责 Agent | 做什么 |
+|------|-----------|--------|
+| **① 章纲** | chapter-planner | 分析前文和设定，给出分镜、情绪设计和钩子计划。你看完后说"可以"或"改一下" |
+| **② 提示词** | prompt-crafter | 根据章纲、反 AI 规则和文风偏好，组装 9 层纯净提示词 |
+| **③ 写正文** | writer | 按提示词写完整一章，自动净化 AI 腔 |
+| **④ 审阅** | reader（可选） | 10 维 60+ 细项深度评审，对照章纲/设定/前文逐条诊断 |
+| **⑤ 归档** | updater | 你确认后归档定稿，自动更新角色状态、追加情绪弧线、合并文风偏好、检测钩子健康和卷边界 |
 
 第一章写完后，Agent 会问"下一章继续吗？"
 
-### 自动做的事
+### 自动做的事（Agent 维护）
 
-- **去 AI 味**：生成提示词时自动净化"分析腔"，写完后检测句式重复、身体反应模板化等机器腔词汇，标出来让你决定要不要改
-- **动态记忆**：记录你对正文的修改偏好（反 AI 模式 + 作家文风），越写越懂你的风格。模式可贡献社区，帮助其他作家
-- **记伏笔**：每章结尾的情绪钩子自动追踪，该填坑的时候提醒你
-- **管角色状态**：角色换了地点、变了能力、关系变了——自动记录，写下一章时 Agent 知道他的最新状态
-- **节奏检查**：连续高压超过 3 章或连续平淡超过 2 章，提醒你调整
+- **去 AI 味**（prompt-crafter + writer）：提示词组装时注入反 AI 规则，正文生成时自动规避疲劳词、句式模板、元叙事
+- **动态记忆**（updater）：归档时 diff 对比 AI 原版 vs 最终正文，提取你的修改偏好，语义合并到文风记忆。越写越懂你
+- **记伏笔**（updater）：归档时自动扫描未兑现/新埋的钩子，检测陈旧度和集中收束风险
+- **管角色状态**（updater）：每章归档后自动追加角色状态历史、情绪弧线和人际关系变化。下一章写作时 Agent 知道最新状态
+- **节奏检查**（updater）：连续高压超过 3 章或连续平淡超过 2 章，提醒你调整
+- **卷边界检测**（updater）：整卷完成后自动输出报告，询问下一卷方向
 
 ### 常用指令
 
@@ -130,7 +159,7 @@ Agent 会引导你完成后续步骤。下面是你将经历的完整流程：
 | "这章写完了" 或 "归档" | 确认本章完成 |
 | "看看进度" | 查看当前写了多少 |
 | "导入这本小说" | 导入已有草稿继续写 |
-| "迁移项目" | 从 2.x 旧版自动迁移到 3.0 格式 |
+| "迁移项目" | 从旧版自动迁移到 4.0 格式 |
 | "solo" 或 "你全权写" | 进入全自动模式，不打断你确认 |
 
 ## 三种协作模式
@@ -257,7 +286,6 @@ awesome-novel-skill/
 │   ├── prompt-crafter.md# 提示词工程师
 │   ├── writer.md        # 写手
 │   ├── reader.md        # 测试读者
-│   ├── migrator.md      # 迁移工程师
 │   ├── updater.md       # 档案管理员
 │   └── skills/          # Agent 技能 SOP
 ├── knowledge/            # 知识库（→ 项目 .claude/knowledge/）

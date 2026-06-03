@@ -25,10 +25,10 @@
 | 新模板位置 | 旧版来源 | 迁移方式 | 验收 |
 |-----------|---------|---------|------|
 | `# {title}` | `story.yaml → title` | ✅ 直接填 | 标题一致 |
-| `**作者：**` | `story.yaml → author` | ✅ 直接填 | 作者一致 |
-| `**创建时间：**` | `story.yaml → created_at` | ✅ 直接填 | 时间一致 |
-| `**更新时间：**` | `story.yaml → updated_at` | ✅ 直接填 | 非空（如有） |
-| `skill_version` | — | ❌ 新增 | 写 `3.0` |
+| 元信息 → skill_version | — | ❌ 新增 | 写 `4.0` |
+| 元信息 → 题材 | `writing-style.yaml → genre_profile` | ✅ 直接填 | 有值则填，无值标"待确认" |
+| 元信息 → 标签 | 无直接字段 | ⚠️ 从 story.yaml 内容推断 | 允许空 |
+| 元信息 → 状态 | — | ❌ 新增 | 写"写作中" |
 | 引用路径表 → 世界观概要 | `story.yaml → world_setting.summary` | ✅ 直接填 | 非空 |
 | 引用路径表 → 题材概要 | — | ❌ 新增 | 标"待确认" |
 | 引用路径表 → 角色概要 | `story.yaml → characters.summary` | ✅ 直接填 | 非空 |
@@ -44,10 +44,10 @@
 ### 验收
 
 - `story.md` 标题行正确
+- 元信息三字段至少题材有值
 - 引用路径表 4 行全部非空（题材行标"待确认"）
 - 故事主线段：结构类型 + 总卷数 + 核心冲突 三项齐全
 - 分卷规划：卷数正确，每卷至少有标题和核心冲突
-- `skill_version: 3.0` 已写入
 - 没有旧版 story.yaml 残留
 
 ---
@@ -94,24 +94,20 @@
 
 | 新模板位置 | 旧版来源 | 迁移方式 | 验收 |
 |-----------|---------|---------|------|
-| genre_profile | `writing-style.yaml → genre_profile` | ✅ 直接填 | 非空则填，空则标"无" |
-| role | `writing-style.yaml → role` | ✅ 直接填 | 非空 |
-| personality | `writing-style.yaml → personality` | ✅ 直接填 | 非空 |
-| core_principles → global_rules | `writing-style.yaml → core_principles.global_rules` | ✅ 直接填 | 非空 |
-| core_principles → natural_expression | `writing-style.yaml → core_principles.natural_expression` | ✅ 直接填 | 非空 |
-| core_principles → description_vs_depiction | `writing-style.yaml → core_principles.description_vs_depiction` | ✅ 直接填 | 非空 |
-| core_principles → character_building | `writing-style.yaml → core_principles.character_building` | ✅ 直接填 | 非空 |
-| core_principles → pov_consistency | `writing-style.yaml → core_principles.pov_consistency` | ✅ 直接填 | 非空 |
-| possible_mistakes | `writing-style.yaml → possible_mistakes` | ✅ 直接填 | 非空 |
-| depiction_techniques | `writing-style.yaml → depiction_techniques` | ✅ 直接填 | 非空 |
-| workflow | `writing-style.yaml → workflow` | ✅ 直接填 | 非空 |
+| `## role` | `writing-style.yaml → role` | ✅ 直接填 | 非空 |
+| `## role`（合并 personality） | `writing-style.yaml → personality` | 🔄 合并到 role 段末尾 | 非空 |
+| `## core_principles` | `writing-style.yaml → core_principles.*` | 🔄 所有子字段合并为一个列表 | 非空，无重复 |
+| `## possible_mistakes` | `writing-style.yaml → possible_mistakes` | ✅ 直接填 | 非空 |
+| `## depiction_techniques` | `writing-style.yaml → depiction_techniques` | ✅ 直接填 | 非空 |
 
-**说明：** 新版模板本身就是 YAML 内容，和旧版结构一致。字段基本 1:1 迁移。
+**说明：** 新版使用 markdown 格式（非 YAML）。旧版 `core_principles` 的 5 个子字段（global_rules / natural_expression / description_vs_depiction / character_building / pov_consistency）合并为一个列表写入 `## core_principles`。`personality` 合并到 `## role` 段末尾。`genre_profile` → 写入 §8 genre-setting.md。`workflow` / `writing_model` → 新版无对应位置，迁移时跳过。
 
 ### 验收
 
-- 所有字段已填入，内容完整
-- genre_profile 已记录（供 §8 genre-setting 使用）
+- ## role 段已合并 personality，内容非空
+- ## core_principles 包含旧版所有子字段的内容
+- ## possible_mistakes 完整迁移
+- ## depiction_techniques 完整迁移
 - 与旧文件对比确认无遗漏
 
 ---
@@ -306,18 +302,31 @@
 
 ---
 
+## §10 timeline 文件（新建）
+
+**旧版无此文件。** 时间线由 updater 在归档时自动追加，迁移时只需创建空文件。
+
+**模板：** `templates/migration/timeline.md.template`
+
+### 验收
+
+- `settings/timeline.md` 存在，表头正确
+
+---
+
 ## 总体验收清单
 
 执行完所有迁移步骤后，Agent 逐项检查：
 
 ### 结构验收
 
-- [ ] `story.md` 存在，`skill_version: 3.0`
+- [ ] `story.md` 存在，元信息已填充
 - [ ] `settings/world-setting.md` 存在
 - [ ] `settings/writing-style.md` 存在
 - [ ] `settings/genre-setting.md` 存在
 - [ ] `settings/anti-ai.md` 存在
 - [ ] `settings/foreshadowing.md` 存在
+- [ ] `settings/timeline.md` 存在
 - [ ] `settings/character-setting/` 下角色文件与旧版一致
 - [ ] `volumes/volume-{N}.md` 卷数与旧版一致
 - [ ] `chapters/` 下已归档章节全部迁移

@@ -5,7 +5,6 @@ description: 章纲设定 SOP——从卷纲拆出每章内容规划，含 PreFl
 
 # chapter-planner skill
 
-> 来源：skills/chapter/SKILL.md。每章独立走完这个流程。
 
 ## 流程概览
 

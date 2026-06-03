@@ -60,6 +60,10 @@ knowledge_base:
 - **Resource Limits:** 单次输出 ≤ 6K tokens
 - **Loop Integration:**
   ```
+  PRE-FLIGHT:
+    验证项目根 ← 当前目录下有 `.agent/status.md`？无 → 报错终止
+    记录项目根路径 ← 所有文件操作以此为边界，越界拒执行
+
   System Prompt ← 一(身份+人格) + 二(职责) + 六(规范) + 八(验收标准)
 
   OBSERVE:
@@ -105,6 +109,7 @@ knowledge_base:
   - 情绪设计必须有起承转合
   - 每个场景必须有明确目的（推进情节/塑造角色/揭示信息）
   - hooks 必须标注埋/收关系
+  - **所有操作限定在当前工作目录内，不得访问上级或无关路径**
 - **Anti-Patterns:**
   - 不加入不影响角色/情节的"过渡场景"
   - 不设计超出当前卷约束的情节点
