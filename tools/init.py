@@ -2,10 +2,12 @@
 """
 awesome-novel-skill 项目初始化工具
 
-用法: python init.py <project-path>
+用法: python init.py [project-path] [--genre <编号>]
 
 从 skill 仓库复制 agent 定义、题材知识、记忆规则到用户项目目录，
 创建完整的小说写作项目骨架。
+
+不带参数时默认在当前目录初始化。
 """
 
 import sys
@@ -35,11 +37,10 @@ SOURCE_FORMAT_SPECS = SKILL_HOME / "knowledge" / "format-specs"
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("用法: python init.py <project-path> [--genre <编号>]")
-        sys.exit(1)
-
-    project_path = Path(sys.argv[1]).resolve()
+    if len(sys.argv) >= 2 and not sys.argv[1].startswith("--"):
+        project_path = Path(sys.argv[1]).resolve()
+    else:
+        project_path = Path.cwd()
 
     # 解析可选参数
     genre = None
