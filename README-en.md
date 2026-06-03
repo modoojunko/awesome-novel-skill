@@ -1,13 +1,10 @@
 <p align="center">
   <strong>awesome-novel</strong><br>
-  <em>Write Novels with AI — Free, Native DeepSeek V4 Support</em>
+  <em>Write Novels with Claude Code</em>
 </p>
 
 <p align="center">
-  <a href="https://github.com/hust-open-atom-club/DeepSeek-TUI"><img src="https://img.shields.io/badge/DeepSeek%20V4-%E2%9C%93%20%E6%94%AF%E6%8C%81-4FC08D?style=flat-square" alt="DeepSeek V4 TUI"></a>
   <a href="https://docs.anthropic.com/en/docs/claude-code/overview"><img src="https://img.shields.io/badge/Claude%20Code-%E2%9C%93%20%E6%94%AF%E6%8C%81-6B46C1?style=flat-square" alt="Claude Code"></a>
-  <a href="https://github.com/hermes/hermes"><img src="https://img.shields.io/badge/Hermes-%E2%9C%93%20%E6%94%AF%E6%8C%81-FF6B6B?style=flat-square" alt="Hermes"></a>
-  <a href="https://github.com/openclaw/openclaw"><img src="https://img.shields.io/badge/OpenClaw-%E2%9C%93%20%E6%94%AF%E6%8C%81-FFA94D?style=flat-square" alt="OpenClaw"></a>
   <br>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-blue?style=flat-square" alt="GPL 3.0"></a>
 </p>
@@ -47,54 +44,30 @@ Let AI be your novel writing partner, from world-building to character developme
 
 ## What You Need
 
-- A computer with one of: [DeepSeek TUI (DeepSeek V4)](https://github.com/hust-open-atom-club/DeepSeek-TUI), [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview), [Hermes](https://github.com/hermes/hermes), or [OpenClaw](https://github.com/openclaw/openclaw)
+- A computer with [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) installed
 - About 1 minute to install
-
-> **Tip**: DeepSeek V4 via DeepSeek TUI is completely free with no API costs.
 
 ## Installation
 
-Copy the command for your tool and paste it in your terminal:
-
-### DeepSeek V4 (DeepSeek TUI)
-
-```bash
-git clone https://github.com/modoojunko/awesome-novel-skill.git && cd awesome-novel-skill && ./install.sh deepseek-tui
-```
-
-### Claude Code
+Copy the command and paste it in your terminal:
 
 ```bash
 git clone https://github.com/modoojunko/awesome-novel-skill.git && cd awesome-novel-skill && ./install.sh claude-code
 ```
 
-### Hermes
-
-```bash
-git clone https://github.com/modoojunko/awesome-novel-skill.git && cd awesome-novel-skill && ./install.sh hermes
-```
-
-### OpenClaw
-
-```bash
-git clone https://github.com/modoojunko/awesome-novel-skill.git && cd awesome-novel-skill && ./install.sh openclaw
-```
-
-Manual installation (using DeepSeek V4 as example):
+Manual installation:
 
 ```bash
 git clone https://github.com/modoojunko/awesome-novel-skill.git
 cd awesome-novel-skill
-mkdir -p ~/.deepseek/skills/awesome-novel
-cp -r agents ~/.deepseek/skills/awesome-novel/
-cp -r templates ~/.deepseek/skills/awesome-novel/
-cp -r knowledge ~/.deepseek/skills/awesome-novel/
-cp -r memory ~/.deepseek/skills/awesome-novel/
-cp -r tools ~/.deepseek/skills/awesome-novel/
-cp SKILL.md ~/.deepseek/skills/awesome-novel/
+mkdir -p ~/.claude/skills/awesome-novel
+cp -r agents ~/.claude/skills/awesome-novel/
+cp -r templates ~/.claude/skills/awesome-novel/
+cp -r knowledge ~/.claude/skills/awesome-novel/
+cp -r memory ~/.claude/skills/awesome-novel/
+cp -r tools ~/.claude/skills/awesome-novel/
+cp SKILL.md ~/.claude/skills/awesome-novel/
 ```
-
-> Claude Code users: use `~/.claude/skills/awesome-novel`. Hermes users: use `~/.hermes/skills/awesome-novel`. OpenClaw users: use `~/.openclaw/skills/awesome-novel`.
 
 You'll see "安装完成" (Installation complete) when done.
 
@@ -238,11 +211,7 @@ Have a novel you love and want AI to write in that style?
 
 **Q: I'm not a programmer, can I install it?**
 
-Yes. Just copy and paste those commands into your terminal. The only requirement is having DeepSeek TUI, Claude Code, Hermes, or OpenClaw installed.
-
-**Q: Do I need a Claude subscription to use this?**
-
-No. DeepSeek V4 (DeepSeek TUI) provides complete functionality for free with no subscriptions or API costs.
+Yes. Just copy and paste those commands into your terminal. The only requirement is having Claude Code installed.
 
 **Q: I upgraded the skill, how do I migrate my existing novel projects to the new format?**
 
@@ -267,7 +236,5 @@ Yes. After project creation, there's a writing style file where you can write in
 </a>
 
 ## Acknowledgments
-
-Thanks to [@hust-open-atom-club](https://github.com/hust-open-atom-club) for [DeepSeek TUI](https://github.com/hust-open-atom-club/DeepSeek-TUI), providing free and smooth terminal experience for DeepSeek V4 users, making this Skill completely free for personal use.
 
 Part of this project's design was inspired by [InkOS](https://github.com/Narcooo/inkos) — including AI flavor detection system, foreshadowing/hook tracking, genre configuration, and layered technique models. Thanks to [@Narcooo](https://github.com/Narcooo) for the excellent work.
