@@ -12,20 +12,21 @@ description: 和 AI 协作写小说的工作流系统。7 个 agent 协作完成
 ```
 检测项目状态
 ├─ story.yaml 存在 → 旧版 2.x → 执行自动迁移（见下文）
-├─ story.md 不存在 → 全新项目 → 必须执行 init.py，不得跳过
-│   └─ python tools/init.py [--genre <编号>] → 完成后 @novel-agent
+├─ story.md 不存在 → 询问作者是否初始化 → 是则执行 init.py
+│   └─ python tools/init.py [project-path] [--genre <编号>] → 完成后 @novel-agent
 └─ story.md 存在 → 已有项目 → @novel-agent 继续写作
 ```
 
 **强制规则：**
-- `story.md` 不存在时，**必须先运行 `init.py`**，禁止直接进入 `@novel-agent`
-- 禁止手动创建 `settings/` `volumes/` `chapters/` 等目录结构替代 init.py
+- `story.md` 不存在时，**先询问作者**是否要在此目录创建小说项目，确认后再运行 `init.py`
+- 禁止未经确认直接执行 `init.py`
+- 确认后必须运行 `init.py`，禁止手动创建目录结构替代
 - `init.py` 执行完毕后，确认 `.agent/status.md` 和 `.claude/agents/` 已生成，方可进入 `@novel-agent`
 - 如果 `init.py` 报错，必须先修复问题重新执行，不允许绕过
 
-## 初始化 — 必须执行，不可跳过
+## 初始化 — 先询问，确认后执行，不可跳过
 
-全新项目必须运行 `init.py`（项目路径可选，默认当前目录）：
+全新项目先询问作者是否初始化，确认后运行 `init.py`（项目路径可选，默认当前目录）：
 ```
 python tools/init.py [project-path] [--genre <编号>]
 ```
