@@ -15,6 +15,13 @@ import os
 import shutil
 from pathlib import Path
 
+# 强制 UTF-8 编码，避免 Windows 终端中文乱码
+for s in (sys.stdin, sys.stdout, sys.stderr):
+    try:
+        s.reconfigure(encoding="utf-8")
+    except AttributeError:
+        pass
+
 
 GENRES = [
     "xianxia", "xuanhuan", "urban", "urban-romance", "urban-daily",
@@ -131,7 +138,7 @@ def create_skeleton(project_path: Path):
         ".claude/knowledge",
     ]
     for d in dirs:
-        (project_path / d).mkdir(parents=True)
+        (project_path / d).mkdir(parents=True, exist_ok=True)
 
     # Copy template files into project (skip migration/ — old project upgrade only)
     if SOURCE_TEMPLATES.exists():
