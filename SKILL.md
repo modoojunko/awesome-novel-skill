@@ -21,6 +21,8 @@ description: 和 AI 协作写小说的工作流系统。7 个 agent 协作完成
 - `story.md` 不存在时，**先询问作者**是否要在此目录创建小说项目，确认后再运行 `init.py`
 - 禁止未经确认直接执行 `init.py`
 - 确认后必须运行 `init.py`，禁止手动创建目录结构替代
+- **禁止在 skill 安装目录（含 `skills/awesome-novel` 路径）内运行 `init.py`** — 此目录是技能仓库，不是小说项目
+- 如果当前目录是 skill 安装目录，应提示作者切换到目标目录后再执行
 - `init.py` 执行完毕后，确认 `.agent/status.md` 和 `.claude/agents/` 已生成，方可进入 `@novel-agent`
 - 如果 `init.py` 报错，必须先修复问题重新执行，不允许绕过
 
