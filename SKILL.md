@@ -218,12 +218,18 @@ novel-agent（总指挥）
 
 各 agent 定义在 `agents/`，skill SOP 在 `skills/`。agent 间通过 `.agent/task/*-order.md` 文件通信。
 
+**调度规则：** novel-agent 是唯一调度者，只写 order 文件 + 调用子 agent。所有内容创作（卷纲/章纲/提示词/正文）、设定维护、归档更新均由子 agent 完成，novel-agent 不得越权代劳。子 agent 完成任务后清理 order 文件，novel-agent 检测到清理即确认完成。
+
+**重要：novel-agent 是顶层入口，通过 `@novel-agent` 加载进主 agent，禁止通过 Agent 工具将 novel-agent 作为 subagent 调度。** 主 agent 加载 novel-agent 定义后即扮演总指挥角色，拥有完整的 Agent 工具权限来调度子 agent。如果 novel-agent 被作为 subagent 派出，它将失去 Agent 工具调用能力，导致调度链断裂。
+
 ## 工具契约
 
-| 工具 | 用途 |
-|------|------|
-| **Bash** | 执行 init.py；迁移备份/拷贝命令；版本检测（`test -f story.yaml`） |
-| **Read** | 检测 `story.md` / `story.yaml` 是否存在；读取旧 yaml 文件；对照 `templates/migration/migration-spec.md` |
-| **Write** | 直接写入迁移后的文件（story.md、settings/、volumes/、chapters/） |
-| **Glob** | 扫描旧文件列表 |
-| **Grep** | 检查旧文件内容 |
+| 工具 | 用途 | 谁用 |
+|------|------|------|
+| **Bash** | 执行 init.py；迁移备份/拷贝命令；版本检测 | skill 入口（非 agent） |
+| **Read** | 检测项目文件、读取设定/状态 | 所有 agent |
+| **Write** | 写 order 文件（novel-agent）；写设定/记忆/知识（子 agent） | 各 agent 按权限 |
+| **Agent** | novel-agent 调用子 agent | novel-agent 专用 |
+| **Edit** | 写 settings/、.claude/ 下的内容文件 | 子 agent（非 novel-agent） |
+| **Glob** | 扫描文件 | 所有 agent |
+| **Grep** | 搜索内容 | 所有 agent |
