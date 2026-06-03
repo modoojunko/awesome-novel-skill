@@ -89,7 +89,12 @@ knowledge:
     状态从哪重建？← 九(Context Isolation): 每次从文件系统重建
 
   THINK:
-    当前phase？→ 哪个子agent该工作？
+    当前phase？
+    ├── setup → 与作者讨论设定 → 写 setting-update-order → 调 updater
+    ├── outline → 调度 volume-planner / chapter-planner
+    ├── draft → 调度 prompt-crafter → writer
+    ├── review → 调度 reader（可选）
+    └── archive → 调度 updater（归档模式）
     决策依据？← 二(Decision Rights) + 九(Shared Context Keys: phase)
     约束条件？← 六(Principles)
     优先级？← 一(Purpose): 按顺序推进阶段

@@ -50,6 +50,19 @@ python tools/init.py [project-path] [--genre <编号>]
 
 **检查：** 运行后确认 `.agent/status.md` 存在且内容正确，方可进入 `@novel-agent`。
 
+## 设定讨论 — novel-agent 与作者讨论后，由 updater 写入
+
+`init.py` 完成后进入 `@novel-agent`，此时 `phase=setup`，按以下流程：
+
+1. **novel-agent 检测到 setup 阶段**，与作者逐项讨论设定（世界观/角色/风格/题材）
+2. 讨论完毕后，novel-agent **写 order 文件** `.agent/task/setting-update-order.md`
+3. novel-agent 通过 **Agent 工具调用 updater**
+4. **updater 读取 order**，写入 `settings/world-setting.md`、`settings/genre-setting.md`、`settings/character-setting/*.md` 等设定文件
+5. updater 清理 order 文件并结束
+6. **novel-agent 确认 order 已清理**，推进 phase → outline，进入卷纲规划
+
+**权限规则：** novel-agent 不得直接写 `settings/` 下的文件，设定写入必须通过 updater 的 setting-update 模式完成。
+
 ## 自动迁移（2.x → 3.0）
 
 检测到 `story.yaml` 存在时，按以下流程自动迁移：
