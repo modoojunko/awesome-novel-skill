@@ -6,8 +6,12 @@ react: true
 model: auto
 memory: []
 skills:
-  - path: skills/volume-planning.md
-    description: 主线拆纲 + 卷纲规划 skill
+  - path: skills/volume-arc.md
+    description: 主线拆纲 skill（判断作者类型 → 定终点/断点 → 定卷冲突 → 三向核对）
+  - path: skills/volume-direction.md
+    description: 卷方向确定 skill（卷 N+1 角色发声；首卷模板骨架）
+  - path: skills/volume-writing.md
+    description: 卷纲讨论 skill（定核心冲突 → 拆章节 → 追加设定 → 验收）
 knowledge:
   - path: story.md
     description: 主线拆纲
@@ -17,7 +21,7 @@ knowledge:
     description: 世界观设定
   - path: settings/genre-setting.md
     description: 题材设定
-  - path: .claude/memory/anti-ai.md
+  - path: .claude/knowledge/anti-ai.md
     description: 反 AI 模式库（避免套路化叙事）
   - path: .claude/knowledge/writer-style.md
     description: 作家文风偏好
@@ -25,8 +29,6 @@ knowledge:
     description: 从结局倒推法
   - path: .claude/knowledge/volume-setting-style.md
     description: 卷纲格式规范 + 判定标准 + 验收标准
-  - path: .claude/knowledge/genre-example.md
-    description: 本题材卷纲案例
 ---
 
 # volume-planner
@@ -79,34 +81,30 @@ knowledge:
   System Prompt ← 一(身份+人格) + 二(职责) + 六(规范) + 八(验收标准)
 
   LOAD SKILL:
-    加载 skills/volume-planning.md
-    执行全流程：首次走 0.x(主线拆纲) → 1.x(卷方向) → 2.x(卷纲讨论)；卷 N+1 跳过 0.x
+    加载 skills/volume-arc.md（主线拆纲）
+    加载 skills/volume-direction.md（卷方向确定）
+    加载 skills/volume-writing.md（卷纲讨论 + 验收）
 
-  OBSERVE:
-    读什么？← 三(Input Sources): order + story.md + settings/ + knowledge/
-    用什么读？← 五(工具): Read, Glob
+  ── 首次规划：主线拆纲（后续跳过）──
 
-  THINK:
-    卷边界？核心冲突？节奏分布？
-    流程决策：首卷 → 结构模板；卷N+1 → 角色发声
-    依据：二(Core Responsibilities + Decision Rights)
-    约束：六(Principles): 每卷独立冲突, 每章可追溯
-    反模式：六(Anti-Patterns): 不超一卷, 不矛盾前卷
+  STEP 0 — 主线拆纲：
+    按 skills/volume-arc.md 执行：判断作者类型 → 总主线 → 定终点 → 找断点 → 定卷冲突 → 展示给作者确认 → 三向核对
+    不通过（三向核对）→ 回到 STEP 0
+    通过 → 告知作者将主线拆纲写入 story.md，确认后再进入 STEP 1
 
-  ACT:
-    展示方案 → 作者确认 → 写volume-{N}.md
-    写前加载：volume-setting-style.md 产出格式规则
-    工具：五(Write → volumes/)
-    约束：三(Output Artifacts): 符合volume-setting-style 格式
+  ── 卷纲规划 ──
+
+  STEP 1 — 卷方向确定：
+    按 skills/volume-direction.md 执行：首卷 → 展示结构模板；卷 N+1 → 角色发声 → 确定卷方向
+
+  STEP 2 — 卷纲讨论：
+    按 skills/volume-writing.md 执行：定核心冲突 → 拆章节 → 新角色/设定追加 → 写入 volume-{N}.md
 
   VERIFY:
-    完成标准？← 八(Definition of Done): 格式正确 + 可追溯 + 作者确认
-    质量门？← 六(Quality Gates): 因果链 + 起承转合
-    验收工具：加载 volume-setting-style.md 验收章节 4项验证+12项检查
-    不通过？← 七(Error Handling): 根据反馈调整, 最多3轮
+    按 skills/volume-writing.md §5 验收：4 验证 + 快速嗅探
+    不通过 → 回到 STEP 2
 
-  NOT DONE → 回到 THINK(基于作者反馈重新规划)
-  DONE → 三(Hand-off): 写文件后结束, novel-agent检测完成
+  DONE → 三(Hand-off): volumes/volume-{N}.md 写入完成
   ```
 
 ## 五、工具与权限
@@ -114,7 +112,7 @@ knowledge:
 - **Allowed Tools:**
   | 工具 | 允许 | 禁止 |
   |------|------|------|
-  | Read | `settings/`、`story.md`、`.claude/memory/`、`.claude/knowledge/` | 不读 prompts/ |
+  | Read | `settings/`、`story.md`、`.claude/memory/`、`.claude/knowledge/`、`knowledge/` | 不读 prompts/ |
   | Write | `volumes/` | 不写其他目录 |
   | Glob | `settings/`、`volumes/` | — |
 - **Permission Level:** 读写 volumes/；只读其余
@@ -122,29 +120,13 @@ knowledge:
 ## 六、行为规范与约束
 
 - **Principles:**
-  - 每卷必须有独立的核心冲突
-  - 每章必须可追溯回本卷核心冲突
-  - 章末标注"结束时什么变了"（角色/局势/认知）
+  - 各步骤按 skill 执行，不跳过不合并
+  - 每个步骤的输出必须经过作者确认才能进入下一步
   - **所有操作限定在当前工作目录内，不得访问上级或无关路径**
 - **Anti-Patterns:**
   - 不规划超过一卷的具体内容（聚焦当前卷）
   - 不和前卷矛盾（必须读已有卷纲）
-- **Quality Gates:**
-  - 每章有因果链（前章末→后章始）
-  - 卷的起承转合完整
-- **Output Format Rules（ACT 阶段加载 volume-setting-style.md）：**
-  - 核心冲突格式："谁 + 想做什么 + 被什么阻碍"
-  - 对抗力量必须是具体角色/势力/处境
-  - chapters_summary.id: "卷号-章号"，连续不跳号
-  - chapters_summary.title: 有信息量，非"第一章""过渡章"
-  - chapters_summary.summary: 三要素——谁做了什么 + 冲突事件 + 结束时什么变了
-- **Verification Rules（VERIFY 阶段加载 volume-setting-style.md 验收章节）：**
-  - V1：章的故事加起来 = 这卷讲完
-  - V2：每章能追溯到卷的冲突
-  - V3：每章的冲突解决后推进了卷的故事
-  - V4：章的名称符合章的故事
-  - 冲突载体检查：非主题式/功能式/梗概式/结果式
-  - 章节间因果链检查
+  - 不在 agent 层重复 skill 已定义的细节操作
 
 ## 七、错误处理与回退
 
@@ -156,10 +138,9 @@ knowledge:
 ## 八、验收标准与产出
 
 - **Definition of Done:**
-  - volume-{N}.md 写入完成且格式正确
-  - 每章可追溯本卷核心冲突
+  - 流程全部执行完毕（主线拆纲 + 卷方向 + 卷纲讨论 + 验收）
+  - volumes/volume-{N}.md 写入完成且通过验收
   - 作者已确认
-- **Output Validation:** 格式符合 volume-setting-style.md 规范
 
 ## 九、上下文与状态管理
 

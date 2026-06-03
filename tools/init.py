@@ -66,7 +66,10 @@ def main():
     # Step 6: 生成 CLAUDE.md
     write_claude_md(project_path)
 
-    # Step 7: 初始化状态
+    # Step 7: 生成 MEMORY.md 索引
+    write_memory_index(project_path)
+
+    # Step 8: 初始化状态
     write_status(project_path)
 
     print(f"\n初始化完成!")
@@ -138,44 +141,12 @@ def deploy_agents(project_path: Path):
 
 
 def deploy_memory(project_path: Path, genre: str):
-    """按题材继承反 AI 规则和文风偏好"""
-    memory_dir = project_path / ".claude" / "memory"
-
-    # 反 AI 规则：通用 + 题材
-    anti_ai_content = []
-    anti_ai_content.append(f"# 反 AI 规则\n\n[community-defaults]\n")
-    common_rules = SOURCE_ANTI_AI / "common-rules.md"
-    if common_rules.exists():
-        anti_ai_content.append(common_rules.read_text(encoding="utf-8"))
-
-    genre_rules = SOURCE_ANTI_AI / f"{genre}.md"
-    if genre_rules.exists():
-        anti_ai_content.append(f"\n[community-defaults] 题材: {genre}\n")
-        anti_ai_content.append(genre_rules.read_text(encoding="utf-8"))
-
-    if anti_ai_content:
-        (memory_dir / "anti-ai.md").write_text(
-            "\n".join(anti_ai_content), encoding="utf-8"
-        )
-        print(f"  ✅ 已继承反 AI 规则 (通用 + {genre})")
-
-    # 文风偏好
-    style_dir = SOURCE_WRITER_STYLE / genre
-    if style_dir.exists():
-        style_content = []
-        for sf in style_dir.glob("*.md"):
-            style_content.append(sf.read_text(encoding="utf-8"))
-        if style_content:
-            (memory_dir / "writer-style.md").write_text(
-                f"# 文风偏好\n\n[community-defaults] 题材: {genre}\n\n" +
-                "\n".join(style_content),
-                encoding="utf-8",
-            )
-            print(f"  ✅ 已继承文风偏好 ({genre})")
+    """初始化 memory 目录（占位，反 AI/文风已移至 knowledge）"""
+    pass
 
 
 def deploy_knowledge(project_path: Path, genre: str):
-    """按题材拷贝参考材料到 .claude/knowledge/"""
+    """按题材拷贝参考材料 + 反 AI/文风规则到 .claude/knowledge/"""
     knowledge_dir = project_path / ".claude" / "knowledge"
     count = 0
 
@@ -190,6 +161,40 @@ def deploy_knowledge(project_path: Path, genre: str):
     if genre_example_src.exists():
         shutil.copy2(genre_example_src, knowledge_dir / "genre-example.md")
         count += 1
+
+    # 反 AI 规则：通用 + 题材
+    anti_ai_content = []
+    anti_ai_content.append("# 反 AI 规则\n\n[community-defaults]\n")
+    common_rules = SOURCE_ANTI_AI / "common-rules.md"
+    if common_rules.exists():
+        anti_ai_content.append(common_rules.read_text(encoding="utf-8"))
+
+    genre_rules = SOURCE_ANTI_AI / f"{genre}.md"
+    if genre_rules.exists():
+        anti_ai_content.append(f"\n[community-defaults] 题材: {genre}\n")
+        anti_ai_content.append(genre_rules.read_text(encoding="utf-8"))
+
+    if anti_ai_content:
+        (knowledge_dir / "anti-ai.md").write_text(
+            "\n".join(anti_ai_content), encoding="utf-8"
+        )
+        count += 1
+        print(f"  ✅ 已继承反 AI 规则 (通用 + {genre})")
+
+    # 文风偏好
+    style_dir = SOURCE_WRITER_STYLE / genre
+    if style_dir.exists():
+        style_content = []
+        for sf in style_dir.glob("*.md"):
+            style_content.append(sf.read_text(encoding="utf-8"))
+        if style_content:
+            (knowledge_dir / "writer-style.md").write_text(
+                f"# 文风偏好\n\n[community-defaults] 题材: {genre}\n\n"
+                + "\n".join(style_content),
+                encoding="utf-8",
+            )
+            count += 1
+            print(f"  ✅ 已继承文风偏好 ({genre})")
 
     print(f"  ✅ 已继承 {count} 个知识文件")
 
@@ -212,8 +217,7 @@ def write_claude_md(project_path: Path):
 - `prompts/` — 提示词
 - `archives/` — 正文
 - `.agent/` — 状态追踪 + agent 通信
-- `.claude/memory/` — 反 AI 规则、文风偏好
-- `.claude/knowledge/` — 题材参考材料
+- `.claude/knowledge/` — 反 AI 规则、文风偏好、题材参考材料
 """
     (project_path / "CLAUDE.md").write_text(
         claude_md.format(project_name=project_path.name), encoding="utf-8"
@@ -232,6 +236,12 @@ def write_status(project_path: Path):
 - **next_task:** 填写基础设定（世界观/角色/写作风格）
 """
     (project_path / ".agent" / "status.md").write_text(status, encoding="utf-8")
+
+
+def write_memory_index(project_path: Path):
+    """生成 .claude/memory/MEMORY.md 占位索引"""
+    memory_dir = project_path / ".claude" / "memory"
+    (memory_dir / "MEMORY.md").write_text("# 写作记忆库\n\n（暂无记忆）\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

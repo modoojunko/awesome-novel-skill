@@ -21,7 +21,7 @@ knowledge:
     description: 题材设定
   - path: settings/writing-style.md
     description: 写作文风
-  - path: .claude/memory/anti-ai.md
+  - path: .claude/knowledge/anti-ai.md
     description: 检查是否仍有 AI 味
   - path: .claude/knowledge/chapter-quality-checklist.md
     description: 验收清单

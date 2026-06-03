@@ -19,7 +19,7 @@ knowledge:
     description: 角色设定目录
   - path: settings/timeline.md
     description: 时间线
-  - path: .claude/memory/anti-ai.md
+  - path: .claude/knowledge/anti-ai.md
     description: 反 AI 模式库（静态规则，不在此写入语义合并）
   - path: .claude/knowledge/writer-style.md
     description: 作家文风偏好
@@ -43,7 +43,7 @@ knowledge:
     - 对比 AI 原版快照与最终正文，提取修改模式
     - 更新 `settings/character-setting/*.md` → 追加角色本幕状态变化和情绪弧
     - 追加 `settings/timeline.md` → 追加本章关键事件
-    - 语义合并后追加 `.claude/memory/anti-ai.md` + `writer-style.md`
+    - 语义合并后追加 `.claude/knowledge/anti-ai.md` + `.claude/knowledge/writer-style.md`
     - 清理 AI 快照
   - **设定变更流程**（setting-update-order.md → 加载 updater-setting）：
     - 新增角色（创建文件、ID 唯一性检查、关系同步）
@@ -70,21 +70,21 @@ knowledge:
   - `.agent/{chapter}-draft-ai.md` → AI 原版快照（归档 diff 基线）
   - `archives/vol-{N}-ch-{M}*.md` → 最终正文（含作者修改）
   - `settings/` 全部文件 → 已有设定（角色/世界观/时间线等）
-  - `.claude/memory/anti-ai.md` → 已有反 AI 规则
-  - `.claude/memory/writer-style.md` → 已有文风偏好
+  - `.claude/knowledge/anti-ai.md` → 已有反 AI 规则
+  - `.claude/knowledge/writer-style.md` → 已有文风偏好
   - `.agent/status.md` → 当前进度标记
 - **Output Artifacts（归档流程）:**
   - `settings/character-setting/*.md` → 追加角色状态变化、情绪弧
   - `settings/timeline.md` → 追加本章关键事件
-  - `.claude/memory/anti-ai.md` → 追加语义合并后的反 AI 规则
-  - `.claude/memory/writer-style.md` → 追加语义合并后的文风偏好
+  - `.claude/knowledge/anti-ai.md` → 追加语义合并后的反 AI 规则
+  - `.claude/knowledge/writer-style.md` → 追加语义合并后的文风偏好
   - `.agent/{chapter}-draft-ai.md` → 归档后删除（清理快照）
 - **Output Artifacts（设定变更流程）:**
   - `settings/character-setting/{id}.md` → 新建或修改
   - `settings/world-setting.md` → 追加或修改
   - `settings/writing-style.md` / `settings/genre-setting.md` → 按需修改
   - `settings/timeline.md` → 追加事件
-  - `.claude/memory/` → 追加规则
+  - `.claude/knowledge/` → 追加规则
 - **公共产出:**
   - `.agent/status.md` → 更新进度标记
 - **Hand-off Protocol:** 所有更新写入后清理 order 文件并结束；novel-agent 检测到 order 清理即确认完成
@@ -116,7 +116,7 @@ knowledge:
     ├── archive-order.md → 加载 skill(updater-archive)，走归档流程
     │   THINK: 哪些角色状态变了？→ 更新 character-setting
     │          哪些关键事件发生？→ 追加 timeline
-    │          正文 vs AI 快照差异提取什么模式？→ 语义合并到 memory
+    │          正文 vs AI 快照差异提取什么模式？→ 语义合并到 knowledge
     │
     └── setting-update-order.md → 加载 skill(updater-setting)，走设定变更
         THINK: order 指定了什么操作？（create/modify/delete）
@@ -127,8 +127,7 @@ knowledge:
 
   ACT:
     按对应 skill 执行
-    工具：五(Edit → settings/, .claude/memory/, .agent/)
-    冲突 → 问作者确认
+    工具：五(Edit → settings/, .claude/memory/, .claude/knowledge/, .agent/)
 
   VERIFY:
     完成标准？← 八(Definition of Done)
@@ -144,11 +143,11 @@ knowledge:
 - **Allowed Tools:**
   | 工具 | 允许 | 禁止 |
   |------|------|------|
-  | Read | `settings/`、`archives/`、`.claude/memory/`、`.agent/` | 不读 prompts/、chapters/ |
+  | Read | `settings/`、`archives/`、`.claude/memory/`、`.claude/knowledge/`、`.agent/` | 不读 prompts/、chapters/ |
   | Write | `.agent/status.md` | 不写正文/卷纲/章纲/提示词 |
-  | Edit | `settings/`、`.claude/memory/` | — |
+  | Edit | `settings/`、`.claude/memory/`、`.claude/knowledge/` | — |
   | Glob | `settings/`、`archives/` | — |
-- **Permission Level:** 读写 settings/, .claude/memory/, .agent/；只读 archives/
+- **Permission Level:** 读写 settings/, .claude/memory/, .claude/knowledge/, .agent/；只读 archives/
 
 ## 六、行为规范与约束
 
@@ -199,7 +198,7 @@ knowledge:
 ## 九、上下文与状态管理
 
 - **Context Isolation:** 每次从文件系统重建状态，不依赖历史上下文
-- **State Persistence:** 无自有状态；所有信息写入 settings/, .claude/memory/, .agent/
+- **State Persistence:** 无自有状态；所有信息写入 settings/, .claude/memory/, .claude/knowledge/, .agent/
 
 ## 十、可观测性与调试
 

@@ -13,7 +13,7 @@ knowledge:
     description: 写作文风
   - path: settings/character-setting/
     description: 角色设定目录
-  - path: .claude/memory/anti-ai.md
+  - path: .claude/knowledge/anti-ai.md
     description: 反 AI 模式库
   - path: .claude/knowledge/writer-style.md
     description: 作家文风偏好
@@ -52,8 +52,8 @@ knowledge:
 - **Input Sources:**
   - `.agent/task/prompt-order.md` → 目标章节
   - `chapters/vol-{N}-ch-{M}.md` → 章纲（memo、情绪、场景）
-  - `.claude/memory/anti-ai.md` → 反 AI 规则
-  - `.claude/memory/writer-style.md` → 文风偏好
+  - `.claude/knowledge/anti-ai.md` → 反 AI 规则
+  - `.claude/knowledge/writer-style.md` → 文风偏好
 - **Output Artifacts:**
   - `prompts/vol-{N}-ch-{M}-prompt.md` → 9 层提示词
 - **Hand-off Protocol:** 写入 prompt.md 后结束；novel-agent 检测到后验证
@@ -76,8 +76,8 @@ knowledge:
     执行全流程：Step 1(读取输入) → Step 2(9层填充) → Step 3(冲突检测) → Step 4(验收自检)
 
   OBSERVE:
-    读什么？← 三(Input Sources): order + chapter.md + memory/anti-ai.md + memory/writer-style.md
-    用什么读？← 五(工具): Read → chapters/, .claude/memory/
+    读什么？← 三(Input Sources): order + chapter.md + knowledge/anti-ai.md + knowledge/writer-style.md
+    用什么读？← 五(工具): Read → chapters/, .claude/knowledge/
 
   THINK:
     9层如何填充？优先注入哪些规则？

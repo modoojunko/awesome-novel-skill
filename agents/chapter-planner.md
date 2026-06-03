@@ -21,7 +21,7 @@ knowledge:
     description: 角色设定目录
   - path: settings/genre-setting.md
     description: 题材设定
-  - path: .claude/memory/anti-ai.md
+  - path: .claude/knowledge/anti-ai.md
     description: 反 AI 模式库（避免常见套路）
   - path: story.md
     description: 主线拆纲（STEP 3 架构维度需要）
