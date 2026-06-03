@@ -69,7 +69,10 @@ def main():
     # Step 7: 生成 MEMORY.md 索引
     write_memory_index(project_path)
 
-    # Step 8: 初始化状态
+    # Step 8: 初始化写作记忆文件
+    init_memory_files(project_path)
+
+    # Step 9: 初始化状态
     write_status(project_path)
 
     print(f"\n初始化完成!")
@@ -196,6 +199,17 @@ def deploy_knowledge(project_path: Path, genre: str):
             count += 1
             print(f"  ✅ 已继承文风偏好 ({genre})")
 
+    # 永久记忆占位文件（空，后续由 updater 晋升填充）
+    permanent_memory = knowledge_dir / "permanent-memory.md"
+    if not permanent_memory.exists():
+        permanent_memory.write_text(
+            "# 永久记忆\n\n> 从 .claude/memory/ 晋升的高频条目，"
+            "内容格式与 memory 条目一致，由 updater 在兜底 sweep 时维护。\n\n"
+            "---\n\n## 条目列表\n",
+            encoding="utf-8",
+        )
+        count += 1
+
     print(f"  ✅ 已继承 {count} 个知识文件")
 
 
@@ -242,6 +256,47 @@ def write_memory_index(project_path: Path):
     """生成 .claude/memory/MEMORY.md 占位索引"""
     memory_dir = project_path / ".claude" / "memory"
     (memory_dir / "MEMORY.md").write_text("# 写作记忆库\n\n（暂无记忆）\n", encoding="utf-8")
+
+
+MEMORY_FILES = {
+    "volume-memory.md": (
+        "# 卷纲写作记忆\n\n> 记录卷纲规划环节中作者的反馈"
+        "（冲突设计、节奏分布、章节结构等）。\n\n**相关 Agent:** volume-planner\n"
+        "**相关 Skill:** volume-arc, volume-direction, volume-writing\n\n"
+        "---\n\n## 条目列表\n"
+    ),
+    "chapter-memory.md": (
+        "# 章纲写作记忆\n\n> 记录章纲规划环节中作者的反馈"
+        "（场景设计、情绪节奏、伏笔安排等）。\n\n**相关 Agent:** chapter-planner\n"
+        "**相关 Skill:** chapter-reference, chapter-outline, chapter-verify\n\n"
+        "---\n\n## 条目列表\n"
+    ),
+    "prompt-memory.md": (
+        "# 提示词写作记忆\n\n> 记录提示词组装环节中作者的反馈"
+        "（层结构、注入规则、指令清晰度等）。\n\n**相关 Agent:** prompt-crafter\n"
+        "**相关 Skill:** prompt-crafting\n\n"
+        "---\n\n## 条目列表\n"
+    ),
+    "writing-memory.md": (
+        "# 正文写作记忆\n\n> 记录正文写作和读者验收环节中作者的反馈"
+        "（文风、爽点、节奏、描写等）。\n\n**相关 Agent:** writer, reader\n"
+        "**相关 Skill:** writing-execution, reader-review\n\n"
+        "---\n\n## 条目列表\n"
+    ),
+}
+
+
+def init_memory_files(project_path: Path):
+    """初始化 4 个写作记忆文件"""
+    memory_dir = project_path / ".claude" / "memory"
+    for filename, content in MEMORY_FILES.items():
+        filepath = memory_dir / filename
+        if not filepath.exists():
+            filepath.write_text(content, encoding="utf-8")
+    print("  \u2705 \u5df2\u521d\u59cb\u5316 4 \u4e2a\u5199\u4f5c\u8bb0\u5fc6\u6587\u4ef6")
+
+
+
 
 
 if __name__ == "__main__":

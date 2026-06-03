@@ -26,6 +26,8 @@ knowledge:
     description: 提示词组装结构
   - path: .claude/knowledge/chapter-quality-checklist.md
     description: 正文验收清单
+  - path: .claude/knowledge/permanent-memory.md
+    description: 永久记忆（高频引用条目的沉淀）
 ---
 
 # novel-agent

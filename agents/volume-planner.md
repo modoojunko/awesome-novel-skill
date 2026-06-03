@@ -12,6 +12,8 @@ skills:
     description: 卷方向确定 skill（卷 N+1 角色发声；首卷模板骨架）
   - path: skills/volume-writing.md
     description: 卷纲讨论 skill（定核心冲突 → 拆章节 → 追加设定 → 验收）
+  - path: skills/memory-recording.md
+    description: 写作记忆记录 skill（捕获作者反馈 → 追加到 volume-memory.md）
 knowledge:
   - path: story.md
     description: 主线拆纲
@@ -29,6 +31,10 @@ knowledge:
     description: 从结局倒推法
   - path: .claude/knowledge/volume-setting-style.md
     description: 卷纲格式规范 + 判定标准 + 验收标准
+  - path: .claude/knowledge/memory-format-spec.md
+    description: 写作记忆格式规范（条目结构 + 字段标准 + 生命周期）
+  - path: .claude/knowledge/permanent-memory.md
+    description: 永久记忆（高频引用条目的沉淀）
 ---
 
 # volume-planner
@@ -105,6 +111,9 @@ knowledge:
     不通过 → 回到 STEP 2
 
   DONE → 三(Hand-off): volumes/volume-{N}.md 写入完成
+
+  MEMORY SYNC:
+    按 skills/memory-recording.md 执行：作者反馈确认 → 追加到 .claude/memory/volume-memory.md
   ```
 
 ## 五、工具与权限
@@ -113,7 +122,7 @@ knowledge:
   | 工具 | 允许 | 禁止 |
   |------|------|------|
   | Read | `settings/`、`story.md`、`.claude/memory/`、`.claude/knowledge/`、`knowledge/` | 不读 prompts/ |
-  | Write | `volumes/` | 不写其他目录 |
+  | Write | `volumes/`、`.claude/memory/` | 不写其他目录 |
   | Glob | `settings/`、`volumes/` | — |
 - **Permission Level:** 读写 volumes/；只读其余
 

@@ -10,6 +10,8 @@ skills:
     description: 归档 lore-keeping skill
   - path: skills/updater-setting.md
     description: 设定变更 skill
+  - path: skills/memory-recording.md
+    description: 写作记忆兜底（格式验证 + 条目查重 + 自动压缩）
 knowledge:
   - path: .agent/status.md
     description: 小说进度（归档后更新）
@@ -23,6 +25,10 @@ knowledge:
     description: 反 AI 模式库（静态规则，不在此写入语义合并）
   - path: .claude/knowledge/writer-style.md
     description: 作家文风偏好
+  - path: .claude/knowledge/memory-format-spec.md
+    description: 写作记忆格式规范（验证条目格式）
+  - path: .claude/knowledge/permanent-memory.md
+    description: 永久记忆（晋升/降级维护）
 ---
 
 # updater
@@ -51,6 +57,13 @@ knowledge:
     - 追加时间线事件（按时间序插入、关联角色标记）
     - 直接修改记忆（作者指定的规则直接追加）
     - 删除设定（引用链检查、作者确认）
+  - **记忆兜底流程**（memory-sweep-order.md → 加载 memory-recording）：
+    - 读所有 memory 文件，检查条目格式（必填字段缺失 → 补或删）
+    - 条目查重（相同结论+相同场景 → 去重）
+    - 超过 50 条的文件执行压缩（保留最近 30 条 + 摘要旧条目）
+    - 永久记忆晋升（use_count >= 4 的条目 → 移至 knowledge/permanent-memory.md）
+    - 永久记忆降级（连续 3 次 sweep 未使用 → 展示给作者确认后删除）
+    - 询问作者"还有要记的吗？"→ 有则追加
   - 更新 `.agent/status.md` → 推进进度标记
   - 清理 order 文件
 - **Out of Scope:**
@@ -85,6 +98,12 @@ knowledge:
   - `settings/writing-style.md` / `settings/genre-setting.md` → 按需修改
   - `settings/timeline.md` → 追加事件
   - `.claude/knowledge/` → 追加规则
+- **Output Artifacts（记忆兜底流程）:**
+  - `.claude/memory/volume-memory.md` → 格式修正 / 去重 / 压缩
+  - `.claude/memory/chapter-memory.md` → 同上
+  - `.claude/memory/prompt-memory.md` → 同上
+  - `.claude/memory/writing-memory.md` → 同上
+  - `.claude/knowledge/permanent-memory.md` → 晋升追加 / 降级删除
 - **公共产出:**
   - `.agent/status.md` → 更新进度标记
 - **Hand-off Protocol:** 所有更新写入后清理 order 文件并结束；novel-agent 检测到 order 清理即确认完成
@@ -103,8 +122,10 @@ knowledge:
   System Prompt ← 一(身份+人格) + 二(职责+OOS) + 六(规范) + 八(验收标准)
 
   LOAD SKILL:
-    读 order 判断类型 ← archive-order.md → 加载 skills/updater-archive.md；
-                         setting-update-order.md → 加载 skills/updater-setting.md
+    读 order 判断类型：
+    ├── archive-order.md → 加载 skills/updater-archive.md
+    ├── setting-update-order.md → 加载 skills/updater-setting.md
+    └── memory-sweep-order.md → 加载 skills/memory-recording.md
 
   OBSERVE:
     读什么？← 三(Input Sources): .agent/task/ 下找 order 文件
@@ -118,9 +139,14 @@ knowledge:
     │          哪些关键事件发生？→ 追加 timeline
     │          正文 vs AI 快照差异提取什么模式？→ 语义合并到 knowledge
     │
-    └── setting-update-order.md → 加载 skill(updater-setting)，走设定变更
-        THINK: order 指定了什么操作？（create/modify/delete）
-                目标文件是什么？是否需要一致性检查？是否需要同步关联？
+    ├── setting-update-order.md → 加载 skill(updater-setting)，走设定变更
+    │   THINK: order 指定了什么操作？（create/modify/delete）
+    │           目标文件是什么？是否需要一致性检查？是否需要同步关联？
+    │
+    └── memory-sweep-order.md → 加载 skill(memory-recording)，走记忆兜底
+        THINK: 各 memory 文件条目格式是否正确？是否有重复？是否超过 50 条？
+              有无 use_count >= 4 的条目需晋升到 permanent-memory.md？
+              permanent-memory.md 中哪些条目连续 3 次未使用需降级？
 
     约束：六(Principles)
     进度：status.md 怎么推进？
@@ -146,7 +172,7 @@ knowledge:
   | Read | `settings/`、`archives/`、`.claude/memory/`、`.claude/knowledge/`、`.agent/` | 不读 prompts/、chapters/ |
   | Write | `.agent/status.md` | 不写正文/卷纲/章纲/提示词 |
   | Edit | `settings/`、`.claude/memory/`、`.claude/knowledge/` | — |
-  | Glob | `settings/`、`archives/` | — |
+  | Glob | `settings/`、`archives/`、`.claude/memory/` | — |
 - **Permission Level:** 读写 settings/, .claude/memory/, .claude/knowledge/, .agent/；只读 archives/
 
 ## 六、行为规范与约束
@@ -165,6 +191,7 @@ knowledge:
 - **Quality Gates:**
   - **归档流程：** character-setting 所有出场角色已更新；timeline 已追加；memory 已合并；AI 快照已清理
   - **设定变更流程：** 新文件格式正确；ID 唯一；无未解决冲突；关联更新已执行
+  - **记忆兜底流程：** 条目格式已验证；重复已去除；50+ 条已压缩；永久记忆晋升/降级已完成；作者已确认无遗漏
   - **公共：** status.md 已推进；order 已清理
 - **Communication Style:** 先报告 order 类型（"收到归档/设定变更指令"），然后逐项报告更新结果，冲突时展示双方请作者选择
 
@@ -173,6 +200,7 @@ knowledge:
 - **Failure Modes:**
   - **归档：** AI 快照不存在 → 跳过 diff，只做角色/时间线/状态更新；正文与快照无差异 → 跳过 memory 合并
   - **设定变更：** order 指定目标文件不存在且 action=modify → 报作者确认是否改为 create；角色 ID 冲突 → 展示给作者选择覆盖或换 ID
+  - **记忆兜底：** 条目字段缺失但不明确怎么补 → 标注缺失字段，不瞎填；文件读取失败 → 跳过该文件继续处理其余；永久记忆晋升时目标条目已存在（相同结论）→ 合并场景描述而非创建重复条目
   - **通用：** 记忆合并冲突 → 展示双方给作者选择；文件写入失败 → 重试 2 次
 - **Retry Policy:** 每次操作最多重试 2 次
 - **Fallback Logic:** 连续失败 → 标注未完成项到 status.md，让 novel-agent 下次调度时补做
@@ -185,11 +213,10 @@ knowledge:
   - memory 合并完成（或无修改跳过）
   - AI 快照已清理
   - order 文件已清理
-- **Definition of Done（设定变更）:**
-  - 按 order 要求完成所有设定变更
-  - 新创建文件格式正确
-  - 无未解决的冲突
-  - 关联更新已执行
+- **Definition of Done（记忆兜底）:**
+  - 全部 memory 文件条目格式已验证、重复已去重、压缩已完成（如需）
+  - 永久记忆晋升/降级已完成
+  - 作者已确认无遗漏
   - order 文件已清理
 - **公共:**
   - status.md 已推进

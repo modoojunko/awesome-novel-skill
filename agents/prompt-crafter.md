@@ -8,6 +8,8 @@ memory: []
 skills:
   - path: skills/prompt-crafting.md
     description: 9 层提示词组装 skill（填充规则 + 冲突检测 + 验收自检）
+  - path: skills/memory-recording.md
+    description: 写作记忆记录 skill（捕获作者反馈 → 追加到 prompt-memory.md）
 knowledge:
   - path: settings/writing-style.md
     description: 写作文风
@@ -21,6 +23,10 @@ knowledge:
     description: 9 层提示词骨架 + 填充规则 + 质检标准
   - path: .claude/knowledge/chapter-quality-checklist.md
     description: 正文验收清单
+  - path: .claude/knowledge/memory-format-spec.md
+    description: 写作记忆格式规范（条目结构 + 字段标准 + 生命周期）
+  - path: .claude/knowledge/permanent-memory.md
+    description: 永久记忆（高频引用条目的沉淀）
 ---
 
 # prompt-crafter
@@ -99,6 +105,9 @@ knowledge:
 
   NOT DONE → 回到 THINK
   DONE → 三(Hand-off): 写文件后结束
+
+  MEMORY SYNC:
+    按 skills/memory-recording.md 执行：作者反馈确认 → 追加到 .claude/memory/prompt-memory.md
   ```
 
 ## 五、工具与权限
@@ -107,7 +116,7 @@ knowledge:
   | 工具 | 允许 | 禁止 |
   |------|------|------|
   | Read | `chapters/`、`.claude/memory/`、`.claude/knowledge/` | 不读 archives/ |
-  | Write | `prompts/` | 不写其他目录 |
+  | Write | `prompts/`、`.claude/memory/` | 不写其他目录 |
   | Glob | `prompts/`、`.claude/memory/` | — |
 - **Permission Level:** 读写 prompts/；只读其余
 
