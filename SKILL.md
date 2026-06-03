@@ -13,15 +13,15 @@ description: 和 AI 协作写小说的工作流系统。7 个 agent 协作完成
 检测项目状态
 ├─ story.yaml 存在 → 旧版 2.x → 自动迁移（见下文）
 ├─ story.md 不存在 → 全新项目 → 初始化骨架
-│   └─ python tools/init.py <project-path> → @novel-agent
+│   └─ python tools/init.py [--genre <编号>] → @novel-agent
 └─ story.md 存在 → 已有项目 → @novel-agent 继续写作
 ```
 
 ## 初始化
 
-新项目执行：
+新项目执行（项目路径可选，默认当前目录）：
 ```
-python tools/init.py <project-path>
+python tools/init.py [project-path] [--genre <编号>]
 ```
 
 `init.py` 会：
@@ -72,7 +72,7 @@ rm -rf drafts/ drifts/ tmp/ manuscripts/ .vscode/ author-intent.md current-focus
 ### Step 3: 初始化新骨架
 
 ```bash
-python tools/init.py <project-path>
+python tools/init.py [project-path] [--genre <编号>]
 ```
 
 `init.py` 创建目录结构 + 空模板 + agent 定义 + 记忆/知识库。后续迁移步骤负责填数据。
