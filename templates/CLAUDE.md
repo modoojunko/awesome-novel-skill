@@ -16,5 +16,5 @@
 - `prompts/` — 提示词
 - `archives/` — 正文
 - `.agent/` — 状态追踪 + agent 通信
-- `.claude/memory/` — 反 AI 规则、文风偏好（持续积累）
-- `.claude/knowledge/` — 题材参考材料
+- `.claude/memory/` — 写作动态记忆（各环节作者反馈，持续积累）
+- `.claude/knowledge/` — 反 AI 规则、文风偏好、永久记忆、题材参考材料

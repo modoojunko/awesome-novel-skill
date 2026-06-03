@@ -113,7 +113,7 @@ cp old/prompts/*.txt prompts/ 2>/dev/null
 
 ### Step 6: 验收
 
-- [ ] story.md 存在，skill_version = 3.0
+- [ ] story.md 存在，skill_version = 4.0
 - [ ] settings/world-setting.md 存在且已填充
 - [ ] settings/writing-style.md 存在且已填充
 - [ ] settings/genre-setting.md 存在
@@ -143,7 +143,7 @@ cp old/prompts/*.txt prompts/ 2>/dev/null
 | 场景 | 处理 |
 |------|------|
 | `story.yaml` 存在 → `story.md` 不存在 | 旧版 2.x → 执行自动迁移流程 |
-| `story.md` 存在但 `skill_version` < 3.0 | 待升级 → 执行自动迁移流程 |
+| `story.md` 存在但 `skill_version` < 4.0 | 待升级 → 执行自动迁移流程 |
 | `story.md` 存在且版本匹配 | 已有项目 → @novel-agent |
 | 两者都不存在 | 全新项目 → init.py → @novel-agent |
 | `init.py` 不可用 | 手动创建目录结构 + 复制 `templates/` 文件 |
@@ -190,7 +190,7 @@ novel-agent（总指挥）
   └─ 作者确认 → 调度 updater（归档 + lore-keeping）
 ```
 
-各 agent 定义在 `agents/`，skill SOP 在 `agents/skills/`。agent 间通过 `.agent/task/*-order.md` 文件通信。
+各 agent 定义在 `agents/`，skill SOP 在 `skills/`。agent 间通过 `.agent/task/*-order.md` 文件通信。
 
 ## 工具契约
 

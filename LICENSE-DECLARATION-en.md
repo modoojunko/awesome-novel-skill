@@ -23,7 +23,7 @@ The following files are subject to GPL-3.0 license:
 | **Core** | `SKILL.md` |
 | **Documentation** | `README.md`, `PRODUCTION.md`, `docs/*.md` |
 | **Reference Guides** | `knowledge/*.md + memory/*.md` |
-| **Agent Definitions** | `agents/*.md`, `agents/skills/*.md` |
+| **Agent Definitions** | `agents/*.md`, `skills/*.md` |
 | **Templates** | `templates/*`, `templates/migration/*` |
 | **Tools** | `tools/*.py`, `install.sh`, `install.ps1` |
 

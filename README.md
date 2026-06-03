@@ -289,8 +289,8 @@ awesome-novel-skill/
 │   ├── prompt-crafter.md# 提示词工程师
 │   ├── writer.md        # 写手
 │   ├── reader.md        # 测试读者
-│   ├── updater.md       # 档案管理员
-│   └── skills/          # Agent 技能 SOP
+│   └── updater.md       # 档案管理员
+├── skills/               # Agent 技能 SOP
 ├── knowledge/            # 知识库（→ 项目 .claude/knowledge/）
 │   ├── format-specs/    # 格式规范
 │   └── genre-example/   # 题材案例
@@ -315,7 +315,7 @@ awesome-novel-skill/
 
 | 模块 | 路径 | 贡献方向 |
 |------|------|---------|
-| Agent/Skill | `agents/` + `agents/skills/` | 改进 agent 定义、新增 skill SOP |
+| Agent/Skill | `agents/` + `skills/` | 改进 agent 定义、新增 skill SOP |
 | 格式规范 | `knowledge/format-specs/` | 改进各环节规范文档 |
 | 反AI写作库 | `memory/anti-ai/` | 新增题材正反例、丰富通用规则 |
 | 题材画像 | `knowledge/genre-example/` | 新增题材档案、丰富配置内容 |

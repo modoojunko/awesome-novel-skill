@@ -46,6 +46,5 @@ Copy-Item -Recurse "$SCRIPT_DIR" "$DEST_DIR"
 Remove-Item -Recurse -Force "$DEST_DIR\.git" -ErrorAction SilentlyContinue
 Remove-Item -Recurse -Force "$DEST_DIR\.claude" -ErrorAction SilentlyContinue
 Remove-Item -Recurse -Force "$DEST_DIR\docs" -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$DEST_DIR\example" -ErrorAction SilentlyContinue
 
 Write-Host "安装完成!"

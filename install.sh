@@ -76,10 +76,11 @@ mkdir -p "$DEST"
 
 # 只复制运行时需要的文件（include list，避免泄露仓库元数据）
 cp "$SCRIPT_DIR/SKILL.md" "$DEST/"
-cp -r "$SCRIPT_DIR/scripts" "$DEST/"
-cp -r "$SCRIPT_DIR/skills" "$DEST/"
 cp -r "$SCRIPT_DIR/agents" "$DEST/"
-cp -r "$SCRIPT_DIR/references" "$DEST/"
+cp -r "$SCRIPT_DIR/skills" "$DEST/"
+cp -r "$SCRIPT_DIR/knowledge" "$DEST/"
+cp -r "$SCRIPT_DIR/memory" "$DEST/"
 cp -r "$SCRIPT_DIR/templates" "$DEST/"
+cp -r "$SCRIPT_DIR/tools" "$DEST/"
 
 echo "安装完成!"

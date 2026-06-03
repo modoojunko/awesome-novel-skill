@@ -23,7 +23,7 @@
 | **核心文件** | `SKILL.md` |
 | **文档** | `README.md`, `PRODUCTION.md`, `docs/*.md` |
 | **参考指南** | `knowledge/*.md + memory/*.md` |
-| **Agent 定义** | `agents/*.md`, `agents/skills/*.md` |
+| **Agent 定义** | `agents/*.md`, `skills/*.md` |
 | **模板** | `templates/*`, `templates/migration/*` |
 | **工具** | `tools/*.py`, `install.sh`, `install.ps1` |
 

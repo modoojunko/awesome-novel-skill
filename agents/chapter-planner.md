@@ -27,7 +27,7 @@ knowledge:
     description: 反 AI 模式库（避免常见套路）
   - path: story.md
     description: 主线拆纲（STEP 3 架构维度需要）
-  - path: knowledge/format-specs/chapter-setting-style.md
+  - path: .claude/knowledge/chapter-setting-style.md
     description: 章纲格式规范（STEP 3/4 的产出格式标准）
   - path: .claude/knowledge/memory-format-spec.md
     description: 写作记忆格式规范（条目结构 + 字段标准 + 生命周期）
