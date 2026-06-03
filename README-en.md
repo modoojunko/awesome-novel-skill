@@ -76,7 +76,18 @@ After installation, open your terminal in the directory where you want your nove
 
 > **"帮我写本小说"** (Help me write a novel)
 
-The Agent will guide you through the rest. Here's the complete flow:
+The Agent will guide you through the rest. The system uses 7 AI agents working together — novel-agent (the director) dispatches specialized sub-agents based on progress:
+
+```
+novel-agent (top-level entry — loaded via @novel-agent)
+  ├─ setup → dispatches updater (write settings)
+  ├─ outline → dispatches volume-planner → chapter-planner
+  ├─ draft → dispatches prompt-crafter → writer
+  ├─ review → dispatches reader (optional)
+  └─ archive → dispatches updater (archive + lore-keeping)
+```
+
+novel-agent only dispatches and verifies — it never writes content directly. Sub-agents handle their specialized tasks and clean up when done.
 
 ### One-Time Setup
 
@@ -105,8 +116,13 @@ After setup, the Agent creates your novel project in the current directory:
 ├── chapters/             # Chapter outlines
 ├── prompts/              # Writing prompts
 ├── archives/             # Finalized prose
-├── .agent/               # Agent progress data
-└── .claude/              # Agent definitions + knowledge base
+├── .agent/               # Agent progress + task communication
+│   ├── status.md         # Progress marker (phase/volume/chapter)
+│   └── task/             # Order files for sub-agent dispatch
+└── .claude/              # Agent definitions + knowledge + memory
+    ├── agents/           # Agent definitions (deployed at init)
+    ├── knowledge/        # Anti-AI rules, style profile, permanent memory, format specs
+    └── memory/           # Dynamic writing memory (feedback per phase)
 ```
 
 All files are plain Markdown — you can open and edit them directly.
@@ -121,17 +137,19 @@ After setup, Agent helps plan the overall story structure:
 
 > **Don't know the ending?** Tell Agent "I only know the beginning" and it will still help plan the first volume.
 
-### Chapter Writing Loop
+### Chapter Writing Loop (Multi-Agent)
 
-Each chapter follows this flow, Agent auto-advances:
+7 agents collaborate — novel-agent (the director) dispatches sub-agents based on progress. You review and decide:
 
-| Step | What Happens |
-|------|--------------|
-| **① Chapter Outline** | Agent gives chapter plan — what to write, how many sections, how emotions flow. Review and say "ok" or "change this" |
-| **② Prompt** | Auto-assemble writing prompt from outline and global settings |
-| **③ Write** | Agent writes the complete chapter from the prompt |
-| **④ Review** | Read through. Say "archive" if satisfied, or "revise paragraph X" / "rewrite" if not |
-| **⑤ Archive** | After confirmation, chapter is officially archived. Character status auto-updates, ready for next chapter |
+| Step | Responsible Agent | What Happens |
+|------|-----------------|--------------|
+| **① Chapter Outline** | chapter-planner | (dispatched by novel-agent) Analyzes context and settings, provides scene breakdown, emotional design, and hook plan. You review and say "ok" or "change this" |
+| **② Prompt** | prompt-crafter | (dispatched by novel-agent) Assembles 9-layer prompt from outline, anti-AI rules, and style preferences |
+| **③ Write** | writer | (dispatched by novel-agent) Writes full chapter from prompt, auto-cleans AI-isms |
+| **④ Review** | reader (optional) | (dispatched by novel-agent) 10-dimension deep review against outline/settings/context |
+| **⑤ Archive** | updater | (dispatched by novel-agent) Finalizes draft, updates character status, merges style preferences, checks hook health and volume boundaries |
+
+**Dispatch rule:** `@novel-agent` is the top-level entry point — loaded into the main AI which acts as the director. novel-agent dispatches sub-agents via the Agent tool and never writes content directly. Sub-agents clean up their task markers when done; novel-agent detects cleanup and advances to the next phase.
 
 After chapter one, Agent asks "下一章继续吗？" (Continue to next chapter?)
 

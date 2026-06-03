@@ -20,19 +20,39 @@ Step 1（检测状态）→ 匹配路由 → Read 子skill → 执行子task →
 
 | 角色 | 职责 |
 |-----|------|
-| **主 Agent（novel-agent）** | 状态检测、分发路由、协调子 agent |
-| **子 Agent（agents/）** | 各自负责一个具体环节的执行 |
+| **主 Agent（novel-agent）** | 顶层入口，通过 `@novel-agent` 加载进主 AI。检测状态、写 order 文件、通过 Agent 工具调度子 agent。**不直接代劳子 agent 的工作** |
+| **子 Agent（volume-planner / chapter-planner / prompt-crafter / writer / reader / updater）** | 各自负责一个具体环节的执行，由 novel-agent 调度，完成后清理 order 文件 |
 
 ### Agent 分工
 
-| Agent | 职责 | 触发条件 |
+| Agent | 职责 | 由谁调度 |
 |-------|------|----------|
-| `volume-planner` | 主线拆纲 + 卷纲规划 | 新项目 / 新卷 |
-| `chapter-planner` | 章纲生成（memo + 情绪设计 + hooks） | 卷纲就绪，进入章循环 |
-| `prompt-crafter` | 9 层提示词组装 | 章纲就绪 |
-| `writer` | 正文生成 + AI 味自检 | 提示词就绪 |
-| `reader` | 10 维 60+ 细项深度评审 | 作者要求 |
-| `updater` | 归档 + lore-keeping + 设定变更 | 作者确认归档 |
+| `volume-planner` | 主线拆纲 + 卷纲规划 | novel-agent |
+| `chapter-planner` | 章纲生成（memo + 情绪设计 + hooks） | novel-agent |
+| `prompt-crafter` | 9 层提示词组装 | novel-agent |
+| `writer` | 正文生成 + AI 味自检 | novel-agent |
+| `reader` | 10 维 60+ 细项深度评审 | novel-agent（可选） |
+| `updater` | 归档 + lore-keeping + 设定变更 | novel-agent |
+
+---
+
+### 调度架构
+
+```
+主 AI（加载 @novel-agent）
+  │
+  ├── 读 status.md → 判断当前 phase
+  ├── 写 order 文件到 .agent/task/{type}-order.md
+  ├── 通过 Agent 工具调度子 agent
+  │     ├── volume-planner / chapter-planner（outline）
+  │     ├── prompt-crafter / writer（draft）
+  │     ├── reader（review，可选）
+  │     └── updater（archive / setting-update）
+  ├── 子 agent 完成后清理 order 文件
+  └── 检测到 order 清理 → 推进下一阶段
+```
+
+**要点：** novel-agent 不直接写内容文件，只写 order 文件。子 agent 通过 Agent 工具调用，独立完成任务。
 
 ---
 

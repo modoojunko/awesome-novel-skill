@@ -31,6 +31,10 @@
 
 ---
 
+> **关于多 Agent 协作架构：** 本系统由 7 个 Agent 协作驱动。`@novel-agent` 是顶层入口，由主 AI 加载后扮演总指挥角色。它不直接写内容，而是通过 Agent 工具调度子 agent（volume-planner / chapter-planner / prompt-crafter / writer / reader / updater）各司其职。子 agent 完成后清理任务标记，novel-agent 检测到后自动推进下一阶段。
+
+---
+
 **AI 会帮你：**
 
 1. 下载最新版本
@@ -41,7 +45,7 @@
 
 **如果 AI 说不知道这个项目，再试试：**
 
-> "去 https://github.com/modoojunko/awesome-novel-skilll/releases 下载最新的 release，然后运行 install.sh"
+> "去 https://github.com/modoojunko@novel-agent-skilll/releases 下载最新的 release，然后运行 install.sh"
 
 ---
 
@@ -61,21 +65,21 @@
 安装完成后，打开你的 AI 工具，说：
 
 ```
-/awesome-novel
+@novel-agent
 ```
 
 如果出现小说写作相关的引导，说明安装成功。
 
 ---
 
-## 2. 启动 Skill
+## 2. 启动写作
 
-### 2.1 触发 Skill
+### 2.1 触发
 
-在 Claude Code 中输入：
+在你的 AI 工具中输入：
 
 ```
-/awesome-novel
+@novel-agent
 ```
 
 或直接说：
@@ -88,7 +92,7 @@ AI 检测到是新项目，开始初始化：
 
 ```
 检测到：无 story.md → 新项目
-正在读取 skills/setup/SKILL.md...
+正在运行 init.py 初始化骨架...
 ```
 
 ---
@@ -108,12 +112,10 @@ AI 检测到是新项目，开始初始化：
 **【AI】** 执行 init.py：
 
 ```bash
-python $NOVEL_SKILL_HOME/scripts/init.py 青云志 --author 你的名字
+python $NOVEL_SKILL_HOME/tools/init.py
 ```
 
-**【AI】** 询问：
-
-> 请告诉我书名和作者名。
+`init.py` 会自动创建项目骨架，无需额外参数。
 
 ---
 
@@ -435,7 +437,21 @@ python $NOVEL_SKILL_HOME/scripts/init.py 青云志 --author 你的名字
 
 ---
 
-#### 3.7.5 自检（角色）
+#### 3.7.5 持有物与经历
+
+每个角色还可以记录持有的物品和重大经历，归档时由 updater 自动更新。
+
+```markdown
+### 持有物
+| 名称 | 类型 | 来源 | 状态 | 备注 |
+|------|------|------|------|------|
+
+### 经历
+| 事件/地点 | 类型 | 结果 | 状态 |
+|-----------|------|------|------|
+```
+
+#### 3.7.6 自检（角色）
 
 **【AI】** 检查每个角色：
 
@@ -682,7 +698,7 @@ python $NOVEL_SKILL_HOME/scripts/init.py 青云志 --author 你的名字
 **【AI】** 更新 `.agent/status.md`：
 
 ```
-current_phase: chapter-loop
+phase: outline
 current_volume: 1
 current_chapter: 1
 ```
@@ -1078,18 +1094,22 @@ L3+ 基础质量：✅✅✅✅
 
 ### 5.6 归档
 
-**【AI】** 执行归档操作：
+novel-agent 写 archive-order.md，通过 Agent 工具调度 updater 执行归档。
+
+**updater 执行归档操作：**
 
 1. 草稿 → 定稿：`vol-1-ch-1-灭门之夜.draft.md` → `vol-1-ch-1-灭门之夜.md`
 2. 更新 chapter.md status → `archived`
 3. 追加角色状态历史（林逸）：
    - 状态变化：从"9岁天真少年"变为"10岁沉默孤儿"
    - 情绪弧线：+悲伤（强度：高）
-4. 更新 hooks 记录：
+4. 追加 **持有物**/**经历**（如有）
+5. 更新 hooks 记录：
    - "青云剑法"：待回收
    - "玉佩"：待回收
    - "陈师弟"：待回收
-5. 检测卷边界：第1卷共10章，第1章归档
+6. 检测卷边界：第1卷共10章，第1章归档
+7. 清理 order 文件
 
 ---
 
@@ -1535,7 +1555,7 @@ L3+ 基础质量：✅✅✅✅
 
 **暂停**：直接说"今天先到这里"。
 
-**继续**：下次输入 `/awesome-novel` 或说"继续写小说"。
+**继续**：下次输入 `@novel-agent` 或说"继续写小说"。
 
 ---
 
