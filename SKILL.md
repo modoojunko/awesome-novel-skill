@@ -7,22 +7,30 @@ description: 和 AI 协作写小说的工作流系统。7 个 agent 协作完成
 
 和 AI 一起写小说。本 skill 负责项目状态检测、新项目初始化、旧版项目自动迁移，完成后将控制权交给 novel-agent。
 
-## 检测流程
+## 检测流程 — 严格按此执行，禁止跳过
 
 ```
 检测项目状态
-├─ story.yaml 存在 → 旧版 2.x → 自动迁移（见下文）
-├─ story.md 不存在 → 全新项目 → 初始化骨架
-│   └─ python tools/init.py [--genre <编号>] → @novel-agent
+├─ story.yaml 存在 → 旧版 2.x → 执行自动迁移（见下文）
+├─ story.md 不存在 → 全新项目 → 必须执行 init.py，不得跳过
+│   └─ python tools/init.py [--genre <编号>] → 完成后 @novel-agent
 └─ story.md 存在 → 已有项目 → @novel-agent 继续写作
 ```
 
-## 初始化
+**强制规则：**
+- `story.md` 不存在时，**必须先运行 `init.py`**，禁止直接进入 `@novel-agent`
+- 禁止手动创建 `settings/` `volumes/` `chapters/` 等目录结构替代 init.py
+- `init.py` 执行完毕后，确认 `.agent/status.md` 和 `.claude/agents/` 已生成，方可进入 `@novel-agent`
+- 如果 `init.py` 报错，必须先修复问题重新执行，不允许绕过
 
-新项目执行（项目路径可选，默认当前目录）：
+## 初始化 — 必须执行，不可跳过
+
+全新项目必须运行 `init.py`（项目路径可选，默认当前目录）：
 ```
 python tools/init.py [project-path] [--genre <编号>]
 ```
+
+**禁止以任何理由跳过 init.py：** 手动创建目录、复制模板、直接调用 agent 都属于违规行为。`init.py` 是初始化入口，必须执行且完整运行。
 
 `init.py` 会：
 1. 选题材
@@ -35,7 +43,9 @@ python tools/init.py [project-path] [--genre <编号>]
 8. 生成 CLAUDE.md
 9. 初始化状态文件 `.agent/status.md`
 
-完成后进入项目目录，输入 `@novel-agent` 开始写作。
+以上 9 步全部由 `init.py` 自动完成，AI 无需也不应手动干预。
+
+**检查：** 运行后确认 `.agent/status.md` 存在且内容正确，方可进入 `@novel-agent`。
 
 ## 自动迁移（2.x → 3.0）
 
