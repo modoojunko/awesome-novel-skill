@@ -62,10 +62,20 @@ Step 1（检测状态）→ 匹配路由 → Read 子skill → 执行子task →
 [设定阶段]
   story.md → settings/（world/character/writing/genre）
 
-[卷纲阶段]
+[卷纲阶段]（四维方法论）
   story.md → volumes/volume-{N}.md
+  ├─ 情绪走向：整卷情绪变化弧线（压抑→压抑→提升→打脸→装逼）
+  ├─ 冲突阶梯：2-4 层逐级升高的障碍，每层间有转折点
+  ├─ 信息差：卷定义起点→终点（开始时谁↦谁知道什么不知道什么，结束时谁知道了新信息）
+  └─ 场景卡：每章三要素（主角想干啥+拦着他+悬念）
 
-[章循环]
+[章循环]（卷→章继承 + 章内小递推）
+  chapter.md 继承卷的情绪位置/冲突层位/信息差弧段
+  ├─ 章内微弧线：从卷走向的当前位置衍生
+  ├─ 章内小阶梯：试探→遭遇→升级，每步比前一步难
+  ├─ 章内信息差变化：设→用→揭→新信息差
+  └─ 场景卡细化：三段锚点法（感官+动作+判断）
+
   chapter.md (status=outline) → prompt.md → verify → chapter.md (status=draft)
   → archives/*.draft.md → verify → archive
   → .agent/*-ai.md + .claude/memory/*.md（动态记忆，updater 归档时合并）
@@ -120,13 +130,13 @@ Step 1（检测状态）→ 匹配路由 → Read 子skill → 执行子task →
 knowledge/                   # 静态参考知识 → 部署到项目 .claude/knowledge/
 ├── format-specs/            # 格式规范
 │   ├── chapter-quality-checklist.md  # 正文验收清单（15项）
-│   ├── chapter-setting-style.md      # 章纲格式 + 情绪设计
+│   ├── chapter-setting-style.md      # 章纲格式 + 情绪设计 + 章内冲突阶梯
 │   ├── character-setting-style.md    # 角色认知6层模型
 │   ├── genre-style.md               # 节奏规则/满足类型/禁忌
 │   ├── world-setup-style.md         # 地理/政治/规则结构
 │   ├── story-arc-style.md           # 主线拆纲方法论
-│   ├── volume-setting-style.md      # 卷纲格式
-│   ├── prompt-setting-style.md      # 提示词组装结构
+│   ├── volume-setting-style.md      # 卷纲格式 + 情绪走向/冲突阶梯/信息差/场景卡方法论
+│   ├── prompt-setting-style.md      # 提示词组装结构（含驱动力/信息差/冲突阶梯层位）
 │   ├── writing-style.md             # 写作风格方法论
 │   └── memory-format-spec.md        # 记忆格式规范 + 生命周期
 └── genre-example/           # 填充案例（按题材）
