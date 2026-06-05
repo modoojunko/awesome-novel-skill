@@ -104,10 +104,10 @@ knowledge:
     按 skills/volume-direction.md 执行：首卷 → 展示结构模板；卷 N+1 → 角色发声 → 确定卷方向
 
   STEP 2 — 卷纲讨论：
-    按 skills/volume-writing.md 执行：定核心冲突 → 拆章节 → 新角色/设定追加 → 写入 volume-{N}.md
+    按 skills/volume-writing.md 执行：立情绪走向 → 定核心冲突 → 设冲突阶梯 → 建信息差 → 拆场景卡 → 新角色/设定追加 → 写入 volume-{N}.md
 
   VERIFY:
-    按 skills/volume-writing.md §5 验收：4 验证 + 快速嗅探
+    按 skills/volume-writing.md §8 验收：三维验收 + 快速嗅探
     不通过 → 回到 STEP 2
 
   DONE → 三(Hand-off): volumes/volume-{N}.md 写入完成
