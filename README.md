@@ -43,7 +43,7 @@
 
 </div>
 
-<video src="reference/video/4.0%E5%AE%A3%E4%BC%A0%E8%A7%86%E9%A2%91.mp4" controls width="100%" style="max-width: 720px; display: block; margin: 24px auto; border-radius: 8px;"></video>
+<video src="reference/video/4.0%E5%AE%A3%E4%BC%A0%E8%A7%86%E9%A2%91.mp4" controls width="100%" style="max-width: 640px; display: block; margin: 24px auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);"></video>
 
 ## 你需要什么
 
