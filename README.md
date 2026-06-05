@@ -43,6 +43,8 @@
 
 </div>
 
+<video src="reference/video/4.0%E5%AE%A3%E4%BC%A0%E8%A7%86%E9%A2%91.mp4" controls width="100%" style="max-width: 720px; display: block; margin: 24px auto; border-radius: 8px;"></video>
+
 ## 你需要什么
 
 - 安装了 [Claude Code](https://docs.anthropic.com/zh-CN/docs/claude-code/overview) 的电脑
