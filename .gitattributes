@@ -1,0 +1,2 @@
+# 打包下载时排除 reference/（视频、截图等大文件）
+reference/ export-ignore
