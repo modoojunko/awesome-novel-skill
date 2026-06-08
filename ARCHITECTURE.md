@@ -139,17 +139,23 @@ knowledge/                   # 静态参考知识 → 部署到项目 .claude/kn
 │   ├── prompt-setting-style.md      # 提示词组装结构（含驱动力/信息差/冲突阶梯层位）
 │   ├── writing-style.md             # 写作风格方法论
 │   └── memory-format-spec.md        # 记忆格式规范 + 生命周期
-├── scene-craft/              # 场景写作方法论（按需注入 L8）
+├── scene-craft/              # 场景写作方法论（按类型分目录，按题材分文件）
 │   ├── index.md             # 索引
-│   ├── dialogue.md          # 对话场景写法（通用）
-│   ├── fight.md             # 战斗场景写法（通用）
-│   ├── environment.md       # 环境描写（待补充）
-│   ├── inner-mono.md        # 内心独白（待补充）
-│   ├── group-scene.md       # 群像场景（待补充）
-│   ├── transition.md        # 过渡场景（待补充）
-│   └── genres/              # 题材特化适配（覆盖通用方法论）
-│       ├── xianxia.md       # 东方仙侠场景适配
-│       └── suspense-crime.md# 悬疑刑侦场景适配
+│   ├── dialogue/            # 对话场景
+│   │   ├── universal.md    #   通用对话方法论
+│   │   ├── xianxia.md      #   仙侠特化
+│   │   └── suspense-crime.md # 悬疑特化
+│   ├── fight/               # 战斗/对抗
+│   │   ├── universal.md    #   通用
+│   │   ├── xianxia.md      #   仙侠特化
+│   │   └── suspense-crime.md # 悬疑特化
+│   ├── environment/         # 环境/氛围
+│   │   ├── universal.md    #   通用
+│   │   ├── xianxia.md      #   仙侠特化
+│   │   └── suspense-crime.md # 悬疑特化
+│   ├── inner-mono/          # 内心独白（待补充）
+│   ├── group-scene/         # 群像场景（待补充）
+│   └── transition/          # 过渡场景（待补充）
 └── genre-example/           # 填充案例（按题材）
 
 memory/                      # 静态参考素材 → 部署到项目 .claude/knowledge/

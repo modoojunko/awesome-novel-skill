@@ -1,38 +1,37 @@
 # 场景写作方法论
 
-> 按场景类型组织的小说写法指南。每个文件对应一种场景类型（对话、战斗、环境、心理等），提供该类型的高质量写法方法论。
->
-> 这些方法论不是写作规则——是用来给 prompt-crafter 按需注入 L8 的参考。prompt-crafter 分析本章的场景序列后，只选取本章用到的场景类型方法论注入提示词。
+> 按场景类型组织的小说写法指南。每场景一个目录，内含通用方法论 + 各题材特化覆盖。
 
-## 原则
+## 目录结构
 
-1. **给做法，不给反例** —— 每条是"怎么写"，不是"别那么写"。反例在 `anti-ai/` 已有，不重复
-2. **可操作，不抽象** —— "紧张时手在抖" ✅ ，"写得有张力" ❌
-3. **通用优先，题材特化补充** —— 先写跨题材通用的 craft knowledge，再在各节末尾补充题材差异（如"修仙对话 vs 都市对话"）
-4. **prompt-crafter 按需注入** —— 不塞入每个 prompt，只在 L8 动态追加本章涉及的类型
+```
+scene-craft/
+├── index.md                      # 索引
+├── dialogue/                     # 对话场景
+│   ├── universal.md              #   通用对话方法论
+│   ├── xianxia.md                #   仙侠题材特化
+│   └── suspense-crime.md         #   悬疑刑侦特化
+├── fight/                        # 战斗/对抗
+│   ├── universal.md              #   通用战斗方法论
+│   ├── xianxia.md                #   仙侠题材特化
+│   └── suspense-crime.md         #   悬疑刑侦特化
+├── environment/                  # 环境/氛围描写
+│   ├── universal.md              #   通用方法论（待补充）
+│   ├── xianxia.md                #   仙侠题材特化
+│   └── suspense-crime.md         #   悬疑刑侦特化
+├── inner-mono/                   # 心理活动（待补充）
+│   └── universal.md
+├── group-scene/                  # 群像场景（待补充）
+│   └── universal.md
+└── transition/                   # 过渡场景（待补充）
+    └── universal.md
+```
 
-## 使用方式
+## 加载方式
 
-prompt-crafter 在 Step 2 填充 L5 场景序列时，识别本章的场景类型 → 从 `scene-craft/` 读取对应文件 → 精炼后注入 L8。
+prompt-crafter 根据 L5 识别的场景类型，按以下路径读取：
 
-## 文件清单
+1. 通用方法论：`scene-craft/{类型}/universal.md`
+2. 题材特化：`scene-craft/{类型}/{当前题材}.md`（存在则读，否则跳过）
 
-### 通用方法论（所有题材通用）
-
-| 文件 | 适用场景 | 状态 |
-|------|---------|------|
-| [dialogue.md](dialogue.md) | 两人及以上对话场景 | ✅ 初始版 |
-| [fight.md](fight.md) | 战斗/对抗/追逐场景 | ✅ 初始版 |
-| [environment.md](environment.md) | 环境/景物/氛围描写 | 📝 待补充 |
-| [inner-mono.md](inner-mono.md) | 心理活动/内心独白 | 📝 待补充 |
-| [group-scene.md](group-scene.md) | 三人以上群像场景 | 📝 待补充 |
-| [transition.md](transition.md) | 场景切换/时间过渡/转场 | 📝 待补充 |
-
-### 题材特化适配（按题材覆盖/补充通用方法论）
-
-| 文件 | 适用题材 | 覆盖场景类型 | 状态 |
-|------|---------|------------|------|
-| [genres/xianxia.md](genres/xianxia.md) | 东方仙侠 | 对话、战斗、环境 | ✅ 初始版 |
-| [genres/suspense-crime.md](genres/suspense-crime.md) | 悬疑刑侦 | 对话、战斗、环境 | ✅ 初始版 |
-
-> 当 prompt-crafter 检测到本章题材有对应的特化文件时（`scene-craft/genres/{genre}.md` 存在），优先使用题材特化规则覆盖或补充通用方法论。所有场景方法论统一从 `scene-craft/` 读取。
+通用方法论 + 题材特化合并 → 经四步转化法 → 注入 L8。
