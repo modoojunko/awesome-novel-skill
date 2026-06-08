@@ -19,8 +19,10 @@ scene-craft/
 │   ├── universal.md              #   通用方法论（待补充）
 │   ├── xianxia.md                #   仙侠题材特化
 │   └── suspense-crime.md         #   悬疑刑侦特化
-├── inner-mono/                   # 心理活动（待补充）
+├── appearance/                   # 角色外貌描写
 │   └── universal.md
+├── inner-mono/                   # 心理活动/内心独白
+│   └── universal.md              # ✅ 生理通感/思维碎片/递进崩塌
 ├── group-scene/                  # 群像场景（待补充）
 │   └── universal.md
 └── transition/                   # 过渡场景（待补充）
