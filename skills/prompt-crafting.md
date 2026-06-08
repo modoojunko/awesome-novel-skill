@@ -71,8 +71,9 @@ Step 4: 验收自检
    b. 题材特化：`knowledge/scene-craft/{类型}/{当前题材}.md`（存在则读，否则跳过）
 3. 通用方法论 + 题材特化合并为该场景类型的方法论来源
 4. **按标签过滤**：读取 `scene-craft/{类型}/universal.md` 的 `## 标签选择指南` 节，根据场景核心事件匹配合适的标签。从合并后的方法论中只选取标签匹配的 2-4 条。如果某个场景匹配不到任何标签，从通用方法论中选取 2 条最通用的
-5. **特殊：角色外貌描写**——以上步骤完成后，额外检查每个 L5 场景的核心事件是否触发外貌描写条件（新角色登场/角色外貌变化/场景涉及外貌感知）。如果触发，加载 `knowledge/scene-craft/appearance/universal.md` + `knowledge/scene-craft/appearance/{题材}.md`（如存在），同样经四步转化后追加到 L8
-6. 如果某个类型的目录不存在（如 `inner-mono/` 暂为空框架），跳过该类型
+5. **特殊检查一：角色外貌描写**——额外检查每个 L5 场景的核心事件是否触发外貌描写条件（新角色登场/角色外貌变化/场景涉及外貌感知）。如果触发，加载 `knowledge/scene-craft/appearance/universal.md` + `knowledge/scene-craft/appearance/{题材}.md`（如存在），经四步转化后追加到 L8
+6. **特殊检查二：心理活动/内心独白**——额外检查每个 L5 场景的核心事件 + 情绪设计 + 关键抉择是否触发心理描写条件（角色遭遇重大事件/情绪剧烈波动/面临重大抉择/打脸反转/内心冲突）。如果触发，加载 `knowledge/scene-craft/inner-mono/universal.md` + `knowledge/scene-craft/inner-mono/{题材}.md`（如存在），经四步转化后追加到 L8
+7. 如果某个类型的目录不存在，跳过该类型
 
 **上下文过滤（关键步骤）：**
 
