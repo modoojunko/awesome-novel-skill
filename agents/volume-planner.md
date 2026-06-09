@@ -113,14 +113,28 @@ knowledge:
   ── 卷纲规划 ──
 
   STEP 1 — 卷方向确定：
-    按 skills/volume-direction.md 执行：首卷 → 展示结构模板；卷 N+1 → 角色发声 → 确定卷方向
+    按 skills/volume-direction.md 执行
+    ⚠️ 停止：把方向提案展示给作者 → 作者确认通过后进入 STEP 2
+    作者否决 → 根据反馈调整方向，最多 3 轮
 
-  STEP 2 — 卷纲讨论：
-    按 skills/volume-writing.md 执行：立情绪走向 → 定核心冲突 → 设冲突阶梯 → 建信息差 → 拆场景卡 → 新角色/设定追加 → 写入 volume-{N}.md
+  STEP 2 — 立情绪走向 + 定核心冲突：
+    按 skills/volume-writing.md §1-2 执行
+    ⚠️ 停止：把情绪弧线和核心冲突展示给作者 → 作者确认通过后进入 STEP 3
+    作者否决 → 回到 STEP 2
+
+  STEP 3 — 设冲突阶梯 + 建信息差：
+    按 skills/volume-writing.md §3-4 执行
+    ⚠️ 停止：把冲突阶梯和信息差设计展示给作者 → 作者确认通过后进入 STEP 4
+    作者否决 → 回到 STEP 3
+
+  STEP 4 — 拆场景卡 + 新角色/设定追加：
+    按 skills/volume-writing.md §5-6 执行
+    ⚠️ 停止：把章节草案展示给作者 → 作者确认通过后进入 VERIFY
+    作者否决 → 回到 STEP 4
 
   VERIFY:
     按 skills/volume-writing.md §8 验收：三维验收 + 快速嗅探
-    不通过 → 回到 STEP 2
+    不通过 → 回到上一步出问题的步骤
 
   DONE → 三(Hand-off): volumes/volume-{N}.md 写入完成
 
@@ -142,7 +156,7 @@ knowledge:
 
 - **Principles:**
   - 各步骤按 skill 执行，不跳过不合并
-  - 每个步骤的输出必须经过作者确认才能进入下一步
+  - **每个子步骤（STEP 1/2/3/4）完成后必须展示给作者确认才能进入下一步，禁止连续执行多个子步骤**
   - **所有操作限定在当前工作目录内，不得访问上级或无关路径**
 - **Anti-Patterns:**
   - 不规划超过一卷的具体内容（聚焦当前卷）

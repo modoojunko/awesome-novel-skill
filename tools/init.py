@@ -237,6 +237,17 @@ def deploy_knowledge(project_path: Path, genre: str):
         )
         count += 1
 
+    # 创作方法论目录（plot-craft / scene-craft / character-craft / title-craft）
+    craft_dirs = ["plot-craft", "scene-craft", "character-craft", "title-craft"]
+    for dir_name in craft_dirs:
+        src = SOURCE_KNOWLEDGE / dir_name
+        if src.exists() and src.is_dir():
+            dst = knowledge_dir / dir_name
+            shutil.copytree(src, dst, dirs_exist_ok=True)
+            file_count = sum(1 for _ in src.rglob("*") if _.is_file())
+            count += file_count
+            print(f"  ✅ 已部署 {dir_name}/ ({file_count} 个文件)")
+
     print(f"  ✅ 已继承 {count} 个知识文件")
 
 

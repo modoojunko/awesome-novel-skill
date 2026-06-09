@@ -81,16 +81,16 @@ Step 4: 验收自检
 
 1. 从场景场景类型列表中**去重**，得到本章涉及的不重复场景类型（如 ["dialogue", "environment"]）
 2. 对每个类型，按以下顺序读取：
-   a. 通用方法论：`knowledge/scene-craft/{类型}/universal.md`（必须存在）
-   b. 题材特化：`knowledge/scene-craft/{类型}/{当前题材}.md`（存在则读，否则跳过）
+   a. 通用方法论：`.claude/knowledge/scene-craft/{类型}/universal.md`（必须存在）
+   b. 题材特化：`.claude/knowledge/scene-craft/{类型}/{当前题材}.md`（存在则读，否则跳过）
 3. 通用方法论 + 题材特化合并为该场景类型的方法论来源
-4. **按标签过滤**：读取 `scene-craft/{类型}/universal.md` 的 `## 标签选择指南` 节，根据场景核心事件匹配合适的标签。从合并后的方法论中随机抽取 1-2 条标签匹配的方法论。如果某个场景匹配不到任何标签，从通用方法论中随机抽取 1-2 条最通用的
-5. **特殊检查一：角色外貌描写**——额外检查每个场景的核心事件是否触发外貌描写条件（新角色登场/角色外貌变化/场景涉及外貌感知）。如果触发，加载 `knowledge/scene-craft/appearance/universal.md` + `knowledge/scene-craft/appearance/{题材}.md`（如存在），经四步转化后追加到写作规范节
-6. **特殊检查二：心理活动/内心独白**——额外检查每个场景的核心事件 + 情绪设计 + 关键抉择是否触发心理描写条件（角色遭遇重大事件/情绪剧烈波动/面临重大抉择/打脸反转/内心冲突）。如果触发，加载 `knowledge/scene-craft/inner-mono/universal.md` + `knowledge/scene-craft/inner-mono/{题材}.md`（如存在），经四步转化后追加到写作规范节
-7. **特殊检查三：死亡/牺牲场景**——额外检查每个场景的核心事件是否涉及角色死亡/牺牲/下线（关键词：阵亡、陨落、牺牲、被杀）。如果触发，加载 `knowledge/scene-craft/death-scene/universal.md`，经四步转化后追加到写作规范节
+4. **按标签过滤**：读取 `.claude/knowledge/scene-craft/{类型}/universal.md` 的 `## 标签选择指南` 节，根据场景核心事件匹配合适的标签。从合并后的方法论中随机抽取 1-2 条标签匹配的方法论。如果某个场景匹配不到任何标签，从通用方法论中随机抽取 1-2 条最通用的
+5. **特殊检查一：角色外貌描写**——额外检查每个场景的核心事件是否触发外貌描写条件（新角色登场/角色外貌变化/场景涉及外貌感知）。如果触发，加载 `.claude/knowledge/scene-craft/appearance/universal.md` + `.claude/knowledge/scene-craft/appearance/{题材}.md`（如存在），经四步转化后追加到写作规范节
+6. **特殊检查二：心理活动/内心独白**——额外检查每个场景的核心事件 + 情绪设计 + 关键抉择是否触发心理描写条件（角色遭遇重大事件/情绪剧烈波动/面临重大抉择/打脸反转/内心冲突）。如果触发，加载 `.claude/knowledge/scene-craft/inner-mono/universal.md` + `.claude/knowledge/scene-craft/inner-mono/{题材}.md`（如存在），经四步转化后追加到写作规范节
+7. **特殊检查三：死亡/牺牲场景**——额外检查每个场景的核心事件是否涉及角色死亡/牺牲/下线（关键词：阵亡、陨落、牺牲、被杀）。如果触发，加载 `.claude/knowledge/scene-craft/death-scene/universal.md`，经四步转化后追加到写作规范节
 8. **始终加载（始终加载但稀疏注入）**——无论本章包含什么场景，始终加载以下文件，但每条只需注入 1-2 句精炼指引，不展开全部技法：
-   - `knowledge/scene-craft/prose/universal.md`（始终选 1 条最相关的：抽象具体化/镜头节奏/动词代形容词/感官叠加 四选一）
-   - `knowledge/scene-craft/pov/universal.md`（始终选 1 条最相关的：视角分界/物理转场/信息差错位 三选一）
+   - `.claude/knowledge/scene-craft/prose/universal.md`（始终选 1 条最相关的：抽象具体化/镜头节奏/动词代形容词/感官叠加 四选一）
+   - `.claude/knowledge/scene-craft/pov/universal.md`（始终选 1 条最相关的：视角分界/物理转场/信息差错位 三选一）
 9. 如果某个类型的目录不存在（如 `group-scene/` `transition/` 暂为空框架），跳过该类型
 
 **上下文过滤（关键步骤）：**
@@ -296,7 +296,7 @@ Step 4 融合输出：
 - 节奏要求：整体节奏 + 各情绪段变化
 - 反 AI 规则：疲劳词阈值/句式规则/元叙事禁止/情绪外化/重复检测/标点规范
 - 题材反 AI：从题材特定 anti-ai 复制
-- **场景写作指引**（从上一步"场景方法论加载"的结果中选取）：本章涉及 {N} 种场景类型（{类型列表}）。针对每种类型，注入 1-2 条具体写法指引。通用方法论来自 `scene-craft/{类型}/universal.md`，题材特化来自 `scene-craft/{类型}/{题材}.md`（存在时覆盖通用）
+- **场景写作指引**（从上一步"场景方法论加载"的结果中选取）：本章涉及 {N} 种场景类型（{类型列表}）。针对每种类型，注入 1-2 条具体写法指引。通用方法论来自 `.claude/knowledge/scene-craft/{类型}/universal.md`，题材特化来自 `scene-craft/{类型}/{题材}.md`（存在时覆盖通用）
 - **必须填入具体内容，不只是标注来源**
 
 **写作四步执行逻辑（强制注入，所有章节生效）：**

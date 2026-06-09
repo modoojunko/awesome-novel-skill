@@ -1,6 +1,6 @@
 # 生成章纲 skill
 
-校准后的参考材料 → 一份可执行的章纲。格式规范参考 `knowledge/format-specs/chapter-setting-style.md`。
+校准后的参考材料 → 一份可执行的章纲。格式规范参考 `.claude/knowledge/chapter-setting-style.md`。
 
 ## 流程
 
@@ -10,7 +10,7 @@
 
 按 `chapter-setting-style.md` 的格式规范逐项填充。以下为执行顺序，具体格式和写法参考该规范。前三步（情绪锚点/冲突阶梯/信息差）与卷纲方法论一致，只是粒度从"卷"细化到"章"。
 
-**a. 立情绪锚点** — 分两层：**本章在卷情绪走向中的位置** + **本章内部的微弧线**。如果是首章，先和作者一起讨论开篇钩子——展示 `knowledge/plot-craft/opening-hooks.md` 中的五种手法，让作者选择或者据此调整方向。
+**a. 立情绪锚点** — 分两层：**本章在卷情绪走向中的位置** + **本章内部的微弧线**。如果是首章，先和作者一起讨论开篇钩子——展示 `.claude/knowledge/plot-craft/opening-hooks.md` 中的五种手法，让作者选择或者据此调整方向。
 
 > Step 1：卷的情绪走向现在走到哪一步了？——"压抑阶段的中段"还是"到了打脸的释放阶段"？
 
@@ -26,7 +26,7 @@
 
 本章的障碍强度由卷的层位决定。入门级写信息受阻，终极级写正面对决。
 
-> **冲突升级参考：** 设计章内小阶梯时，参考 `knowledge/plot-craft/index.md` 中的手法（环境压力/目标置换/连锁反应/反转误导），让每步障碍的冲突类型有变化。
+> **冲突升级参考：** 设计章内小阶梯时，参考 `.claude/knowledge/plot-craft/index.md` 中的手法（环境压力/目标置换/连锁反应/反转误导），让每步障碍的冲突类型有变化。
 
 > Step 2：这章内部障碍怎么递进？——主角在章内面对的不止一个障碍，是一组越来越难的障碍。至少 2-3 步。
 
@@ -76,7 +76,7 @@
 
 信息差变化决定了本章的驱动力节奏（悬疑/威胁/目标/关系/信息差驱动）。
 
-**d. 拆场景卡** — 按 §二(从方向到纲要点) 的三段锚点法拆解关键点。每条关键点对应一个场景卡，底层逻辑与卷纲一致。如果本章涉及悲剧/虐心情节，参考 `knowledge/plot-craft/tragedy-techniques.md` 设计情绪节奏；情绪拉扯参考 `knowledge/plot-craft/emotional-pull.md`：
+**d. 拆场景卡** — 按 §二(从方向到纲要点) 的三段锚点法拆解关键点。每条关键点对应一个场景卡，底层逻辑与卷纲一致。如果本章涉及悲剧/虐心情节，参考 `.claude/knowledge/plot-craft/tragedy-techniques.md` 设计情绪节奏；情绪拉扯参考 `.claude/knowledge/plot-craft/emotional-pull.md`：
 
 ```
 场景卡三要素 → 关键点中的体现
@@ -102,7 +102,7 @@
 
 **g. Emotional Design（完善）** — 按 §四(情绪设计) 填充情绪细节：mood_progression（已在 a 完成）、intensity_peak、intensity_level、emotional_hook、micro_payoffs。
 
-**h. Hooks 操作** — 写入本章的钩子操作（埋/推进/收束）。参考 `knowledge/plot-craft/hook-techniques.md` 中的三种钩子设计手法（认知错位/信息差/倒计时）。不读写全局 hooks.md——真相源在各 chapter.md 的 hooks 字段。
+**h. Hooks 操作** — 写入本章的钩子操作（埋/推进/收束）。参考 `.claude/knowledge/plot-craft/hook-techniques.md` 中的三种钩子设计手法（认知错位/信息差/倒计时）。不读写全局 hooks.md——真相源在各 chapter.md 的 hooks 字段。
 
 **i. 设变通知（可选）** — 规划/校准过程中发现的设定变更需求。用于通知 novel-agent 调度 updater。按需在章纲末尾追加：
 
