@@ -3,7 +3,7 @@ name: chapter-planner
 description: 四步流程：获取参考材料 → 讨论定稿 → 生成章纲 → 验收
 role: 章纲规划师
 react: true
-model: auto
+model: sonnet
 memory: []
 skills:
   - path: skills/chapter-reference.md

@@ -3,7 +3,7 @@ name: volume-planner
 description: 根据主线拆纲和世界观，规划每一卷的核心冲突、节奏分布和章节目标
 role: 叙事架构师
 react: true
-model: auto
+model: sonnet
 memory: []
 skills:
   - path: skills/volume-arc.md
