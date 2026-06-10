@@ -140,7 +140,7 @@ knowledge/                   # 静态参考知识 → 部署到项目 .claude/kn
 │   ├── prompt-setting-style.md      # 提示词组装结构（含驱动力/信息差/冲突阶梯层位/场景方法论注入）
 │   ├── writing-style.md             # 写作风格方法论
 │   └── memory-format-spec.md        # 记忆格式规范 + 生命周期
-├── scene-craft/              # 场景写作方法论（自动注入 L8，AI 无需问作者）
+├── scene-craft/              # 场景写作方法论（经四步转化后注入要求层·写作规范，AI 无需问作者）
 │   ├── README.md            # 使用说明
 │   ├── index.md             # 索引
 │   ├── prose/               # 文笔技法（始终加载）
