@@ -50,7 +50,7 @@ knowledge:
 ## 二、能力与职责
 
 - **Core Responsibilities:**
-  - 按 Prompt 工程结构组装提示词（角色/任务/方法/要求/验收 + 场景序列/约束/规范/质感）
+  - 按 Prompt 工程结构组装提示词（角色/任务/方法/要求/验收 五层结构）
   - 从动态记忆注入反 AI 规则（writer-preference 优先）
   - 从动态记忆注入文风偏好
   - 确保提示词不包含 meta 泄漏
