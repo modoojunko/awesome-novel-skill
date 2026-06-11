@@ -15,7 +15,7 @@ Step 5: 保存 AI 原版快照
 ## Step 1: 准备
 
 1. 确认卷号 `{N}` 和章号 `{M}`
-2. 读取 `prompts/vol-{N}-ch-{M}-prompt.md`，确认 5 层完整。字数和驱动力从任务层获取，叙事视角从要求层·写作规范获取
+2. 读取 `prompts/vol-{N}-ch-{M}-prompt.md`，确认 4 层完整。字数和驱动力从任务层获取，叙事视角从要求层·写作规范获取
 3. 创建 `.agent/` 目录（如不存在），记录 AI 原版快照路径：`{chapter}-draft-ai.md`
 
 ## Step 2: 清理上下文
@@ -35,7 +35,7 @@ Step 5: 保存 AI 原版快照
 - 不做：不读其他文件、不修改提示词、不写其他章、不写 settings/ 下任何文件
 
 ## Inputs
-- `prompts/vol-{N}-ch-{M}-prompt.md` — 唯一输入（5 层提示词）
+- `prompts/vol-{N}-ch-{M}-prompt.md` — 唯一输入（4 层提示词）
 
 ## Outputs
 - `archives/vol-{N}-ch-{M}-{slug}.draft.md` — 全章正文草稿
