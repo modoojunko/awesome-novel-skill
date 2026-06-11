@@ -14,7 +14,16 @@ description: 和 AI 协作写小说的工作流系统。7 个 agent 协作完成
 ├─ story.yaml 存在 → 旧版 2.x → 执行自动迁移（见下文）
 ├─ story.md 不存在 → 询问作者是否初始化 → 是则执行 init.py
 │   └─ python tools/init.py [project-path] [--genre <编号>] → 完成后 @novel-agent
-└─ story.md 存在 → 已有项目 → @novel-agent 继续写作
+└─ story.md 存在 → 已有项目
+    ├─ 检查同步新鲜度
+    │   ├─ python tools/sync-project.py . --check → exit 0 → 已最新，略过
+    │   ├─ python tools/sync-project.py . --check → exit 1 → 有更新
+    │   │   └─ 展示变更文件，询问作者是否同步
+    │   │       ├─ 确认 → 运行 python tools/sync-project.py .
+    │   │       └─ 跳过 → 继续
+    │   └─ .agent/.sync-fingerprint 不存在（首次）
+    │       └─ 静默运行 python tools/sync-project.py . → 写入指纹
+    └─ → @novel-agent 继续写作
 ```
 
 **强制规则：**
@@ -54,7 +63,7 @@ python tools/init.py [project-path] [--genre <编号>]
 
 `init.py` 完成后进入 `@novel-agent`，此时 `phase=setup`，按以下流程：
 
-1. **novel-agent 检测到 setup 阶段**，与作者逐项讨论设定（世界观/角色/风格/题材）
+1. **novel-agent 检测到 setup 阶段**，与作者逐项讨论设定（世界观/角色/风格/题材）。如果作者需要帮忙取书名，参考 `knowledge/title-craft/index.md` 的方法论给出建议
 2. 讨论完毕后，novel-agent **写 order 文件** `.agent/task/setting-update-order.md`
 3. novel-agent 通过 **Agent 工具调用 updater**
 4. **updater 读取 order**，写入 `settings/world-setting.md`、`settings/genre-setting.md`、`settings/character-setting/*.md` 等设定文件

@@ -1,7 +1,3 @@
----
-name: volume-arc
-description: 主线拆纲 SOP——判断作者类型，定终点，找断点，定每卷冲突，三向核对
----
 
 # 主线拆纲 skill
 

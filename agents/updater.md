@@ -48,6 +48,7 @@ knowledge:
   - **归档流程**（archive-order.md → 加载 updater-archive）：
     - 对比 AI 原版快照与最终正文，提取修改模式
     - 更新 `settings/character-setting/*.md` → 追加角色本幕状态变化和情绪弧
+    - 检测本章出现的新生物/怪物 → 追加到 `settings/world-setting.md`
     - 追加 `settings/timeline.md` → 追加本章关键事件
     - 语义合并后追加 `.claude/knowledge/anti-ai.md` + `.claude/knowledge/writer-style.md`
     - 清理 AI 快照

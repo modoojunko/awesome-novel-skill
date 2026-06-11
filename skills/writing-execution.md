@@ -1,7 +1,3 @@
----
-name: writer
-description: 正文生成 SOP——从提示词到正文草稿，含 sub-agent 写作指令、防 AI 味规则、输出验证与快照保存
----
 
 # writer skill
 
@@ -19,7 +15,7 @@ Step 5: 保存 AI 原版快照
 ## Step 1: 准备
 
 1. 确认卷号 `{N}` 和章号 `{M}`
-2. 读取 `prompts/vol-{N}-ch-{M}-prompt.md`，确认 9 层完整。字数目标和叙事视角从 prompt L1 和 L8 获取
+2. 读取 `prompts/vol-{N}-ch-{M}-prompt.md`，确认 4 层完整。字数和驱动力从任务层获取，叙事视角从输出·写作规范获取
 3. 创建 `.agent/` 目录（如不存在），记录 AI 原版快照路径：`{chapter}-draft-ai.md`
 
 ## Step 2: 清理上下文
@@ -39,7 +35,7 @@ Step 5: 保存 AI 原版快照
 - 不做：不读其他文件、不修改提示词、不写其他章、不写 settings/ 下任何文件
 
 ## Inputs
-- `prompts/vol-{N}-ch-{M}-prompt.md` — 唯一输入（9 层提示词）
+- `prompts/vol-{N}-ch-{M}-prompt.md` — 唯一输入（4 层提示词）
 
 ## Outputs
 - `archives/vol-{N}-ch-{M}-{slug}.draft.md` — 全章正文草稿
@@ -49,7 +45,7 @@ Step 5: 保存 AI 原版快照
 - 每个段落的写作指引必须兑现（场景/情绪/角色状态/结束画面）
 - 结尾停在最后一段 ends_with 指定的画面或状态
 - 正文不含解释、说明、引导语（不写"他感到""他意识到"）
-- 字数不低于提示词 L1 目标字数的 80%
+- 字数不低于提示词任务层目标字数的 80%
 
 ## 防 AI 味字面规则（违规即重写）
 - 疲劳词："突然"≤3、"然而"≤4、"于是"≤3、"渐渐"≤2（全文）

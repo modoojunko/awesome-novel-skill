@@ -304,6 +304,10 @@ awesome-novel-skill/
 ├── skills/               # Agent 技能 SOP
 ├── knowledge/            # 知识库（→ 项目 .claude/knowledge/）
 │   ├── format-specs/    # 格式规范
+│   ├── scene-craft/     # 场景写作方法论（四步转化后注入输出·写作规范）
+│   ├── plot-craft/      # 剧情设计（与作者讨论）
+│   ├── character-craft/ # 角色设定（与作者讨论）
+│   ├── title-craft/     # 取书名（与作者讨论）
 │   └── genre-example/   # 题材案例
 ├── memory/               # 动态记忆（→ 项目 .claude/memory/）
 │   └── anti-ai/         # 反AI写作库
@@ -328,6 +332,9 @@ awesome-novel-skill/
 |------|------|---------|
 | Agent/Skill | `agents/` + `skills/` | 改进 agent 定义、新增 skill SOP |
 | 格式规范 | `knowledge/format-specs/` | 改进各环节规范文档 |
+| 场景写法 | `knowledge/scene-craft/` | 新增/改进场景写作方法论（四步转化后注入输出·写作规范） |
+| 剧情设计 | `knowledge/plot-craft/` | 新增/改进剧情设计方法论（与作者讨论） |
+| 角色设定 | `knowledge/character-craft/` | 新增/改进角色设定方法论 |
 | 反AI写作库 | `memory/anti-ai/` | 新增题材正反例、丰富通用规则 |
 | 题材画像 | `knowledge/genre-example/` | 新增题材档案、丰富配置内容 |
 

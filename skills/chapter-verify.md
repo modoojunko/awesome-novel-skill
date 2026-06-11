@@ -1,6 +1,6 @@
 # 验收章纲 skill
 
-章纲产出后，逐项检查质量和完整性。全部通过才进入提示词生成阶段。验收标准参考 `knowledge/format-specs/chapter-setting-style.md`。
+章纲产出后，逐项检查质量和完整性。全部通过才进入提示词生成阶段。验收标准参考 `.claude/knowledge/chapter-setting-style.md`。
 
 ## 流程
 

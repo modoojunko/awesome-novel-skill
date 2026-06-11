@@ -8,6 +8,10 @@
 
 {politics}
 
+## 生物与怪物
+
+{creatures}
+
 ## 规则
 
 {rules}

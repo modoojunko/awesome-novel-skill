@@ -1,7 +1,3 @@
----
-name: memory-recording
-description: 写作记忆记录 SOP——捕获、记录、压缩，各 agent 在互动中实时写入，updater 兜底清理
----
 
 # 写作记忆记录 skill
 
@@ -93,7 +89,7 @@ novel-agent 在子 agent 任务完成后，调度 updater 执行记忆兜底：
 ```
 if entry.use_count >= 4:
     1. 从 memory/*.md 移除该条目
-    2. 追加到 knowledge/permanent-memory.md
+    2. 追加到 .claude/knowledge/permanent-memory.md
        → 保留全部原始字段
        → 追加行 `[promoted YYYY-MM-DD]`
     3. 记录晋升日志（条目摘要 + 晋升日期）
@@ -105,7 +101,7 @@ if entry.use_count >= 4:
 
 ### 4.3 降级流程（updater 执行）
 
-读 `knowledge/permanent-memory.md`，对每条条目：
+读 `.claude/knowledge/permanent-memory.md`，对每条条目：
 
 ```
 if entry.last_used 在本次 sweep 中未更新:

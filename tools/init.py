@@ -90,16 +90,13 @@ def main():
     # Step 5: 按题材继承知识
     deploy_knowledge(project_path, genre)
 
-    # Step 6: 生成 CLAUDE.md
-    write_claude_md(project_path)
-
-    # Step 7: 生成 MEMORY.md 索引
+    # Step 6: 生成 MEMORY.md 索引
     write_memory_index(project_path)
 
-    # Step 8: 初始化写作记忆文件
+    # Step 7: 初始化写作记忆文件
     init_memory_files(project_path)
 
-    # Step 9: 初始化状态
+    # Step 8: 初始化状态
     write_status(project_path)
 
     print(f"\n初始化完成!")
@@ -237,32 +234,18 @@ def deploy_knowledge(project_path: Path, genre: str):
         )
         count += 1
 
+    # 创作方法论目录（plot-craft / scene-craft / character-craft / title-craft）
+    craft_dirs = ["plot-craft", "scene-craft", "character-craft", "title-craft"]
+    for dir_name in craft_dirs:
+        src = SOURCE_KNOWLEDGE / dir_name
+        if src.exists() and src.is_dir():
+            dst = knowledge_dir / dir_name
+            shutil.copytree(src, dst, dirs_exist_ok=True)
+            file_count = sum(1 for _ in src.rglob("*") if _.is_file())
+            count += file_count
+            print(f"  ✅ 已部署 {dir_name}/ ({file_count} 个文件)")
+
     print(f"  ✅ 已继承 {count} 个知识文件")
-
-
-def write_claude_md(project_path: Path):
-    """生成项目根目录的 CLAUDE.md"""
-    claude_md = """# {project_name}
-
-## AI 指引
-
-本项目的写作流程由 7 个 agent 协作完成，定义在 `.claude/agents/` 下。
-
-**开始写作：** 输入 `@novel-agent` 进入写作循环。
-
-**项目结构：**
-- `story.md` — 项目索引 + 主线拆纲
-- `settings/` — 世界观、角色、写作风格、时间线
-- `volumes/` — 卷纲
-- `chapters/` — 章纲
-- `prompts/` — 提示词
-- `archives/` — 正文
-- `.agent/` — 状态追踪 + agent 通信
-- `.claude/knowledge/` — 反 AI 规则、文风偏好、题材参考材料
-"""
-    (project_path / "CLAUDE.md").write_text(
-        claude_md.format(project_name=project_path.name), encoding="utf-8"
-    )
 
 
 def write_status(project_path: Path):

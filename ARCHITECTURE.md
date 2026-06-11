@@ -128,34 +128,49 @@ Step 1（检测状态）→ 匹配路由 → Read 子skill → 执行子task →
 
 ```
 knowledge/                   # 静态参考知识 → 部署到项目 .claude/knowledge/
+├── README.md               # 分层说明（自动注入 vs 与作者讨论）
 ├── format-specs/            # 格式规范
 │   ├── chapter-quality-checklist.md  # 正文验收清单（15项）
 │   ├── chapter-setting-style.md      # 章纲格式 + 情绪设计 + 章内冲突阶梯
-│   ├── character-setting-style.md    # 角色认知6层模型
+│   ├── character-setting-style.md    # 角色认知6层模型 + 反派设定引用
 │   ├── genre-style.md               # 节奏规则/满足类型/禁忌
 │   ├── world-setup-style.md         # 地理/政治/规则结构
-│   ├── story-arc-style.md           # 主线拆纲方法论
+│   ├── story-arc-style.md           # 主线拆纲方法论（含冲突升级引用）
 │   ├── volume-setting-style.md      # 卷纲格式 + 情绪走向/冲突阶梯/信息差/场景卡方法论
-│   ├── prompt-setting-style.md      # 提示词组装结构（含驱动力/信息差/冲突阶梯层位）
+│   ├── prompt-setting-style.md      # 提示词组装结构（含驱动力/信息差/冲突阶梯层位/场景方法论注入）
 │   ├── writing-style.md             # 写作风格方法论
 │   └── memory-format-spec.md        # 记忆格式规范 + 生命周期
-├── scene-craft/              # 场景写作方法论（按类型分目录，按题材分文件）
+├── scene-craft/              # 场景写作方法论（经四步转化后注入输出·写作规范，AI 无需问作者）
+│   ├── README.md            # 使用说明
 │   ├── index.md             # 索引
+│   ├── prose/               # 文笔技法（始终加载）
+│   ├── pov/                 # 视角切换（始终加载）
 │   ├── dialogue/            # 对话场景
-│   │   ├── universal.md    #   通用对话方法论
+│   │   ├── universal.md    #   通用
 │   │   ├── xianxia.md      #   仙侠特化
 │   │   └── suspense-crime.md # 悬疑特化
 │   ├── fight/               # 战斗/对抗
-│   │   ├── universal.md    #   通用
-│   │   ├── xianxia.md      #   仙侠特化
+│   │   ├── universal.md    #   通用（凡人级）
+│   │   ├── xianxia.md      #   仙侠特化（超凡级）
 │   │   └── suspense-crime.md # 悬疑特化
-│   ├── environment/         # 环境/氛围
-│   │   ├── universal.md    #   通用
-│   │   ├── xianxia.md      #   仙侠特化
-│   │   └── suspense-crime.md # 悬疑特化
-│   ├── inner-mono/          # 内心独白（待补充）
+│   ├── appearance/          # 角色外貌描写（特殊条件触发）
+│   ├── inner-mono/          # 心理活动/内心独白（特殊条件触发）
+│   ├── death-scene/         # 角色死亡/下线（特殊条件触发）
+│   ├── environment/         # 环境/氛围（待补充）
 │   ├── group-scene/         # 群像场景（待补充）
 │   └── transition/          # 过渡场景（待补充）
+├── plot-craft/              # 剧情设计方法论（展示给作者讨论，不自动注入）
+│   ├── README.md            # 使用说明
+│   ├── index.md             # 目录（冲突升级/钩子/悲剧/情绪拉扯/开篇/反转）
+│   ├── hook-techniques.md   # 钩子悬念
+│   ├── tragedy-techniques.md # 悲剧虐心
+│   ├── emotional-pull.md    # 情绪拉扯
+│   ├── opening-hooks.md     # 开篇钩子
+│   └── plot-twists.md       # 剧情反转
+├── character-craft/         # 角色设定方法论（展示给作者讨论）
+│   ├── villain-types.md     # 反派三大模板
+├── title-craft/             # 取书名方法论（展示给作者讨论）
+│   └── index.md
 └── genre-example/           # 填充案例（按题材）
 
 memory/                      # 静态参考素材 → 部署到项目 .claude/knowledge/

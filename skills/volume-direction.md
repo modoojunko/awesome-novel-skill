@@ -1,7 +1,3 @@
----
-name: volume-direction
-description: 卷方向确定 SOP——首次用模板，后续从角色驱动分析推导卷方向
----
 
 # 卷方向确定 skill
 
