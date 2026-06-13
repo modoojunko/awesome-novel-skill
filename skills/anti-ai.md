@@ -23,6 +23,7 @@ Phase 4 报告 — 输出修改报告
 |------|------|
 | `knowledge/anti-ai/common-rules.md` | 分级禁用词表、句式模板、替换策略 |
 | `knowledge/anti-ai/anti-ai-writing.md` | 去 AI 味完整指南（指纹/模式/范例库） |
+| `knowledge/anti-ai/boundary-cases.md` | 误杀防护——不改清单（角色/对话/标点豁免） |
 | `knowledge/anti-ai/{genre}.md` | 题材特定反 AI 正反例 |
 
 ---
@@ -133,6 +134,12 @@ Gate F: 命中 X 处（按 F1-F4 分类）
 ---
 
 ## Phase 3：逐项清除
+
+### 前置检查（每轮执行前）
+
+读 `knowledge/anti-ai/boundary-cases.md`，对每个 Gate 命中先做豁免判定：
+- 命中是否在 boundary-cases 列表中？→ 是 → 跳过（标注 `[SKIP: 误杀防护]`），不做修改
+- 不确定 → 保留原文，在 Phase 4 标注 `[疑: 疑似误杀]`
 
 ### 收敛规则
 
