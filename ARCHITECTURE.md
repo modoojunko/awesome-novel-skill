@@ -29,8 +29,9 @@ Step 1（检测状态）→ 匹配路由 → Read 子skill → 执行子task →
 |-------|------|----------|
 | `volume-planner` | 主线拆纲 + 卷纲规划 | novel-agent |
 | `chapter-planner` | 章纲生成（memo + 情绪设计 + hooks） | novel-agent |
-| `prompt-crafter` | 9 层提示词组装 | novel-agent |
+| `prompt-crafter` | 6 元素提示词组装 | novel-agent |
 | `writer` | 正文生成 + AI 味自检 | novel-agent |
+| `anti-ai` | Gate A-F 管线检测 + 量化评分定级 | novel-agent |
 | `reader` | 10 维 60+ 细项深度评审 | novel-agent（可选） |
 | `updater` | 归档 + lore-keeping + 设定变更 | novel-agent |
 
@@ -46,6 +47,7 @@ Step 1（检测状态）→ 匹配路由 → Read 子skill → 执行子task →
   ├── 通过 Agent 工具调度子 agent
   │     ├── volume-planner / chapter-planner（outline）
   │     ├── prompt-crafter / writer（draft）
+  │     ├── anti-ai（anti-ai）
   │     ├── reader（review，可选）
   │     └── updater（archive / setting-update）
   ├── 子 agent 完成后清理 order 文件
@@ -171,12 +173,12 @@ knowledge/                   # 静态参考知识 → 部署到项目 .claude/kn
 │   ├── villain-types.md     # 反派三大模板
 ├── title-craft/             # 取书名方法论（展示给作者讨论）
 │   └── index.md
-└── genre-example/           # 填充案例（按题材）
-
-memory/                      # 静态参考素材 → 部署到项目 .claude/knowledge/
 ├── anti-ai/                 # 反 AI 规则库（→ anti-ai.md）
 │   ├── common-rules.md      # 通用反 AI 规则
 │   └── {genre}.md           # 题材反 AI 默认模式
+└── genre-example/           # 填充案例（按题材）
+
+memory/                      # 静态参考素材 → 部署到项目 .claude/knowledge/
 └── writer-style/            # 文风参考（→ writer-style.md，可选）
 
 项目 .claude/memory/ 下的动态记忆文件不在 Skill 仓库中，由 init.py 初始化为空桩，后续由 agent 在写作过程中填充。

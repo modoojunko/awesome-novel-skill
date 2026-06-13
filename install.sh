@@ -81,7 +81,7 @@ cp -r "$SCRIPT_DIR/skills" "$DEST/"
 cp -r "$SCRIPT_DIR/knowledge" "$DEST/"
 cp -r "$SCRIPT_DIR/templates" "$DEST/"
 cp -r "$SCRIPT_DIR/tools" "$DEST/"
-# memory/ 已迁移到 knowledge/（anti-ai + writer-style），仅在存在时复制以兼容旧版
+# memory/ 含 writer-style 等静态参考素材，不包含 anti-ai（已迁至 knowledge/anti-ai/）
 [ -d "$SCRIPT_DIR/memory" ] && cp -r "$SCRIPT_DIR/memory" "$DEST/"
 
 echo "安装完成!"
