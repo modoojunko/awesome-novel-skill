@@ -66,8 +66,12 @@ knowledge:
 - **Input Sources:**
   - `.agent/task/prompt-order.md` → 目标章节
   - `chapters/vol-{N}-ch-{M}.md` → 章纲（memo、情绪、场景）
+  - `settings/writing-style.md` → 写作风格四字段（core_principles/possible_mistakes/depiction_techniques）
+  - `settings/character-setting/` → 本章涉及的角色设定（角色初始状态 + 叙事规则关联推导）
+  - `volumes/vol-{N}.md` → 前章摘要（结尾画面、情绪落点、缺口）
   - `.claude/knowledge/anti-ai.md` → 反 AI 规则
   - `.claude/knowledge/writer-style.md` → 文风偏好
+  - `.claude/knowledge/genre-example/{genre}.md` → 题材提示词注入段（输出·写作规范用）
 - **Output Artifacts:**
   - `prompts/vol-{N}-ch-{M}-prompt.md` → 4 层提示词
 - **Hand-off Protocol:** 写入 prompt.md 后结束；novel-agent 检测到后验证
@@ -94,22 +98,23 @@ knowledge:
     用什么读？← 五(工具): Read → chapters/, .claude/knowledge/
 
   THINK:
-    5层如何填充？优先注入哪些规则？
+    6 元素如何填充？优先注入哪些规则？
+    输入（如从审计轮回退）：携带的审计问题清单 → 针对性修正对应元素
     依据：二(Decision Rights): 自主决定填充方式 + 优先级排序
-    约束：六(Principles): 严格按5层骨架, [writer-preference]优先, 来源层末汇总
+    约束：六(Principles): 严格按 6 元素骨架, [writer-preference]优先, 来源层末汇总
     全局规则：writing-style 四字段（role/core_principles/possible_mistakes/depiction_techniques）必须全部注入
     反模式：六(Anti-Patterns): 不meta泄漏, 不整段复制章纲, 不加自由指令
 
   ACT:
     组装提示词 → 写prompts/vol-{N}-ch-{M}-prompt.md
-    写前加载：prompt-setting-style.md 5层填充规则
+    写前加载：prompt-setting-style.md 6 元素填充规则
     约束：每语义单一定义（情绪只在输入·场景原材料, 场景只在输入·场景原材料, 爽点只在任务指示·叙事目标）
     工具：五(Write → prompts/)
 
   ### 第一轮：自检（同原流程）
 
   VERIFY:
-    完成标准？← 八(Definition of Done): 5层完整 + 规则已注入 + 无泄漏
+    完成标准？← 八(Definition of Done): 6 元素完整 + 规则已注入 + 无泄漏
     质量门？← 六(Quality Gates): 层不缺 + memo已注入 + 反AI已注入 + 文风已注入
     回退？← 七(Fallback Logic): 某层无法填充则留空标注, 不硬填
 
@@ -150,7 +155,7 @@ knowledge:
 - **Allowed Tools:**
   | 工具 | 允许 | 禁止 |
   |------|------|------|
-  | Read | `chapters/`、`.claude/memory/`、`.claude/knowledge/` | 不读 archives/ |
+  | Read | `chapters/`、`settings/`、`volumes/`、`.agent/`、`.claude/memory/`、`.claude/knowledge/` | 不读 archives/ |
   | Write | `prompts/`、`.claude/memory/` | 不写其他目录 |
   | Glob | `prompts/`、`.claude/memory/` | — |
 - **Permission Level:** 读写 prompts/；只读其余
@@ -158,7 +163,7 @@ knowledge:
 ## 六、行为规范与约束
 
 - **Principles:**
-  - 严格按 4 层骨架填充，不增不减
+  - 严格按 6 元素骨架填充，不增不减
   - 反 AI 规则优先采用 [writer-preference] 标记的条目
   - **所有操作限定在当前工作目录内，不得访问上级或无关路径**
 - **Anti-Patterns:**
@@ -167,22 +172,30 @@ knowledge:
   - 不把章纲原文整段复制到提示词（应提炼后注入）
 - **Quality Gates:**
   - 结构完整（角色/任务指示/背景信息/案例/输入/输出 6 元素不缺）
+  - 字段填充完整（各元素字段有值，无 `______` 占位符残留）
+  - writing-style 四字段全部注入（role/core_principles/possible_mistakes/depiction_techniques）
   - 章纲核心 memo 已注入前情上下文
+  - 前情上下文有画面感（ch-1 标注无前置章节）
   - 反 AI 规则已注入输出·写作规范
   - 文风偏好已注入输出·写作规范
   - 写作方法论已注入任务指示
+  - 叙事规则已注入写作规范（通用规则 3 条 + 场景追加规则 + 角色关联推导）
+  - 硬性约束齐全（人设红线 + 世界观禁区 + 剧情红线 + 角色禁区）
   - 场景有权重标注（高/中/低）
+  - 案例已填充（至少 1 条经四步转化的场景写法案例）
   - scene-craft 技法稀疏抽取（每类型 ≤ 2 条）
-  - 质感含"不完美"约束
+  - 质感含"不完美"约束（半截话/生活化细节/段落精度分层）
+  - 无 meta 泄漏（无"以下是小说的正文"类自指短语）
+  - 无整段复制章纲（各层信息是提炼后注入，非原文复制）
 - **Section Definitions（ACT 阶段加载 prompt-setting-style.md）：**
   - 角色：作者小说题材
   - 任务指示：章号/字数/驱动力/节奏 | 叙事目标（核心悬念+悬念状态+读者情绪+爽点设计） | 写作方法论（四步执行流程）
   - 背景信息·前情上下文：上章结尾画面/读者情绪残留/缺口（ch-1 固定无前置章节）
   - 背景信息·角色初始状态：每角色起点→经历→终点+微习惯
   - 案例：场景方法论经四步转化后的写作参考示例
-  - 输入·场景原材料：2-4场景，每场景画面/情绪/核心事件/信息差/拐点/出口 + 权重标注
+  - 输入·场景原材料：2-4场景，每场景画面/情绪/核心事件/信息差/拐点/出口 + 权重标注 + 段落分解（¶1/¶2 叙事列表）
   - 输出·约束红线：冲突阶梯层位/情节红线/边界禁止/角色禁区
-  - 输出·写作规范：视角/描写/节奏/反AI + 通用技法（prose+pov稀疏注入）+ 场景方法论（四步转化后注入）
+  - 输出·写作规范：视角策略/描写/节奏/句式/情绪/信息要求 + 反AI + 通用技法（prose+pov稀疏注入）+ 场景方法论（四步转化后注入）+ 叙事规则（优先级高于所有约束）
   - 输出·质感要求：无用细节/对话节奏/真人痕迹 + 不完美约束
 
 ## 七、错误处理与回退
