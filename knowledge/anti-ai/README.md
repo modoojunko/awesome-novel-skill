@@ -1,61 +1,75 @@
-# 反AI写作库
+# 反 AI 写作规则库
 
-> 通过朱雀等AI检测的核心：让正文读起来像真人手写的。
+> anti-ai 管线核心参考。包含分级禁用表、去 AI 方法论、题材正反例。
 
-## 目录结构
+## 目录
+
+| 文件 | 用途 |
+|------|------|
+| `common-rules.md` | 分级禁用词表、句式模板、替换策略（所有题材共用） |
+| `anti-ai-writing.md` | 去 AI 味完整指南（指纹识别/系统性修改/范例库） |
+| `urban.md` | 都市通用 |
+| `urban-romance.md` | 都市言情 |
+| `urban-daily.md` | 都市日常 |
+| `urban-farming.md` | 都市种田 |
+| `urban-brained.md` | 都市脑洞/高武/修真 |
+| `war-god.md` | 战神赘婿 |
+| `xianxia.md` | 东方仙侠 |
+| `xuanhuan.md` | 玄幻 |
+| `suspense-crime.md` | 悬疑刑侦 |
+| `suspense-paranormal.md` | 悬疑灵异 |
+| `historical.md` | 历史古代 |
+| `ancient-politics.md` | 历史政治/古风权谋 |
+| `western-fantasy.md` | 西方奇幻 |
+| `scifi-apocalypse.md` | 科幻末世 |
+| `anti-japanese-war.md` | 抗战谍战 |
+| `anime-derivative.md` | 动漫/游戏衍生 |
+| `derivative.md` | 男频衍生 |
+| `fanqie.md` | 番茄风 |
+
+## 使用场景
 
 ```
-memory/anti-ai/
-├── README.md              # 本文件（贡献指南）
-├── common-rules.md        # 通用规则（所有题材共用）
-├── urban.md               # 都市通用
-├── urban-romance.md       # 都市言情
-├── urban-daily.md         # 都市日常
-├── urban-farming.md       # 都市种田
-├── urban-brained.md       # 都市脑洞/高武/修真
-├── war-god.md             # 战神赘婿
-├── xianxia.md             # 东方仙侠
-├── xuanhuan.md            # 玄幻
-├── suspense-crime.md      # 悬疑刑侦
-├── suspense-paranormal.md # 悬疑灵异
-├── historical.md          # 历史古代
-├── ancient-politics.md    # 历史政治/古风权谋
-├── western-fantasy.md     # 西方奇幻
-├── scifi-apocalypse.md    # 科幻末世
-├── anti-japanese-war.md   # 抗战谍战
-├── anime-derivative.md    # 动漫/游戏衍生
-└── derivative.md          # 男频衍生
+anti-ai agent 执行去 AI 味时：
+    ↓
+读取 common-rules.md（分级禁用表）
+    ↓
+读取 anti-ai-writing.md（方法论指南）
+    ↓
+读取 {genre}.md（题材正反例）
+    ↓
+按 Phase 1-4 管线执行替换
 ```
 
-## 工作原理
+### anti-ai Phase 3
+按题材查对应正反例做精确替换
 
-```
-prompt-crafter agent 生成提示词时：
-    ↓
-读取 anti-ai/common-rules.md（通用规则）
-    ↓
-读取 anti-ai/{genre}.md（题材正反例，如存在）
-    ↓
-合并填入 prompt.md 模块5
-    ↓
-subagent 写正文时执行这些规则
-```
+### prompt-crafter
+生成提示词时按需注入题材规则
 
-## 文件说明
+## 格式
 
 ### common-rules.md — 通用规则
 
 所有题材共用。包含：
-- **疲劳词阈值** — 词/单章上限/替代策略（如"突然≤3次，删掉"）
-- **句式规则** — 禁止模式（如"连续4句相同主语"）
-- **元叙事禁止** — 发现即删（如"本章""故事还在继续"）
-- **情绪外化规则** — ❌/✅ 对照
+- **分级禁用词表** — ★★★★★ 最毒句式 / 一级 / 二级
+- **句式模板** — 比喻/结构/标点规则
+- **替换策略速查** — 情绪外化/对话标签/视角控制
+- **疲劳词阈值** — 原始阈值速查
+
+### anti-ai-writing.md — 方法论指南
+
+anti-ai 各 Phase 的方法论基础。包含：
+- **AI 写作指纹** — 高频词/章末总结/叠加描写/均匀分布
+- **Show Don't Tell** — 核心公式 + 五感检查
+- **7 种 AI 写作模式检测** — 每种的信号/特征/修复
+- **系统性去 AI 三遍法** — 去泛化/去书面化/回自然感
+- **改写范例库** — 情绪外化/场景/打斗/结尾/节奏
 
 ### {genre}.md — 题材正反例
 
 每个题材独立文件。包含：
-- **高频AI病句** — 该题材最常见的AI味写法
-- **正反例对照** — ❌ AI味 vs ✅ 真人感
+- **高频AI病句正反例** — ❌ AI味 vs ✅ 真人感对照
 - **写作要点** — 该题材的特殊注意事项
 
 ## 格式规范
@@ -88,7 +102,7 @@ subagent 写正文时执行这些规则
 
 ### 方式1：新建题材文件
 
-1. 在 `memory/anti-ai/` 下新建 `{genre-id}.md`
+1. 在 `knowledge/anti-ai/` 下新建 `{genre-id}.md`
 2. 复制以下模板并填写：
 
 ```markdown

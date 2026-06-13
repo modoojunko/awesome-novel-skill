@@ -262,12 +262,12 @@ memory/                      # 静态参考素材 → 部署到项目 .claude/kn
 1. 作家在 `.claude/memory/` 积累自己的模式
 2. 说"贡献这个模式"
 3. Skill 生成 community-ready 格式
-4. 引导作家提 PR 到 `memory/anti-ai/` 或 `knowledge/`
+4. 引导作家提 PR 到 `knowledge/anti-ai/`
 
 ### 新增题材类型
 
 1. 在 `knowledge/genre-example/` 添加题材填充案例
-2. 在 `memory/anti-ai/` 添加反 AI 默认模式
+2. 在 `knowledge/anti-ai/` 添加反 AI 默认模式
 3. 在 `memory/writer-style/` 添加文风参考
 
 ---

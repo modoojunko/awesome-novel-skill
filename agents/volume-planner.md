@@ -47,6 +47,8 @@ knowledge:
     description: 开篇钩子（首卷 STEP 2 拆场景卡时与作者讨论）
   - path: .claude/knowledge/plot-craft/plot-twists.md
     description: 剧情反转手法（设冲突阶梯时参考）
+  - path: .claude/knowledge/plot-craft/conflict-motivation.md
+    description: 冲突动机类型速查（定核心冲突时参考）
 ---
 
 # volume-planner

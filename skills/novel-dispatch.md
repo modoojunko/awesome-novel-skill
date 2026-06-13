@@ -11,22 +11,24 @@ novel-agent **只做三件事**：
 
 ## 各 phase 调度表
 
-| phase | 该谁干 | order 文件 | order 内容 |
-|-------|--------|-----------|-----------|
-| setup | updater | `setting-update-order.md` | 与作者讨论后确定的设定内容（世界观/角色/风格/题材） |
-| outline | volume-planner | `volume-plan-order.md` | 要规划的卷号 v.s. 故事线 |
-| outline | chapter-planner | `chapter-plan-order.md` | 目标卷号、章号、卷纲方向 |
-| draft | prompt-crafter | `prompt-craft-order.md` | 目标章节、章纲路径、参考设定 |
-| draft | writer | `writing-order.md` | 目标章节、提示词路径、反 AI 规则 |
-| review | reader | `reader-review-order.md` | 目标章节正文路径、评审维度 |
-| archive | updater | `archive-order.md` | 目标卷号、章号、各文件路径 |
+| phase | 该谁干 | order 文件 |
+|-------|--------|-----------|
+| setup | updater | `setting-update-order.md` |
+| outline | volume-planner | `volume-plan-order.md` |
+| outline | chapter-planner | `chapter-plan-order.md` |
+| draft | prompt-crafter | `prompt-craft-order.md` |
+| draft | writer | `writing-order.md` |
+| anti-ai | anti-ai | `anti-ai-order.md` |
+| review | reader | `reader-review-order.md` |
+| archive | updater | `archive-order.md` |
 
 ## 写 order 文件的规则
 
 1. order 文件路径：`.agent/task/{type}-order.md`
-2. 只写 order 文件，调用子 agent 后不碰任何其他文件
-3. order 文件包含子 agent 完成任务所需的完整上下文
-4. 不把多个任务塞进同一个 order
+2. order 文件只包含：输入信息/文件路径 + 输出目标路径。不包含执行步骤、规则、方法论。
+3. 子 agent 的 SKILL.md 定义执行 SOP，order 不涉及具体步骤。
+4. 只写 order 文件，调用子 agent 后不碰任何其他文件
+5. 不把多个任务塞进同一个 order
 
 ## 检查完成的标准
 
