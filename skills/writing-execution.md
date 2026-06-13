@@ -33,10 +33,12 @@ Step 6: 保存 AI 原版快照
 
 ## Scope
 - 做：读提示词，按叙事段落顺序写整章
-- 不做：不读其他文件、不修改提示词、不写其他章、不写 settings/ 下任何文件
+- 不做：不读卷纲/章纲/archives、不修改提示词、不写其他章、不写 settings/ 下任何文件
 
 ## Inputs
-- `prompts/vol-{N}-ch-{M}-prompt.md` — 唯一输入（4 层提示词）
+- `prompts/vol-{N}-ch-{M}-prompt.md` — 主要输入（4 层提示词）
+- `settings/writing-style.md` — 写作风格方法论
+- `settings/genre-setting.md` — 题材设定
 
 ## Outputs
 - `archives/vol-{N}-ch-{M}-{slug}.draft.md` — 全章正文草稿
