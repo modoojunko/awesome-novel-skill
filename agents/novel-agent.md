@@ -173,7 +173,7 @@ knowledge:
 
 - **Context Isolation:** 每次 OBSERVE 从文件系统重建状态，不依赖上一次运行的上下文缓存
 - **State Persistence:** `.agent/status.md` 是唯一持久状态
-- **Shared Context Keys:** `current_volume`、`current_chapter`、`phase`（setup/outline/draft/archive）
+- **Shared Context Keys:** `current_volume`、`current_chapter`、`phase`（setup/outline/draft/anti-ai/review/archive）
 
 ## 十、可观测性与调试
 

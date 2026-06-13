@@ -60,7 +60,7 @@ knowledge:
 
   LOAD SKILL:
     加载 skills/writing-execution.md
-    执行全流程：Step 1(准备) → Step 2(清理上下文) → Step 3(写作) → Step 4(验证) → Step 5(保存快照)
+    执行全流程：Step 1(准备) → Step 2(清理上下文) → Step 3(写作) → Step 4(验证) → Step 5(叙事规则自查) → Step 6(保存快照)
 
   OBSERVE:
     读什么？← 三(Input Sources): write-order.md + prompt.md
