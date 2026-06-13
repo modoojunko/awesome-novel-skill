@@ -13,6 +13,8 @@ knowledge:
     description: 分级禁用词表、句式模板、替换策略
   - path: knowledge/anti-ai/anti-ai-writing.md
     description: 去 AI 味完整指南（指纹识别/三遍法/范例库）
+  - path: knowledge/anti-ai/boundary-cases.md
+    description: 误杀防护——不改清单（角色化表达/对话特例/功能豁免）
   - path: knowledge/anti-ai/{genre}.md
     description: 题材特定反 AI 正反例
 ---
@@ -48,6 +50,7 @@ knowledge:
   - `archives/vol-{N}-ch-{M}-{slug}.draft.md` → writer 原始输出
   - `knowledge/anti-ai/common-rules.md` → 分级禁用表
   - `knowledge/anti-ai/anti-ai-writing.md` → 方法论指南
+  - `knowledge/anti-ai/boundary-cases.md` → 误杀防护
   - `knowledge/anti-ai/{genre}.md` → 题材正反例
 - **Output Artifacts:**
   - `archives/vol-{N}-ch-{M}-{slug}.anti-ai.md` → 去 AI 味后的正文
