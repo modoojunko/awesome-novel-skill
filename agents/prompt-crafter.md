@@ -3,7 +3,6 @@ name: prompt-crafter
 description: 根据章纲、动态记忆和知识库，组装 4 层提示词结构
 role: 提示词工程师
 react: true
-model: flash
 memory: []
 skills:
   - path: skills/prompt-crafting.md
