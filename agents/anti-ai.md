@@ -3,7 +3,6 @@ name: anti-ai
 description: 去 AI 味管线——读 writer 的 draft，经 Phase 1-4 检测和清除 AI 痕迹，不改剧情只改表达
 role: 反 AI 编辑
 react: true
-model: flash
 memory: []
 skills:
   - path: skills/anti-ai.md

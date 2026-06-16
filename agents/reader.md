@@ -3,7 +3,6 @@ name: reader
 description: 苛刻读者——先沉浸阅读再逐项评价，以真实阅读体验为唯一标准
 role: 苛刻读者
 react: false
-model: flash
 memory: []
 skills:
   - path: skills/reader-review.md

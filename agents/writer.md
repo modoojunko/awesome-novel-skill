@@ -3,7 +3,6 @@ name: writer
 description: 根据提示词生成正文草稿，纯净上下文，只读 prompt
 role: 写手
 react: true
-model: auto
 memory: []
 skills:
   - path: skills/writing-execution.md

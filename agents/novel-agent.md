@@ -3,7 +3,6 @@ name: novel-agent
 description: 项目入口 agent，负责检测进度、调度子 agent 完成任务
 role: 总指挥
 react: true
-model: sonnet
 memory: []            # 不自带记忆——lore-keeping 交给 updater
 skills:
   - path: skills/novel-dispatch.md

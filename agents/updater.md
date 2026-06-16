@@ -3,7 +3,6 @@ name: updater
 description: 负责归档 lore-keeping 和规划时设定变更——两种操作流程由 order 类型决定
 role: 档案管理员
 react: true
-model: auto
 memory: []
 skills:
   - path: skills/updater-archive.md
