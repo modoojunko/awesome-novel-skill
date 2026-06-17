@@ -25,8 +25,12 @@
 ### Step 1: 正文定稿
 
 1. 如果 `.agent/{chapter}-draft-ai.md` 不存在，从当前草稿复制一份作为 AI 原版快照
-2. 将草稿文件重命名，去掉 `-draft` 标记：
-   `archives/vol-{N}-ch-{M}-{slug}.draft.md` → `archives/vol-{N}-ch-{M}-{slug}.md`
+2. 判断 `archives/` 下是否有去 AI 味版本：
+   - **`.anti-ai.md` 存在** → 以其为定稿，重命名为 `.md`：
+     `archives/vol-{N}-ch-{M}-{slug}.anti-ai.md` → `archives/vol-{N}-ch-{M}-{slug}.md`
+     然后删除 `.draft.md`
+   - **仅 `.draft.md` 存在** → 重命名去掉 `-draft` 标记：
+     `archives/vol-{N}-ch-{M}-{slug}.draft.md` → `archives/vol-{N}-ch-{M}-{slug}.md`
 3. 复核归档文件内容无误
 
 ### Step 2: 角色状态更新 + 情绪弧线
