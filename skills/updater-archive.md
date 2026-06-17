@@ -31,6 +31,7 @@
      然后删除 `.draft.md`
    - **仅 `.draft.md` 存在** → 重命名去掉 `-draft` 标记：
      `archives/vol-{N}-ch-{M}-{slug}.draft.md` → `archives/vol-{N}-ch-{M}-{slug}.md`
+     <!-- 此路径下 draft.md == 最终定稿，step 1 保留的 draft-ai.md 快照与定稿内容一致，self-consistent -->
 3. 复核归档文件内容无误
 
 ### Step 2: 角色状态更新 + 情绪弧线
