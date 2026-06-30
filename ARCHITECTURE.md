@@ -158,9 +158,9 @@ knowledge/                   # 静态参考知识 → 部署到项目 .claude/kn
 │   ├── appearance/          # 角色外貌描写（特殊条件触发）
 │   ├── inner-mono/          # 心理活动/内心独白（特殊条件触发）
 │   ├── death-scene/         # 角色死亡/下线（特殊条件触发）
-│   ├── environment/         # 环境/氛围（待补充）
+│   ├── environment/         # 环境/氛围 ✅ 五感通写/情绪渲染/细节互动
 │   ├── group-scene/         # 群像场景（待补充）
-│   └── transition/          # 过渡场景（待补充）
+│   └── transition/          # 过渡场景 ✅ 七种转场技法
 ├── plot-craft/              # 剧情设计方法论（展示给作者讨论，不自动注入）
 │   ├── README.md            # 使用说明
 │   ├── index.md             # 目录（冲突升级/钩子/悲剧/情绪拉扯/开篇/反转）
