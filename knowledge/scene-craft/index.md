@@ -18,17 +18,17 @@ scene-craft/
 │   ├── xianxia.md                #   仙侠题材特化
 │   └── suspense-crime.md         #   悬疑刑侦特化
 ├── environment/                  # 环境/氛围描写
-│   ├── universal.md              #   通用方法论（待补充）
+│   ├── universal.md              #   ✅ 五感通写/情绪渲染/细节互动
 │   ├── xianxia.md                #   仙侠题材特化
 │   └── suspense-crime.md         #   悬疑刑侦特化
 ├── appearance/                   # 角色外貌描写
-│   └── universal.md
+│   └── universal.md              #   ✅ 锚点/动态/故事/侧面烘托
 ├── inner-mono/                   # 心理活动/内心独白
-│   └── universal.md              # ✅ 生理通感/思维碎片/递进崩塌
+│   └── universal.md              #   ✅ 生理通感/思维碎片/递进崩塌
 ├── group-scene/                  # 群像场景（待补充）
 │   └── universal.md
-└── transition/                   # 过渡场景（待补充）
-    └── universal.md
+└── transition/                   # 过渡场景
+    └── universal.md              #   ✅ 情绪顺延/危机钩子/五感反差/物件线索/动线镜头/空镜景物/对话承接
 ```
 
 ## 标签系统
