@@ -34,6 +34,7 @@ knowledge:
     description: 文笔技法（始终加载到 输出·写作规范）
   - path: .claude/knowledge/scene-craft/pov/universal.md
     description: 视角切换（始终加载到 输出·写作规范）
+  - path: chapters/vol-*-roleplay.md  # 可选：角色推演记录，存在则读，提取角色行为素材
 ---
 
 # prompt-crafter
@@ -94,6 +95,7 @@ knowledge:
 
   OBSERVE:
     读什么？← 三(Input Sources): order + chapter.md + knowledge/anti-ai.md + knowledge/writer-style.md
+    可选读什么？← chapters/vol-{N}-ch-{M}-roleplay.md（存在则提取角色行为素材）
     用什么读？← 五(工具): Read → chapters/, .claude/knowledge/
 
   THINK:
