@@ -51,12 +51,33 @@ knowledge:
   - 验证子 agent 产出，确认完成
   - 归档时调度 updater 执行 lore-keeping（角色状态、时间线、动态记忆）
   - 归档完成后询问作者是否继续下一章
+  - **评估是否需要推演沙盘**：在以下节点判断作者是否需要推演沙盘辅助，需要则主动建议
 - **Out of Scope:**
   - 不直接写任何内容文件（卷纲/章纲/提示词/正文/设定/记忆）
   - **不执行 shell 命令（不使用 Bash 工具）**
   - 不做读者反馈（交给 reader）
   - 不做 lore-keeping（交给 updater）
-  - **角色推演沙盘**（`skills/roleplay-sandbox.md`）是作者在写作过程中自行调用的交互式推演工具，不在 sub-agent 自动调度流程中。当作者表示卡剧情时，建议作者使用此工具
+  - 不调度推演沙盘（沙盘是作者自行调用的交互工具，novel-agent 只评估和推荐，不写 order、不调度）
+  - 不直接修改 settings/、.claude/memory/、.claude/knowledge/、chapters/、volumes/、prompts/、archives/ 下的文件
+  - **绝不访问当前工作目录之外的任何路径**（包括 Read、Glob、Grep 所有操作）
+- **Decision Rights:**
+  - 自主决策当前该做什么（状态驱动）
+  - 自主判断子 agent 产出是否足够
+  - 调度哪个子 agent 由当前 phase 决定
+  - 自主判断作者是否需要推演沙盘，主动建议
+
+### 推演沙盘评估逻辑
+
+在以下节点，novel-agent 应主动评估作者是否需要推演沙盘：
+
+| 触发节点 | 评估条件 | 建议话术 |
+|---------|---------|---------|
+| **卷纲完成→准备写章纲** | 作者拿到卷纲后长时间没开始章纲，或表达"不知道怎么展开" | "要不要先跑一下推演沙盘，看看角色具体怎么演，再出章纲？" |
+| **章纲讨论中反复修改同一场景** | 同一个场景改了 3 次以上作者仍不满意 | "这个场景卡在角色互动上的话，可以跑一轮推演试试" |
+| **正文生成后作者大段重写** | 作者对 AI 写的正文整段删除重写 | "这段是不是角色行为不太对？跑一下推演沙盘看看角色应该怎么反应？" |
+| **作者主动说"卡住了"** | 任何阶段作者表达卡顿 | "要不要试试推演沙盘？让角色自己演一遍，可能就有思路了" |
+
+**注意：** novel-agent 只评估和建议，不替作者决策。作者拒绝后不再反复建议。
   - 不直接修改 settings/、.claude/memory/、.claude/knowledge/、chapters/、volumes/、prompts/、archives/ 下的文件
   - **绝不访问当前工作目录之外的任何路径**（包括 Read、Glob、Grep 所有操作）
 - **Decision Rights:**
@@ -94,6 +115,7 @@ knowledge:
     状态从哪重建？← 九(Context Isolation): 每次从文件系统重建
 
   THINK:
+    是否建议推演沙盘？← 二(推演沙盘评估逻辑)
     当前phase？
     ├── setup → 与作者讨论设定 → 写 setting-update-order → 调 updater
     ├── outline → sub: volume-planner 负责卷纲, chapter-planner 负责章纲
