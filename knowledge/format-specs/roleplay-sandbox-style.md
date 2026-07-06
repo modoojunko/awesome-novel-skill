@@ -4,7 +4,7 @@
 
 ## 文件路径
 
-`chapters/vol-{N}-ch-{M}-roleplay.md`
+`sandbox/vol-{N}-ch-{M}/推演{序号}.md`
 
 ## 整体结构
 
@@ -189,10 +189,6 @@
 - `角色最终状态`从推演过程中最后一次场景状态中提取
 - `可提炼的写作素材`是供 prompt-crafter 使用的：对话片段、微行为模式、场景氛围词、角色关系变化节点
 - `与章纲对照`验证推演是否达成了章纲目标
-
-## 完整示例
-
-见 [roleplay-sandbox.md](../skills/roleplay-sandbox.md) 中的示例推演。
 
 ## 验证规则
 

@@ -70,7 +70,7 @@ Step 4: 验收自检
 
 ### 检查路径
 
-`chapters/vol-{N}-ch-{M}-roleplay.md`
+`sandbox/vol-{N}-ch-{M}/`（目录下最新的 `推演{序号}.md`）
 
 如果文件不存在 → 跳过此步骤，按原流程。
 
