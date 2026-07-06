@@ -158,7 +158,7 @@ knowledge:
   |------|------|------|
   | Read | `chapters/`、`settings/`、`volumes/`、`sandbox/`、`.agent/`、`.claude/memory/`、`.claude/knowledge/` | 不读 archives/ |
   | Write | `prompts/`、`.claude/memory/` | 不写其他目录 |
-  | Glob | `prompts/`、`.claude/memory/` | — |
+  | Glob | `prompts/`、`sandbox/`、`.claude/memory/` | — |
 - **Permission Level:** 读写 prompts/；只读其余
 
 ## 六、行为规范与约束
