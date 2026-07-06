@@ -128,6 +128,7 @@ def create_skeleton(project_path: Path):
         "volumes",
         "chapters",
         "prompts",
+        "sandbox",
         "archives",
         ".agent/task",
         ".claude/agents",
