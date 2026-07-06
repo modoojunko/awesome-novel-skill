@@ -227,6 +227,8 @@ novel-agent（总指挥）
 
 各 agent 定义在 `agents/`，skill SOP 在 `skills/`。agent 间通过 `.agent/task/*-order.md` 文件通信。
 
+**可选工具：** 剧情推演沙盘（`skills/roleplay-sandbox.md`）是独立的交互式工具，不在 agent 调度链中。作者卡剧情时主动调用，产出推演记录（`sandbox/`）供 prompt-crafter 参考。
+
 **调度规则：** novel-agent 是唯一调度者，只写 order 文件 + 调用子 agent。所有内容创作（卷纲/章纲/提示词/正文）、设定维护、归档更新均由子 agent 完成，novel-agent 不得越权代劳。子 agent 完成任务后清理 order 文件，novel-agent 检测到清理即确认完成。
 
 **重要：novel-agent 是顶层入口，通过 `@novel-agent` 加载进主 agent，禁止通过 Agent 工具将 novel-agent 作为 subagent 调度。** 主 agent 加载 novel-agent 定义后即扮演总指挥角色，拥有完整的 Agent 工具权限来调度子 agent。如果 novel-agent 被作为 subagent 派出，它将失去 Agent 工具调用能力，导致调度链断裂。
