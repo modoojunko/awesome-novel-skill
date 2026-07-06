@@ -201,6 +201,8 @@ cp old/prompts/*.txt prompts/ 2>/dev/null
 │   └── vol-{N}-ch-{M}.md # ★ 章纲（status: outline → draft → archived）
 ├── prompts/
 │   └── vol-{N}-ch-{M}-prompt.md  # 提示词
+├── sandbox/
+│   └── vol-{N}-ch-{M}/    # 剧情推演记录（可选）
 ├── archives/
 │   ├── *.draft.md        # 草稿
 │   └── *.md              # 定稿
