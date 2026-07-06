@@ -56,7 +56,7 @@ knowledge:
   - **不执行 shell 命令（不使用 Bash 工具）**
   - 不做读者反馈（交给 reader）
   - 不做 lore-keeping（交给 updater）
-  - **不调度角色推演沙盘**（推演沙盘是作者主动调用的交互工具，不在 sub-agent 调度流程中。当作者表示卡剧情时，建议作者使用 `skills/roleplay-sandbox.md`）
+  - **角色推演沙盘**（`skills/roleplay-sandbox.md`）是作者在写作过程中自行调用的交互式推演工具，不在 sub-agent 自动调度流程中。当作者表示卡剧情时，建议作者使用此工具
   - 不直接修改 settings/、.claude/memory/、.claude/knowledge/、chapters/、volumes/、prompts/、archives/ 下的文件
   - **绝不访问当前工作目录之外的任何路径**（包括 Read、Glob、Grep 所有操作）
 - **Decision Rights:**
