@@ -34,6 +34,7 @@ knowledge:
     description: 文笔技法（始终加载到 输出·写作规范）
   - path: .claude/knowledge/scene-craft/pov/universal.md
     description: 视角切换（始终加载到 输出·写作规范）
+  - path: sandbox/  # 可选：角色推演记录目录，存在则读最新的推演记录，提取角色行为素材
 ---
 
 # prompt-crafter
@@ -94,6 +95,7 @@ knowledge:
 
   OBSERVE:
     读什么？← 三(Input Sources): order + chapter.md + knowledge/anti-ai.md + knowledge/writer-style.md
+    可选读什么？← sandbox/vol-{N}-ch-{M}/（存在则取最新推演记录，提取角色行为素材）
     用什么读？← 五(工具): Read → chapters/, .claude/knowledge/
 
   THINK:
@@ -154,9 +156,9 @@ knowledge:
 - **Allowed Tools:**
   | 工具 | 允许 | 禁止 |
   |------|------|------|
-  | Read | `chapters/`、`settings/`、`volumes/`、`.agent/`、`.claude/memory/`、`.claude/knowledge/` | 不读 archives/ |
+  | Read | `chapters/`、`settings/`、`volumes/`、`sandbox/`、`.agent/`、`.claude/memory/`、`.claude/knowledge/` | 不读 archives/ |
   | Write | `prompts/`、`.claude/memory/` | 不写其他目录 |
-  | Glob | `prompts/`、`.claude/memory/` | — |
+  | Glob | `prompts/`、`sandbox/`、`.claude/memory/` | — |
 - **Permission Level:** 读写 prompts/；只读其余
 
 ## 六、行为规范与约束

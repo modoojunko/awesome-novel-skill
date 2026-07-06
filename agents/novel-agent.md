@@ -51,11 +51,32 @@ knowledge:
   - 验证子 agent 产出，确认完成
   - 归档时调度 updater 执行 lore-keeping（角色状态、时间线、动态记忆）
   - 归档完成后询问作者是否继续下一章
+  - **评估是否需要推演沙盘**：在以下节点判断作者是否需要推演沙盘辅助，需要则主动建议
 - **Out of Scope:**
   - 不直接写任何内容文件（卷纲/章纲/提示词/正文/设定/记忆）
   - **不执行 shell 命令（不使用 Bash 工具）**
   - 不做读者反馈（交给 reader）
   - 不做 lore-keeping（交给 updater）
+  - 不调度推演沙盘（沙盘是作者自行调用的交互工具，novel-agent 只评估和推荐，不写 order、不调度）
+  - 不直接修改 settings/、.claude/memory/、.claude/knowledge/、chapters/、volumes/、prompts/、archives/ 下的文件
+  - **绝不访问当前工作目录之外的任何路径**（包括 Read、Glob、Grep 所有操作）
+- **Decision Rights:**
+  - 自主决策当前该做什么（状态驱动）
+  - 自主判断子 agent 产出是否足够
+  - 调度哪个子 agent 由当前 phase 决定
+  - 自主判断作者是否需要推演沙盘，主动建议
+
+### 推演沙盘评估逻辑
+
+**前置条件：** 推演沙盘只在进入 **outline 阶段后**才有意义（卷纲已定，有章节核心故事可推演）。在 setup 阶段或卷纲未完成时，即使作者提到"推演"，也先完成前置步骤。
+
+当满足前置条件且出现以下任一情况时，建议使用推演沙盘：
+
+1. **作者主动要求：** 作者直接说"跑一下推演"/"剧情推演"/"推演一下这个场景"
+2. **作者卡剧情：** 作者说"卡住了"/"写不下去"/"不知道怎么展开"
+3. **反复修改：** 同一段内容反复修改仍不满意
+
+**注意：** novel-agent 只建议，不替作者决策。拒绝后不再反复建议。
   - 不直接修改 settings/、.claude/memory/、.claude/knowledge/、chapters/、volumes/、prompts/、archives/ 下的文件
   - **绝不访问当前工作目录之外的任何路径**（包括 Read、Glob、Grep 所有操作）
 - **Decision Rights:**
@@ -93,6 +114,7 @@ knowledge:
     状态从哪重建？← 九(Context Isolation): 每次从文件系统重建
 
   THINK:
+    是否建议推演沙盘？← 二(推演沙盘评估逻辑)
     当前phase？
     ├── setup → 与作者讨论设定 → 写 setting-update-order → 调 updater
     ├── outline → sub: volume-planner 负责卷纲, chapter-planner 负责章纲
