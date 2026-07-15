@@ -47,12 +47,13 @@
 
 ---
 
-> **如果这个项目对你写小说有帮助，可以考虑请我喝杯咖啡 ☕**  
-> 你的支持是继续更新的动力。
+> **如果这个项目对你有帮助，可以请我喝杯咖啡 ☕**  
+> 一杯咖啡，不是合同。不影响 issue 优先级和功能方向。
 >
-> <img src="reference/images/donate-qr.png" width="200" alt="收款码" style="border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,0.1)">
+> **International — PayPal:** [paypal.me/yuhuahui](https://paypal.me/yuhuahui)
 >
-> *如果打不开图片，提 Issue 告诉我。*
+> **国内 — 微信支付（扫码）**  
+> <img src="reference/images/wechat-pay.png" width="200" alt="微信收款码" style="border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,0.1)">
 
 ---
 
