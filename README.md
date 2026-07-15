@@ -45,6 +45,17 @@
 
 <video src="https://raw.githubusercontent.com/modoojunko/awesome-novel-skill/main/reference/video/4.0%E5%AE%A3%E4%BC%A0%E8%A7%86%E9%A2%91.mp4" controls width="100%" style="max-width: 640px; display: block; margin: 24px auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);"></video>
 
+---
+
+> **如果这个项目对你写小说有帮助，可以考虑请我喝杯咖啡 ☕**  
+> 你的支持是继续更新的动力。
+>
+> <img src="reference/images/donate-qr.png" width="200" alt="收款码" style="border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,0.1)">
+>
+> *如果打不开图片，提 Issue 告诉我。*
+
+---
+
 ## 你需要什么
 
 - 安装了 [Claude Code](https://docs.anthropic.com/zh-CN/docs/claude-code/overview) 的电脑
