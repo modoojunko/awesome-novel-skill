@@ -50,9 +50,6 @@
 > **如果这个项目对你有帮助，可以请我喝杯咖啡 ☕**  
 > 一杯咖啡，不是合同。不影响 issue 优先级和功能方向。
 >
-> **International — PayPal:** [paypal.me/yuhuahui](https://paypal.me/yuhuahui)
->
-> **国内 — 微信支付（扫码）**  
 > <img src="reference/images/wechat-pay.jpg" width="200" alt="微信收款码" style="border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,0.1)">
 
 ---
