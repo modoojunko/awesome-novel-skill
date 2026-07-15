@@ -2,4 +2,5 @@
 .vscode/
 docs/
 tools/__pycache__/
-video/video-script-input.md
+video/
+video-script-input.md
