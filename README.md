@@ -53,7 +53,7 @@
 > **International — PayPal:** [paypal.me/yuhuahui](https://paypal.me/yuhuahui)
 >
 > **国内 — 微信支付（扫码）**  
-> <img src="reference/images/wechat-pay.png" width="200" alt="微信收款码" style="border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,0.1)">
+> <img src="reference/images/wechat-pay.jpg" width="200" alt="微信收款码" style="border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,0.1)">
 
 ---
 
