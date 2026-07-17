@@ -64,6 +64,7 @@ for profile_file in "$HOME/.profile" "$HOME/.bashrc" "$HOME/.zshrc"; do
     tmpfile=$(mktemp)
     grep -v "export NOVEL_SKILL_HOME" "$profile_file" > "$tmpfile" 2>/dev/null || true
     echo "export NOVEL_SKILL_HOME=\"$DEST\"" >> "$tmpfile"
+    chmod 644 "$tmpfile"
     mv "$tmpfile" "$profile_file"
     echo "已更新 NOVEL_SKILL_HOME=$DEST 到 $profile_file"
 done
@@ -75,6 +76,7 @@ if command -v fish &>/dev/null; then
         tmpfile=$(mktemp)
         grep -v "set -gx NOVEL_SKILL_HOME" "$fish_conf" > "$tmpfile" 2>/dev/null || true
         echo "set -gx NOVEL_SKILL_HOME \"$DEST\"" >> "$tmpfile"
+        chmod 644 "$tmpfile"
         mv "$tmpfile" "$fish_conf"
         echo "已更新 NOVEL_SKILL_HOME=$DEST 到 $fish_conf"
     fi

@@ -16,26 +16,11 @@
 
 param(
     [Parameter(Mandatory=$true)]
-    [ValidateSet("claude-code", "hermes", "openclaw", "deepseek-tui")]
+    [ValidateSet("claude-code")]
     [string]$Platform
 )
 
-$HOME_DIR = $env:USERPROFILE
-
-switch ($Platform) {
-    "claude-code" {
-        $DEST_DIR = "$HOME_DIR\.claude\skills\awesome-novel"
-    }
-    "hermes" {
-        $DEST_DIR = "$HOME_DIR\.hermes\skills\awesome-novel"
-    }
-    "openclaw" {
-        $DEST_DIR = "$HOME_DIR\.openclaw\skills\awesome-novel"
-    }
-    "deepseek-tui" {
-        $DEST_DIR = "$HOME_DIR\.deepseek\skills\awesome-novel"
-    }
-}
+$DEST_DIR = "$env:USERPROFILE\.claude\skills\awesome-novel"
 
 $SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
 
