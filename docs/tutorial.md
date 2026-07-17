@@ -1,4 +1,4 @@
-# awesome-novel-skilll 操作手册
+# awesome-novel-skill 操作手册
 
 以修仙小说《青云志》为案例，完整演示从零开始写小说的全流程。
 
@@ -27,7 +27,7 @@
 
 把下面这段话复制给 AI：
 
-> "帮我安装 awesome-novel-skilll"
+> "帮我安装 awesome-novel-skill"
 
 ---
 
@@ -45,7 +45,7 @@
 
 **如果 AI 说不知道这个项目，再试试：**
 
-> "去 https://github.com/modoojunko@novel-agent-skilll/releases 下载最新的 release，然后运行 install.sh"
+> "去 https://github.com/modoojunko/awesome-novel-skill/releases 下载最新的 release，然后运行 install.sh"
 
 ---
 
@@ -1633,4 +1633,4 @@ AI 会指出具体问题，修改后重新验收。
 ---
 
 **手册版本：** v6.1
-**适用版本：** awesome-novel-skilll v3.2.3+
+**适用版本：** awesome-novel-skill v3.2.3+
