@@ -78,7 +78,7 @@ cp -r agents ~/.claude/skills/awesome-novel/
 cp -r skills ~/.claude/skills/awesome-novel/
 cp -r templates ~/.claude/skills/awesome-novel/
 cp -r knowledge ~/.claude/skills/awesome-novel/
-cp -r memory ~/.claude/skills/awesome-novel/
+[ -d memory ] && cp -r memory ~/.claude/skills/awesome-novel/
 cp -r tools ~/.claude/skills/awesome-novel/
 cp SKILL.md ~/.claude/skills/awesome-novel/
 echo "安装完成!"

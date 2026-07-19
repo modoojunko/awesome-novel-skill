@@ -16,35 +16,34 @@
 
 param(
     [Parameter(Mandatory=$true)]
-    [ValidateSet("claude-code", "hermes", "openclaw")]
+    [ValidateSet("claude-code")]
     [string]$Platform
 )
 
-$HOME_DIR = $env:USERPROFILE
-
-switch ($Platform) {
-    "claude-code" {
-        $DEST_DIR = "$HOME_DIR\.claude\skills\awesome-novel"
-    }
-    "hermes" {
-        $DEST_DIR = "$HOME_DIR\.hermes\skills\awesome-novel"
-    }
-    "openclaw" {
-        $DEST_DIR = "$HOME_DIR\.openclaw\skills\awesome-novel"
-    }
-}
+$DEST_DIR = "$env:USERPROFILE\.claude\skills\awesome-novel"
 
 $SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 Write-Host "安装到: $DEST_DIR"
 
-# 全量覆盖
+# 创建目录，已存在则清空
 Remove-Item -Recurse -Force $DEST_DIR -ErrorAction SilentlyContinue
-Copy-Item -Recurse "$SCRIPT_DIR" "$DEST_DIR"
+New-Item -ItemType Directory -Force -Path $DEST_DIR | Out-Null
 
-# 清理不需要的文件
-Remove-Item -Recurse -Force "$DEST_DIR\.git" -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$DEST_DIR\.claude" -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$DEST_DIR\docs" -ErrorAction SilentlyContinue
+# 显式 include 列表，与 install.sh 保持一致
+$INCLUDES = @("SKILL.md", "agents", "skills", "knowledge", "templates", "tools")
+
+foreach ($item in $INCLUDES) {
+    $src = Join-Path $SCRIPT_DIR $item
+    if (Test-Path $src) {
+        Copy-Item -Recurse $src "$DEST_DIR\"
+    }
+}
+
+# memory/ 含 writer-style 等静态参考素材（可选）
+$memoryDir = Join-Path $SCRIPT_DIR "memory"
+if (Test-Path $memoryDir) {
+    Copy-Item -Recurse $memoryDir "$DEST_DIR\"
+}
 
 Write-Host "安装完成!"
