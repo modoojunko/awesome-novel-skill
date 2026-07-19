@@ -123,15 +123,16 @@ knowledge:
 
   LOAD SKILL:
     加载 skills/prompt-audit.md
-    执行全流程：维度 A(场景-技法覆盖率) → B(知识点溯源) → C(可执行性) → D(四步转化完整性) → E(层间一致性)
+    执行全流程：维度 A(技法覆盖率) → B(知识点溯源) → C(可执行性) → D(四步转化完整性) → E(层间一致性)
+    （审计仅检查已写入 prompt.md 的内容，不重新读取 scene-craft 源文件）
 
   OBSERVE:
-    读什么？← 已写入的 prompts/vol-{N}-ch-{M}-prompt.md + chapters/ + .claude/knowledge/scene-craft/ + settings/genre-setting.md
+    读什么？← 已写入的 prompts/vol-{N}-ch-{M}-prompt.md（scene-craft 方法论已在组装阶段读过并注入，审计时不重复加载）
     工具：五(Read)
 
   THINK:
     逐项评估五个审计维度
-    对照原始 scene-craft 方法论检查 输出·写作规范 的落地质量
+    检查 prompt 输出·写作规范 中注入的技法是否完整、是否经过四步转化、是否可执行
     约束：核心原则——你不是 prompt-crafter，不维护不解释，只找问题
 
   ACT:
