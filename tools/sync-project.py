@@ -41,6 +41,10 @@ KNOWLEDGE_DIR = SKILL_HOME / "knowledge"
 FINGERPRINT_FILE = Path(".agent") / ".sync-fingerprint"
 VERSION_FILE = Path(".agent") / ".sync-version"
 
+# 根据 SKILL_HOME 路径判断平台
+IS_OPENCODE = "opencode" in str(SKILL_HOME).lower()
+AGENT_TARGET = ".opencode/agents" if IS_OPENCODE else ".claude/agents"
+
 
 def main():
     if "-h" in sys.argv or "--help" in sys.argv or len(sys.argv) < 2:
@@ -185,20 +189,14 @@ def find_changes(project: Path) -> list[str]:
     for name, src_dir in [("agents", AGENT_DIR), ("skills", SKILL_DIR), ("knowledge", KNOWLEDGE_DIR)]:
         if not src_dir.exists():
             continue
-        if name == "agents":
-            dst_dirs = [project / ".opencode" / name, project / ".claude" / name]
-        else:
-            dst_dirs = [project / ".claude" / name]
+        dst_dir = project / (AGENT_TARGET if name == "agents" else ".claude") / name
         for item in sorted(src_dir.rglob("*.md")):
             if item.name == ".gitkeep":
                 continue
             rel = item.relative_to(src_dir)
-            # 任一目标目录过时即触发更新
-            for dst_dir in dst_dirs:
-                target = dst_dir / rel
-                if not target.exists() or target.read_bytes() != item.read_bytes():
-                    changed.append(f"{name}/{rel}")
-                    break
+            target = dst_dir / rel
+            if not target.exists() or target.read_bytes() != item.read_bytes():
+                changed.append(f"{name}/{rel}")
 
     return changed
 
@@ -241,17 +239,15 @@ def do_sync(project: Path):
 
 
 def sync_agents(project_path: Path) -> int:
-    """同步 agent 定义到 .opencode/agents/ 和 .claude/agents/"""
+    """同步 agent 定义到当前平台对应的目录"""
     if not AGENT_DIR.exists():
         print("  [!] agents 源目录不存在，跳过")
         return 0
-    count = 0
-    for suffix in [".opencode/agents", ".claude/agents"]:
-        target = project_path / suffix
-        target.mkdir(parents=True, exist_ok=True)
-        count += _sync_dir(AGENT_DIR, target, "*.md")
+    target = project_path / AGENT_TARGET
+    target.mkdir(parents=True, exist_ok=True)
+    count = _sync_dir(AGENT_DIR, target, "*.md")
     if count > 0:
-        print(f"  [OK] agent 定义: {count} 个文件已更新")
+        print(f"  [OK] agent 定义: {count} 个文件已更新（{AGENT_TARGET}）")
     else:
         print(f"  [i] agent 定义: 已是最新")
     return count

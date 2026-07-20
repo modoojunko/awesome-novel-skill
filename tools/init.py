@@ -132,8 +132,6 @@ def create_skeleton(project_path: Path):
         "sandbox",
         "archives",
         ".agent/task",
-        ".opencode/agents",
-        ".claude/agents",
         ".claude/memory",
         ".claude/knowledge",
     ]
@@ -154,22 +152,23 @@ def create_skeleton(project_path: Path):
 
 
 def deploy_agents(project_path: Path):
-    """复制所有 agent 定义到项目 .opencode/agents/ 和 .claude/agents/"""
+    """根据当前平台复制 agent 定义到对应目录"""
     if not SOURCE_AGENTS.exists():
         print("  ⚠️  agent 目录不存在，跳过")
         return
 
-    agent_dirs = [".opencode/agents", ".claude/agents"]
-    for suffix in agent_dirs:
-        target = project_path / suffix
-        target.mkdir(parents=True, exist_ok=True)
-        for item in SOURCE_AGENTS.rglob("*"):
-            if item.is_file() and item.suffix == ".md":
-                rel_path = item.relative_to(SOURCE_AGENTS)
-                dest = target / rel_path
-                dest.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(item, dest)
-    print(f"  ✅ 已部署 agent 定义到 {', '.join(agent_dirs)}")
+    # 根据 SKILL_HOME 路径判断平台：opencode 安装路径含 ".config/opencode"
+    is_opencode = "opencode" in str(SKILL_HOME).lower()
+    agent_dir = ".opencode/agents" if is_opencode else ".claude/agents"
+    target = project_path / agent_dir
+    target.mkdir(parents=True, exist_ok=True)
+    for item in SOURCE_AGENTS.rglob("*"):
+        if item.is_file() and item.suffix == ".md":
+            rel_path = item.relative_to(SOURCE_AGENTS)
+            dest = target / rel_path
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(item, dest)
+    print(f"  ✅ 已部署 agent 定义到 {agent_dir}")
 
 
 def deploy_memory(project_path: Path, genre: str):
