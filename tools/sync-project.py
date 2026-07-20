@@ -186,16 +186,19 @@ def find_changes(project: Path) -> list[str]:
         if not src_dir.exists():
             continue
         if name == "agents":
-            dst_dir = project / ".opencode" / name
+            dst_dirs = [project / ".opencode" / name, project / ".claude" / name]
         else:
-            dst_dir = project / ".claude" / name
+            dst_dirs = [project / ".claude" / name]
         for item in sorted(src_dir.rglob("*.md")):
             if item.name == ".gitkeep":
                 continue
             rel = item.relative_to(src_dir)
-            target = dst_dir / rel
-            if not target.exists() or target.read_bytes() != item.read_bytes():
-                changed.append(f"{name}/{rel}")
+            # 任一目标目录过时即触发更新
+            for dst_dir in dst_dirs:
+                target = dst_dir / rel
+                if not target.exists() or target.read_bytes() != item.read_bytes():
+                    changed.append(f"{name}/{rel}")
+                    break
 
     return changed
 
@@ -238,12 +241,15 @@ def do_sync(project: Path):
 
 
 def sync_agents(project_path: Path) -> int:
-    target = project_path / ".opencode" / "agents"
-    target.mkdir(parents=True, exist_ok=True)
+    """同步 agent 定义到 .opencode/agents/ 和 .claude/agents/"""
     if not AGENT_DIR.exists():
         print("  [!] agents 源目录不存在，跳过")
         return 0
-    count = _sync_dir(AGENT_DIR, target, "*.md")
+    count = 0
+    for suffix in [".opencode/agents", ".claude/agents"]:
+        target = project_path / suffix
+        target.mkdir(parents=True, exist_ok=True)
+        count += _sync_dir(AGENT_DIR, target, "*.md")
     if count > 0:
         print(f"  [OK] agent 定义: {count} 个文件已更新")
     else:

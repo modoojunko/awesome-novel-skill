@@ -56,7 +56,7 @@ python tools/init.py [project-path] [--genre <编号>]
 `init.py` 会：
 1. 选题材
 2. 创建项目骨架（settings/、volumes/、chapters/、prompts/、archives/）
-3. 部署 agent 定义到 `.opencode/agents/`
+3. 部署 agent 定义到 `.opencode/agents/` 和 `.claude/agents/`（双平台兼容）
 4. 按题材继承反 AI 规则和文风偏好到 `.claude/knowledge/`
 5. 按题材继承格式规范、题材案例到 `.claude/knowledge/`
 6. 创建空白的写作记忆文件（`.claude/memory/*.md`）

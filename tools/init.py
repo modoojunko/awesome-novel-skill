@@ -133,6 +133,7 @@ def create_skeleton(project_path: Path):
         "archives",
         ".agent/task",
         ".opencode/agents",
+        ".claude/agents",
         ".claude/memory",
         ".claude/knowledge",
     ]
@@ -153,20 +154,22 @@ def create_skeleton(project_path: Path):
 
 
 def deploy_agents(project_path: Path):
-    """复制所有 agent 定义和 agent skill 到项目 .opencode/agents/"""
-    target = project_path / ".opencode" / "agents"
-    if SOURCE_AGENTS.exists():
-        count = 0
+    """复制所有 agent 定义到项目 .opencode/agents/ 和 .claude/agents/"""
+    if not SOURCE_AGENTS.exists():
+        print("  ⚠️  agent 目录不存在，跳过")
+        return
+
+    agent_dirs = [".opencode/agents", ".claude/agents"]
+    for suffix in agent_dirs:
+        target = project_path / suffix
+        target.mkdir(parents=True, exist_ok=True)
         for item in SOURCE_AGENTS.rglob("*"):
             if item.is_file() and item.suffix == ".md":
                 rel_path = item.relative_to(SOURCE_AGENTS)
                 dest = target / rel_path
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(item, dest)
-                count += 1
-        print(f"  ✅ 已部署 {count} 个 agent/skill 文件")
-    else:
-        print("  ⚠️  agent 目录不存在，跳过")
+    print(f"  ✅ 已部署 agent 定义到 {', '.join(agent_dirs)}")
 
 
 def deploy_memory(project_path: Path, genre: str):
