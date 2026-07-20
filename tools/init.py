@@ -101,7 +101,8 @@ def main():
 
     print(f"\n初始化完成!")
     print(f"项目路径: {project_path}")
-    print(f"输入 @novel-agent 开始写作")
+    print(f"输入 @novel-agent 开始写作（Claude Code）")
+    print(f"或在 OpenCode 中通过 @novel-agent 开始写作")
 
 
 def select_genre() -> str:
@@ -131,7 +132,6 @@ def create_skeleton(project_path: Path):
         "sandbox",
         "archives",
         ".agent/task",
-        ".claude/agents",
         ".claude/memory",
         ".claude/knowledge",
     ]
@@ -152,20 +152,23 @@ def create_skeleton(project_path: Path):
 
 
 def deploy_agents(project_path: Path):
-    """复制所有 agent 定义和 agent skill 到项目 .claude/agents/"""
-    target = project_path / ".claude" / "agents"
-    if SOURCE_AGENTS.exists():
-        count = 0
-        for item in SOURCE_AGENTS.rglob("*"):
-            if item.is_file() and item.suffix == ".md":
-                rel_path = item.relative_to(SOURCE_AGENTS)
-                dest = target / rel_path
-                dest.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(item, dest)
-                count += 1
-        print(f"  ✅ 已部署 {count} 个 agent/skill 文件")
-    else:
+    """根据当前平台复制 agent 定义到对应目录"""
+    if not SOURCE_AGENTS.exists():
         print("  ⚠️  agent 目录不存在，跳过")
+        return
+
+    # 根据 SKILL_HOME 路径判断平台：opencode 安装路径含 ".config/opencode"
+    is_opencode = "opencode" in str(SKILL_HOME).lower()
+    agent_dir = ".opencode/agents" if is_opencode else ".claude/agents"
+    target = project_path / agent_dir
+    target.mkdir(parents=True, exist_ok=True)
+    for item in SOURCE_AGENTS.rglob("*"):
+        if item.is_file() and item.suffix == ".md":
+            rel_path = item.relative_to(SOURCE_AGENTS)
+            dest = target / rel_path
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(item, dest)
+    print(f"  ✅ 已部署 agent 定义到 {agent_dir}")
 
 
 def deploy_memory(project_path: Path, genre: str):

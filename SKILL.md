@@ -7,6 +7,15 @@ description: 和 AI 协作写小说的工作流系统。7 个 agent 协作完成
 
 和 AI 一起写小说。本 skill 负责项目状态检测、新项目初始化、旧版项目自动迁移，完成后将控制权交给 novel-agent。
 
+## OpenCode 集成说明
+
+本 skill 也支持 OpenCode。安装在 `~/.config/opencode/skills/awesome-novel/` 后，项目初始化脚本会自动部署 agent 定义到 `.opencode/agents/`，OpenCode 即可自动发现：
+- `@novel-agent` — 加载总指挥 agent
+- `@volume-planner`、`@chapter-planner` 等 — 加载子 agent
+- **Task 工具** — novel-agent 通过 Task 工具调用子 agent
+
+**调度机制：** novel-agent 写 order 文件到 `.agent/task/` → Task 工具调用子 agent → 子 agent 读取 order 执行 → 清理 order 后退回。
+
 ## 检测流程 — 严格按此执行，禁止跳过
 
 ```
@@ -32,7 +41,7 @@ description: 和 AI 协作写小说的工作流系统。7 个 agent 协作完成
 - 确认后必须运行 `init.py`，禁止手动创建目录结构替代
 - **禁止在 skill 安装目录（含 `skills/awesome-novel` 路径）内运行 `init.py`** — 此目录是技能仓库，不是小说项目
 - 如果当前目录是 skill 安装目录，应提示作者切换到目标目录后再执行
-- `init.py` 执行完毕后，确认 `.agent/status.md` 和 `.claude/agents/` 已生成，方可进入 `@novel-agent`
+- `init.py` 执行完毕后，确认 `.agent/status.md` 和 `.opencode/agents/` 已生成，方可进入 `@novel-agent`
 - 如果 `init.py` 报错，必须先修复问题重新执行，不允许绕过
 
 ## 初始化 — 先询问，确认后执行，不可跳过
@@ -47,12 +56,12 @@ python tools/init.py [project-path] [--genre <编号>]
 `init.py` 会：
 1. 选题材
 2. 创建项目骨架（settings/、volumes/、chapters/、prompts/、archives/）
-3. 部署 agent 定义到 `.claude/agents/`
+3. 部署 agent 定义到 `.opencode/agents/`（OpenCode）或 `.claude/agents/`（Claude Code）
 4. 按题材继承反 AI 规则和文风偏好到 `.claude/knowledge/`
 5. 按题材继承格式规范、题材案例到 `.claude/knowledge/`
 6. 创建空白的写作记忆文件（`.claude/memory/*.md`）
 7. 创建永久记忆占位文件（`.claude/knowledge/permanent-memory.md`）
-8. 生成 CLAUDE.md
+8. 生成 CLAUDE.md（OpenCode 下生成 AGENTS.md）
 9. 初始化状态文件 `.agent/status.md`
 
 以上 9 步全部由 `init.py` 自动完成，AI 无需也不应手动干预。
@@ -209,8 +218,10 @@ cp old/prompts/*.txt prompts/ 2>/dev/null
 ├── .agent/
 │   ├── status.md         # 进度追踪
 │   └── task/             # agent 间 order 文件
+├── .opencode/
+│   └── agents/           # Agent 定义（OpenCode 用）
 └── .claude/
-    ├── agents/           # Agent 定义
+    ├── agents/           # Agent 定义（Claude Code 用）
     ├── knowledge/        # 反 AI 规则、文风偏好、永久记忆、格式规范
     └── memory/           # 写作动态记忆
 ```
@@ -227,7 +238,7 @@ novel-agent（总指挥）
   └─ 作者确认 → 调度 updater（归档 + lore-keeping）
 ```
 
-各 agent 定义在 `agents/`，skill SOP 在 `skills/`。agent 间通过 `.agent/task/*-order.md` 文件通信。
+各 agent 定义在 `.opencode/agents/`（OpenCode）或 `.claude/agents/`（Claude Code），skill SOP 在 `skills/`。agent 间通过 `.agent/task/*-order.md` 文件通信。
 
 **可选工具：** 剧情推演沙盘（`skills/roleplay-sandbox.md`）是独立的交互式工具，不在 agent 调度链中。作者卡剧情时主动调用，产出推演记录（`sandbox/`）供编写章纲时参考。
 

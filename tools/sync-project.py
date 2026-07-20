@@ -41,6 +41,10 @@ KNOWLEDGE_DIR = SKILL_HOME / "knowledge"
 FINGERPRINT_FILE = Path(".agent") / ".sync-fingerprint"
 VERSION_FILE = Path(".agent") / ".sync-version"
 
+# 根据 SKILL_HOME 路径判断平台
+IS_OPENCODE = "opencode" in str(SKILL_HOME).lower()
+AGENT_TARGET = ".opencode/agents" if IS_OPENCODE else ".claude/agents"
+
 
 def main():
     if "-h" in sys.argv or "--help" in sys.argv or len(sys.argv) < 2:
@@ -185,7 +189,7 @@ def find_changes(project: Path) -> list[str]:
     for name, src_dir in [("agents", AGENT_DIR), ("skills", SKILL_DIR), ("knowledge", KNOWLEDGE_DIR)]:
         if not src_dir.exists():
             continue
-        dst_dir = project / ".claude" / name
+        dst_dir = project / (AGENT_TARGET if name == "agents" else ".claude") / name
         for item in sorted(src_dir.rglob("*.md")):
             if item.name == ".gitkeep":
                 continue
@@ -235,14 +239,15 @@ def do_sync(project: Path):
 
 
 def sync_agents(project_path: Path) -> int:
-    target = project_path / ".claude" / "agents"
-    target.mkdir(parents=True, exist_ok=True)
+    """同步 agent 定义到当前平台对应的目录"""
     if not AGENT_DIR.exists():
         print("  [!] agents 源目录不存在，跳过")
         return 0
+    target = project_path / AGENT_TARGET
+    target.mkdir(parents=True, exist_ok=True)
     count = _sync_dir(AGENT_DIR, target, "*.md")
     if count > 0:
-        print(f"  [OK] agent 定义: {count} 个文件已更新")
+        print(f"  [OK] agent 定义: {count} 个文件已更新（{AGENT_TARGET}）")
     else:
         print(f"  [i] agent 定义: 已是最新")
     return count
