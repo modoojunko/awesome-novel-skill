@@ -44,6 +44,9 @@ case "$PLATFORM" in
     deepseek-tui)
         SKILLS_DIR="$HOME/.deepseek/skills"
         ;;
+    opencode)
+        SKILLS_DIR="$HOME/.config/opencode/skills"
+        ;;
     *)
         echo "不支持的平台: $PLATFORM"
         usage

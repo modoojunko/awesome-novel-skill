@@ -185,7 +185,10 @@ def find_changes(project: Path) -> list[str]:
     for name, src_dir in [("agents", AGENT_DIR), ("skills", SKILL_DIR), ("knowledge", KNOWLEDGE_DIR)]:
         if not src_dir.exists():
             continue
-        dst_dir = project / ".claude" / name
+        if name == "agents":
+            dst_dir = project / ".opencode" / name
+        else:
+            dst_dir = project / ".claude" / name
         for item in sorted(src_dir.rglob("*.md")):
             if item.name == ".gitkeep":
                 continue
@@ -235,7 +238,7 @@ def do_sync(project: Path):
 
 
 def sync_agents(project_path: Path) -> int:
-    target = project_path / ".claude" / "agents"
+    target = project_path / ".opencode" / "agents"
     target.mkdir(parents=True, exist_ok=True)
     if not AGENT_DIR.exists():
         print("  [!] agents 源目录不存在，跳过")

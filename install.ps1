@@ -16,11 +16,20 @@
 
 param(
     [Parameter(Mandatory=$true)]
-    [ValidateSet("claude-code")]
+    [ValidateSet("claude-code", "opencode")]
     [string]$Platform
 )
 
-$DEST_DIR = "$env:USERPROFILE\.claude\skills\awesome-novel"
+$HOME_DIR = $env:USERPROFILE
+
+switch ($Platform) {
+    "claude-code" {
+        $DEST_DIR = "$HOME_DIR\.claude\skills\awesome-novel"
+    }
+    "opencode" {
+        $DEST_DIR = "$HOME_DIR\.config\opencode\skills\awesome-novel"
+    }
+}
 
 $SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
 

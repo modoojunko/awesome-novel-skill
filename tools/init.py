@@ -101,7 +101,8 @@ def main():
 
     print(f"\n初始化完成!")
     print(f"项目路径: {project_path}")
-    print(f"输入 @novel-agent 开始写作")
+    print(f"输入 @novel-agent 开始写作（Claude Code）")
+    print(f"或在 OpenCode 中通过 @novel-agent 开始写作")
 
 
 def select_genre() -> str:
@@ -131,7 +132,7 @@ def create_skeleton(project_path: Path):
         "sandbox",
         "archives",
         ".agent/task",
-        ".claude/agents",
+        ".opencode/agents",
         ".claude/memory",
         ".claude/knowledge",
     ]
@@ -152,8 +153,8 @@ def create_skeleton(project_path: Path):
 
 
 def deploy_agents(project_path: Path):
-    """复制所有 agent 定义和 agent skill 到项目 .claude/agents/"""
-    target = project_path / ".claude" / "agents"
+    """复制所有 agent 定义和 agent skill 到项目 .opencode/agents/"""
+    target = project_path / ".opencode" / "agents"
     if SOURCE_AGENTS.exists():
         count = 0
         for item in SOURCE_AGENTS.rglob("*"):
